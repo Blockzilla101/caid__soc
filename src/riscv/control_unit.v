@@ -20,12 +20,14 @@ module control_unit(
 
             `OP_JAL: begin
                 control_word[`CW_BRANCH] <= 1; 
-
+                control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_PC;
+                control_word[`CW_REG_WRITE_EN] <= 1;
             end
 
             `OP_JALR: begin
                 control_word[`CW_BRANCH] <= 1; 
-
+                control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_PC;
+                control_word[`CW_REG_WRITE_EN] <= 1;
             end
 
             `OP_BRANCH: begin
@@ -34,23 +36,25 @@ module control_unit(
             end
 
             `OP_LOAD: begin
-                control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD; 
-
+                control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
+                control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_MEM;
+                control_word[`CW_ALU_SRC] <= `ALU_SRC_IMM;
+                control_word[`CW_REG_WRITE_EN] <= 1;
             end
 
             `OP_STORE: begin
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD; 
-
+                control_word[`CW_ALU_SRC] <= `ALU_SRC_IMM;
             end
 
             `OP_ALU: begin
-                control_word[`CW_REG_WRITE] <= 1;
+                control_word[`CW_REG_WRITE_EN] <= 1;
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_FUNCT; 
             end
 
             `OP_ALUI: begin
                 control_word[`CW_ALU_SRC] <= 1; 
-                control_word[`CW_REG_WRITE] <= 1; 
+                control_word[`CW_REG_WRITE_EN] <= 1; 
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_FUNCT; 
             end
 

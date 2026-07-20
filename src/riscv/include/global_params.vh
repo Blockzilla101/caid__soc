@@ -1,4 +1,4 @@
-`define CW_LEN 6
+`define CW_LEN 7
 
 `define INST_OPCODE 6:0 
 `define INST_RD 11:7
@@ -8,11 +8,18 @@
 `define INST_FUNCT7 31:25
 
 `define CW_BRANCH 0
-`define CW_MEM_READ 1
-`define CW_MEM_WRITE 2
-`define CW_ALU_CTRL 4:3
-`define CW_ALU_SRC 5
-`define CW_REG_WRITE 6
+`define CW_MEM_WRITE 1
+`define CW_ALU_CTRL 3:2
+`define CW_ALU_SRC 4
+`define CW_REG_WRITE_SRC 6:5
+`define CW_REG_WRITE_EN 7
+
+`define REG_WRITE_SRC_ALU 2'b00
+`define REG_WRITE_SRC_MEM 2'b01
+`define REG_WRITE_SRC_PC 2'b10
+
+`define ALU_SRC_REG 0
+`define ALU_SRC_IMM 1
 
 `define ALU_CTRL_ADD 2'b00
 `define ALU_CTRL_SUB 2'b01
