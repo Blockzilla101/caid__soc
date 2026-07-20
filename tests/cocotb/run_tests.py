@@ -3,6 +3,9 @@ import os.path as path
 import shutil
 import os
 
+src_path = "../../src"
+sim_path = "./sim"
+
 runner = get_runner("icarus")
 
 def run_test_single(module: str):
@@ -29,7 +32,8 @@ def run_test(sources: list[str], hdl_toplevel: str, test_module: str):
     shutil.copyfile(path.join("sim_build", waveform), path.join("waves", waveform))
 
 def test_all_modules():
-    run_test_single('control_unit')
+    run_test(sources=[f"{src_path}/riscv/control_unit.v", f"{src_path}/riscv/alu_control.v", f"{sim_path}/tb_control_unit.v"], hdl_toplevel="tb_control_unit", test_module="test_control_unit")
+
     run_test_single('register_file')
     
 if __name__ == "__main__":

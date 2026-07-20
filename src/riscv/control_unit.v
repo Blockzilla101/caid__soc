@@ -6,7 +6,6 @@ module control_unit(
     input [6:0] opcode,
     output reg [`CW_LEN:0] control_word
 );
-
     always @(*) begin
         control_word <= 0;
 
@@ -20,43 +19,40 @@ module control_unit(
             end
 
             `OP_JAL: begin
+                control_word[`CW_BRANCH] <= 1; 
 
             end
 
             `OP_JALR: begin
+                control_word[`CW_BRANCH] <= 1; 
 
             end
 
             `OP_BRANCH: begin
-
+                control_word[`CW_BRANCH] <= 1; 
             end
 
             `OP_LOAD: begin
+                control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD; 
 
             end
 
             `OP_STORE: begin
+                control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD; 
 
             end
 
             `OP_ALU: begin
-                control_word[`CW_REG_WRITE] <= 1; 
-                control_word[`CW_ALU_OP] <= `ALU_CTRL_FUNCT; 
+                control_word[`CW_REG_WRITE] <= 1;
+                control_word[`CW_ALU_CTRL] <= `ALU_CTRL_FUNCT; 
             end
 
             `OP_ALUI: begin
                 control_word[`CW_ALU_SRC] <= 1; 
                 control_word[`CW_REG_WRITE] <= 1; 
-                control_word[`CW_ALU_OP] <= `ALU_CTRL_FUNCT; 
+                control_word[`CW_ALU_CTRL] <= `ALU_CTRL_FUNCT; 
             end
 
-            `OP_FENCE: begin
-
-            end
-
-            `OP_SYSTEM: begin
-
-            end
             default: control_word <= 0;
         endcase
     end

@@ -1,9 +1,16 @@
 `define CW_LEN 6
 
+`define INST_OPCODE 6:0 
+`define INST_RD 11:7
+`define INST_FUNCT3 14:12
+`define INST_RS1 19:15
+`define INST_RS2 24:20
+`define INST_FUNCT7 31:25
+
 `define CW_BRANCH 0
 `define CW_MEM_READ 1
 `define CW_MEM_WRITE 2
-`define CW_ALU_OP 4:3
+`define CW_ALU_CTRL 4:3
 `define CW_ALU_SRC 5
 `define CW_REG_WRITE 6
 
@@ -14,7 +21,7 @@
 `define ALU_OP_ADD 4'b0001
 `define ALU_OP_SUB 4'b0010
 `define ALU_OP_AND 4'b0011
-`define ALU_OP_OR 4'b00100
+`define ALU_OP_OR 4'b0100
 `define ALU_OP_XOR 4'b0101
 `define ALU_OP_SLT 4'b0110
 `define ALU_OP_SLTU 4'b0111
@@ -31,5 +38,5 @@
 `define OP_STORE 7'b0100011 // Store Instructions (SB, SH, SW)
 `define OP_ALU 7'b0110011 // ALU Instructions (ADD, SUB, AND, OR, XOR, etc.)
 `define OP_ALUI 7'b0010011 // ALU Immediate Instructions (ADDI, ANDI, ORI, XORI, etc.)
-`define OP_FENCE 7'b0001111 // Fence
-`define OP_SYSTEM 7'b1110011 // System Instructions (ECALL, EBREAK, etc.)
+// `define OP_FENCE 7'b0001111 // Fence
+// `define OP_SYSTEM 7'b1110011 // System Instructions (ECALL, EBREAK, etc.)
