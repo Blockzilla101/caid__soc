@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
 
+`include "global_params.vh"
+
 module alu_control(
     input [1:0] alu_ctrl,
     input [2:0] funct3,
