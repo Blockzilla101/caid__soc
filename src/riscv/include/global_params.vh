@@ -17,6 +17,7 @@
 `define ALU_CTRL_ADD 2'b00
 `define ALU_CTRL_SUB 2'b01
 `define ALU_CTRL_FUNCT 2'b10
+`define ALU_CTRL_BRANCH 2'b11
 
 `define ALU_OP_ADD 4'b0001
 `define ALU_OP_SUB 4'b0010
@@ -28,6 +29,13 @@
 `define ALU_OP_SLL 4'b1000
 `define ALU_OP_SRL 4'b1001
 `define ALU_OP_SRA 4'b1010
+
+`define ALU_OP_BEQ 4'b0010
+`define ALU_OP_BNE 4'b1100
+`define ALU_OP_BLT 4'b1101
+`define ALU_OP_BGE 4'b1110
+`define ALU_OP_BLTU 4'b1111
+`define ALU_OP_BGEU 4'b1011
 
 `define OP_LUI 7'b0110111 // Load Upper Immediate
 `define OP_AUIPC 7'b0010111 // Add Upper Immediate to PC

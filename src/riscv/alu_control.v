@@ -32,8 +32,16 @@ module alu_control(
                     11'b???????_111_?: alu_op <= `ALU_OP_AND;
                 endcase
             end
-            // todo use 11 for branch operations
-            default: alu_op <= 0;
+            `ALU_CTRL_BRANCH: begin
+                casez (funct3)
+                    3'b000: alu_op <= `ALU_OP_BEQ;
+                    3'b001: alu_op <= `ALU_OP_BNE;
+                    3'b100: alu_op <= `ALU_OP_BLT;
+                    3'b101: alu_op <= `ALU_OP_BGE;
+                    3'b110: alu_op <= `ALU_OP_BLTU;
+                    3'b111: alu_op <= `ALU_OP_BGEU;
+                endcase
+            end
         endcase
     end
 

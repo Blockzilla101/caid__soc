@@ -13,6 +13,12 @@ class AluOp(StrEnum):
     ALU_OP_SLL = '1000'
     ALU_OP_SRL = '1001'
     ALU_OP_SRA = '1010'
+    ALU_OP_BEQ = '0010'
+    ALU_OP_BNE = '1100'
+    ALU_OP_BLT = '1101'
+    ALU_OP_BGE = '1110'
+    ALU_OP_BLTU = '1111'
+    ALU_OP_BGEU = '1011'
 
 @cocotb.test()
 async def test_control_unit(dut):
@@ -144,26 +150,26 @@ async def test_control_unit(dut):
     # await Timer(1, "ns")
     # assert dut.alu_op.value == AluOp.ALU_OP.X, "jalr should set alu to X"
 
-    # dut.instruction.value = '11101010100001111000111011100011' # beq
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "beq should set alu to X"
+    dut.instruction.value = '11101010100001111000111011100011' # beq
+    await Timer(1, "ns")
+    assert dut.alu_op.value == AluOp.ALU_OP_BEQ, f"beq should set alu to ALU_OP_BEQ ({AluOp.ALU_OP_BEQ})"
 
-    # dut.instruction.value = '11101010100001111001111011100011' # bne
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "bne should set alu to X"
+    dut.instruction.value = '11101010100001111001111011100011' # bne
+    await Timer(1, "ns")
+    assert dut.alu_op.value == AluOp.ALU_OP_BNE, f"bne should set alu to ALU_OP_BNE ({AluOp.ALU_OP_BNE})"
 
-    # dut.instruction.value = '11101010100001111100111011100011' # blt
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "blt should set alu to X"
+    dut.instruction.value = '11101010100001111100111011100011' # blt
+    await Timer(1, "ns")
+    assert dut.alu_op.value == AluOp.ALU_OP_BLT, f"blt should set alu to ALU_OP_BLT ({AluOp.ALU_OP_BLT})"
 
-    # dut.instruction.value = '11101010100001111101111011100011' # bge
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "bge should set alu to X"
+    dut.instruction.value = '11101010100001111101111011100011' # bge
+    await Timer(1, "ns")
+    assert dut.alu_op.value == AluOp.ALU_OP_BGE, f"bge should set alu to ALU_OP_BGE ({AluOp.ALU_OP_BGE})"
 
-    # dut.instruction.value = '11101010100001111110111011100011' # bltu
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "bltu should set alu to X"
+    dut.instruction.value = '11101010100001111110111011100011' # bltu
+    await Timer(1, "ns")
+    assert dut.alu_op.value == AluOp.ALU_OP_BLTU, f"bltu should set alu to ALU_OP_BLTU ({AluOp.ALU_OP_BLTU})"
 
-    # dut.instruction.value = '11101010100001111111111011100011' # bgeu
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "bgeu should set alu to X"
+    dut.instruction.value = '11101010100001111111111011100011' # bgeu
+    await Timer(1, "ns")
+    assert dut.alu_op.value == AluOp.ALU_OP_BGEU, f"bgeu should set alu to ALU_OP_BGEU ({AluOp.ALU_OP_BGEU})"

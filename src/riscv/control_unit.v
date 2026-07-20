@@ -30,6 +30,7 @@ module control_unit(
 
             `OP_BRANCH: begin
                 control_word[`CW_BRANCH] <= 1; 
+                control_word[`CW_ALU_CTRL] <= `ALU_CTRL_BRANCH; 
             end
 
             `OP_LOAD: begin
