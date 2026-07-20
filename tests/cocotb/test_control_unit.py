@@ -2,7 +2,7 @@ import cocotb
 from cocotb.triggers import FallingEdge, Timer
 
 @cocotb.test()
-async def test_inst_reg(dut):
+async def test_control_unit(dut):
     """Testing Control Unit"""
 
     await Timer(1, "ns")

@@ -41,13 +41,13 @@ module control_unit(
 
             `OP_ALU: begin
                 control_word[`CW_REG_WRITE] <= 1; 
-                control_word[`CW_ALU_OP] <= `ALU_OP_FUNCT; 
+                control_word[`CW_ALU_OP] <= `ALU_CTRL_FUNCT; 
             end
 
             `OP_ALUI: begin
                 control_word[`CW_ALU_SRC] <= 1; 
                 control_word[`CW_REG_WRITE] <= 1; 
-                control_word[`CW_ALU_OP] <= `ALU_OP_FUNCT; 
+                control_word[`CW_ALU_OP] <= `ALU_CTRL_FUNCT; 
             end
 
             `OP_FENCE: begin

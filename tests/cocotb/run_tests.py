@@ -30,6 +30,7 @@ def run_test(sources: list[str], hdl_toplevel: str, test_module: str):
 
 def test_all_modules():
     run_test_single('control_unit')
+    run_test_single('register_file')
     
 if __name__ == "__main__":
     test_all_modules()
