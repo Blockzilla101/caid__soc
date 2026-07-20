@@ -9,7 +9,7 @@ module control_unit(
     always @(*) begin
         control_word <= 0;
 
-        casez (opcode)
+        case (opcode)
             `OP_LUI: begin
 
             end
