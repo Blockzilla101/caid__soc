@@ -1,1 +1,4 @@
 .venv
+tests/*/waves
+tests/*/sim_build
+__pycache__
