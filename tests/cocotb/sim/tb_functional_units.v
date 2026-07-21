@@ -1,10 +1,11 @@
 `include "global_params.vh"
 
-module tb_control_unit(
+module tb_functional_units(
     input [31:0] instruction
 );
     wire [`CW_LEN:0] control_word;
     wire [3:0] alu_op;
+    wire [31:0] imm_value;
 
     control_unit cu(
         .opcode(instruction[`INST_OPCODE]),
@@ -17,6 +18,11 @@ module tb_control_unit(
         .funct3(instruction[`INST_FUNCT3]),
         .funct7(instruction[`INST_FUNCT7]),
         .alu_op(alu_op)
+    );
+
+    imm_gen imm(
+        .instruction(instruction),
+        .imm_value(imm_value)
     );
 
 endmodule
