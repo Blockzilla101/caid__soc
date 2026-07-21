@@ -63,11 +63,17 @@ class TestInst(StrEnum):
 
 async def test_imm_operand(dut, inst, should_be: int, op):
     await Timer(1, "ns")
+    should_be = should_be if should_be >= 0 else should_be + (1 << 32) # signed numbers
     assert dut.imm_value.value == should_be, f"{inst}: imm_value should be {bin(should_be)}, is {bin(int(str(dut.imm_value.value), 2))}, {op}"
+
+async def test_alu_op(dut, inst_val: TestInst, inst_name: str, should_be: AluOp):
+    dut.instruction.value = inst_val
+    await Timer(1, "ns")
+    assert dut.alu_op.value == should_be, f"{inst_name}: should set alu to {should_be}, is {dut.alu_op.value}"
 
 def get_immediate(op):
     for key, val in op.args.items():
-        if key.startswith("imm") or key == 'shamtd':
+        if "imm" in key or key == 'shamtd':
             return val
     return 0
 
@@ -77,153 +83,39 @@ async def test_alu_operation(dut):
 
     await Timer(1, "ns")
 
-    # dut.instruction.value = '00001010101111110000011010110111' # lui
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "lui should set alu to X"
-
-    # dut.instruction.value = '00001010101111110000011010010111' # auipc
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "auipc should set alu to X"
-# 
-    dut.instruction.value = TestInst.ADDI
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"addi should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.SLTI
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SLT, f"slti should set alu to ALU_OP_SLT ({AluOp.ALU_OP_SLT})"
-
-    dut.instruction.value = TestInst.SLTIU
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SLTU, f"sltiu should set alu to ALU_OP_SLTU ({AluOp.ALU_OP_SLTU})"
-
-    dut.instruction.value = TestInst.XORI
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_XOR, f"xori should set alu to ALU_OP_XOR ({AluOp.ALU_OP_XOR})"
-
-    dut.instruction.value = TestInst.ORI
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_OR, f"ori should set alu to ALU_OP_OR ({AluOp.ALU_OP_OR})"
-
-    dut.instruction.value = TestInst.ANDI
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_AND, f"andi should set alu to ALU_OP_AND ({AluOp.ALU_OP_AND})"
-
-    dut.instruction.value = TestInst.SLLI
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SLL, f"slli should set alu to ALU_OP_SLL ({AluOp.ALU_OP_SLL})"
-
-    dut.instruction.value = TestInst.SRLI
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SRL, f"srli should set alu to ALU_OP_SRL ({AluOp.ALU_OP_SRL})"
-
-    dut.instruction.value = TestInst.SRAI
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SRA, f"srai should set alu to ALU_OP_SRA ({AluOp.ALU_OP_SRA})"
-
-    dut.instruction.value = TestInst.ADD
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"add should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.SUB
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SUB, f"sub should set alu to ALU_OP_SUB ({AluOp.ALU_OP_SUB})"
-
-    dut.instruction.value = TestInst.SLL
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SLL, f"sll should set alu to ALU_OP_SLL ({AluOp.ALU_OP_SLL})"
-
-    dut.instruction.value = TestInst.SLT
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SLT, f"slt should set alu to ALU_OP_SLT ({AluOp.ALU_OP_SLT})"
-
-    dut.instruction.value = TestInst.SLTU
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SLTU, f"sltu should set alu to ALU_OP_SLTU ({AluOp.ALU_OP_SLTU})"
-
-    dut.instruction.value = TestInst.XOR
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_XOR, f"xor should set alu to ALU_OP_XOR ({AluOp.ALU_OP_XOR})"
-
-    dut.instruction.value = TestInst.SRL
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SRL, f"srl should set alu to ALU_OP_SRL ({AluOp.ALU_OP_SRL})"
-
-    dut.instruction.value = TestInst.SRA
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_SRA, f"sra should set alu to ALU_OP_SRA ({AluOp.ALU_OP_SRA})"
-
-    dut.instruction.value = TestInst.OR
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_OR, f"or should set alu to ALU_OP_OR ({AluOp.ALU_OP_OR})"
-
-    dut.instruction.value = TestInst.AND
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_AND, f"and should set alu to ALU_OP_AND ({AluOp.ALU_OP_AND})"
-
-    dut.instruction.value = TestInst.LB
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"lb should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.LH
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"lh should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.LW
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"lw should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.LBU
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"lbu should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.LHU
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"lhu should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.SB
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"sb should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.SH
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"sh should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    dut.instruction.value = TestInst.SW
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_ADD, f"sw should set alu to ALU_OP_ADD ({AluOp.ALU_OP_ADD})"
-
-    # dut.instruction.value = TestInst.JAL
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "jal should set alu to X"
-
-    # dut.instruction.value = TestInst.JALR
-    # await Timer(1, "ns")
-    # assert dut.alu_op.value == AluOp.ALU_OP.X, "jalr should set alu to X"
-
-    dut.instruction.value = TestInst.BEQ
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_BEQ, f"beq should set alu to ALU_OP_BEQ ({AluOp.ALU_OP_BEQ})"
-
-    dut.instruction.value = TestInst.BNE
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_BNE, f"bne should set alu to ALU_OP_BNE ({AluOp.ALU_OP_BNE})"
-
-    dut.instruction.value = TestInst.BLT
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_BLT, f"blt should set alu to ALU_OP_BLT ({AluOp.ALU_OP_BLT})"
-
-    dut.instruction.value = TestInst.BGE
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_BGE, f"bge should set alu to ALU_OP_BGE ({AluOp.ALU_OP_BGE})"
-
-    dut.instruction.value = TestInst.BLTU
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_BLTU, f"bltu should set alu to ALU_OP_BLTU ({AluOp.ALU_OP_BLTU})"
-
-    dut.instruction.value = TestInst.BGEU
-    await Timer(1, "ns")
-    assert dut.alu_op.value == AluOp.ALU_OP_BGEU, f"bgeu should set alu to ALU_OP_BGEU ({AluOp.ALU_OP_BGEU})"
+    await test_alu_op(dut, TestInst.ADDI, 'ADDI', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.SLTI, 'SLTI', AluOp.ALU_OP_SLT)
+    await test_alu_op(dut, TestInst.SLTIU, 'SLTIU', AluOp.ALU_OP_SLTU)
+    await test_alu_op(dut, TestInst.XORI, 'XORI', AluOp.ALU_OP_XOR)
+    await test_alu_op(dut, TestInst.ORI, 'ORI', AluOp.ALU_OP_OR)
+    await test_alu_op(dut, TestInst.ANDI, 'ANDI', AluOp.ALU_OP_AND)
+    await test_alu_op(dut, TestInst.SLLI, 'SLLI', AluOp.ALU_OP_SLL)
+    await test_alu_op(dut, TestInst.SRLI, 'SRLI', AluOp.ALU_OP_SRL)
+    await test_alu_op(dut, TestInst.SRAI, 'SRAI', AluOp.ALU_OP_SRA)
+    await test_alu_op(dut, TestInst.ADD, 'ADD', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.SUB, 'ADD', AluOp.ALU_OP_SUB)
+    await test_alu_op(dut, TestInst.SLL, 'ADD', AluOp.ALU_OP_SLL)
+    await test_alu_op(dut, TestInst.SLT, 'ADD', AluOp.ALU_OP_SLT)
+    await test_alu_op(dut, TestInst.SLTU, 'SLTU', AluOp.ALU_OP_SLTU)
+    await test_alu_op(dut, TestInst.XOR, 'XOR', AluOp.ALU_OP_XOR)
+    await test_alu_op(dut, TestInst.SRL, 'SRL', AluOp.ALU_OP_SRL)
+    await test_alu_op(dut, TestInst.SRA, 'SRA', AluOp.ALU_OP_SRA)
+    await test_alu_op(dut, TestInst.OR, 'OR', AluOp.ALU_OP_OR)
+    await test_alu_op(dut, TestInst.AND, 'AND', AluOp.ALU_OP_AND)
+    await test_alu_op(dut, TestInst.LB, 'LB', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.LH, 'LH', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.LW, 'LW', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.LBU, 'LBU', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.LHU, 'LHU', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.SB, 'SB', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.SH, 'SH', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.SW, 'SW', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.BEQ, 'BEQ', AluOp.ALU_OP_BEQ)
+    await test_alu_op(dut, TestInst.BNE, 'BNE', AluOp.ALU_OP_BNE)
+    await test_alu_op(dut, TestInst.BLT, 'BLT', AluOp.ALU_OP_BLT)
+    await test_alu_op(dut, TestInst.BGE, 'BGE', AluOp.ALU_OP_BGE)
+    await test_alu_op(dut, TestInst.BLTU, 'BLTU', AluOp.ALU_OP_BLTU)
+    await test_alu_op(dut, TestInst.BGEU, 'BGEU', AluOp.ALU_OP_BGEU)
 
 @cocotb.test()
 async def test_imm_gen_value(dut):
