@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module imm_gen(
     input [31:0] instruction,
     output reg[31:0] imm_value
@@ -15,7 +17,7 @@ module imm_gen(
                     3'b001, 3'b101:  imm_value <= $signed(instruction[24:20]); 
                     default imm_value <= $signed(instruction[31:20]);
                 endcase
-            end
+            end 
             default: imm_value <= 0; 
         endcase
     end

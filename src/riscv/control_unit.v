@@ -19,13 +19,13 @@ module control_unit(
             end
 
             `OP_JAL: begin
-                control_word[`CW_BRANCH] <= 1; 
+                control_word[`CW_JUMP_REL] <= 1; 
                 control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_PC;
                 control_word[`CW_REG_WRITE_EN] <= 1;
             end
 
             `OP_JALR: begin
-                control_word[`CW_BRANCH] <= 1; 
+                control_word[`CW_JUMP_ABS] <= 1; 
                 control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_PC;
                 control_word[`CW_REG_WRITE_EN] <= 1;
             end
@@ -47,14 +47,8 @@ module control_unit(
                 control_word[`CW_ALU_SRC] <= `ALU_SRC_IMM;
             end
 
-            `OP_ALU: begin
+            `OP_ALU, `OP_ALUI: begin
                 control_word[`CW_REG_WRITE_EN] <= 1;
-                control_word[`CW_ALU_CTRL] <= `ALU_CTRL_FUNCT; 
-            end
-
-            `OP_ALUI: begin
-                control_word[`CW_ALU_SRC] <= 1; 
-                control_word[`CW_REG_WRITE_EN] <= 1; 
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_FUNCT; 
             end
 

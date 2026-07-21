@@ -1,4 +1,4 @@
-`define CW_LEN 7
+`define CW_LEN 9
 
 `define INST_OPCODE 6:0 
 `define INST_RD 11:7
@@ -13,6 +13,8 @@
 `define CW_ALU_SRC 4
 `define CW_REG_WRITE_SRC 6:5
 `define CW_REG_WRITE_EN 7
+`define CW_JUMP_ABS 8
+`define CW_JUMP_REL 9
 
 `define REG_WRITE_SRC_ALU 2'b00
 `define REG_WRITE_SRC_MEM 2'b01
