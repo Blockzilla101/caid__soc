@@ -11,7 +11,7 @@ module alu (
 );
 
     always @(*) begin
-        branch <= 0;
+        compare <= 0;
         result <= 0;
         case (alu_op)
             `ALU_OP_ADD: result <= A + B;

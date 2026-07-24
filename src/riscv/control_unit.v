@@ -11,11 +11,14 @@ module control_unit(
 
         case (opcode)
             `OP_LUI: begin
-
+                control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
+                control_word[`CW_REG_WRITE_EN] <= 1;
             end
 
             `OP_AUIPC: begin
-
+                control_word[`CW_ALU_SRC_OP1] <= `ALU_SRC_OP1_PC; 
+                control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
+                control_word[`CW_REG_WRITE_EN] <= 1;
             end
 
             `OP_JAL: begin
@@ -38,13 +41,13 @@ module control_unit(
             `OP_LOAD: begin
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
                 control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_MEM;
-                control_word[`CW_ALU_SRC] <= `ALU_SRC_IMM;
+                control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
                 control_word[`CW_REG_WRITE_EN] <= 1;
             end
 
             `OP_STORE: begin
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD; 
-                control_word[`CW_ALU_SRC] <= `ALU_SRC_IMM;
+                control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
             end
 
             `OP_ALU, `OP_ALUI: begin

@@ -7,8 +7,9 @@ module program_counter(
     input rst,
     input [`CW_LEN:0] control_word,
     input compare_result,
-    input [31:0] write_value
-    output reg [31:0] next_val
+    input [31:0] write_value,
+    output [31:0] pc_val,
+    output [31:0] next_val
 );
     reg [31:0] counter;
 
@@ -20,7 +21,10 @@ module program_counter(
             else counter <= next_val;
         end
 
-        next_val = counter + 4;
+        // next_val = counter + 4;
     end
+
+    assign pc_val = counter;
+    assign next_val = counter + 4;
 
 endmodule
