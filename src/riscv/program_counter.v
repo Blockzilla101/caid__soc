@@ -5,26 +5,16 @@
 module program_counter(
     input clk,
     input rst,
-    input [`CW_LEN] control_word,
-    input compare_result,
-    input [31:0] write_value,
-    output [31:0] pc_val,
-    output [31:0] next_val
+    input [31:0] next_val,
+    output [31:0] pc_val
 );
     reg [31:0] counter;
 
     always @(posedge clk or posedge rst) begin
         if (rst) counter <= 0;
-        else begin
-            if ((control_word[`CW_BRANCH] && compare_result) || counter_word[`CW_JUMP_REL]) counter <= counter + write_value;
-            else if (counter_word[`CW_JUMP_ABS]) counter <= write_value;
-            else counter <= next_val;
-        end
-
-        // next_val = counter + 4;
+        else counter <= next_val;
     end
 
     assign pc_val = counter;
-    assign next_val = counter + 4;
 
 endmodule
