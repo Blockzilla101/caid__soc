@@ -5,7 +5,7 @@
 module program_counter(
     input clk,
     input rst,
-    input [`CW_LEN:0] control_word,
+    input [`CW_LEN] control_word,
     input compare_result,
     input [31:0] write_value,
     output [31:0] pc_val,

@@ -4,7 +4,7 @@
 
 module control_unit(
     input [6:0] opcode,
-    output reg [`CW_LEN:0] control_word
+    output reg [`CW_LEN] control_word
 );
     always @(*) begin
         control_word <= 0;

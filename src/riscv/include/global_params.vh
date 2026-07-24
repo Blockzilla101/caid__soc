@@ -1,4 +1,4 @@
-`define CW_LEN 10
+`define CW_LEN 10:0
 
 `define INST_OPCODE 6:0 
 `define INST_RD 11:7

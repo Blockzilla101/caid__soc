@@ -3,7 +3,7 @@
 module tb_functional_units(
     input [31:0] instruction
 );
-    wire [`CW_LEN:0] control_word;
+    wire [`CW_LEN] control_word;
     wire [3:0] alu_op;
     wire [31:0] imm_value;
 
