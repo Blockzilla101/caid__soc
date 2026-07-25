@@ -6,7 +6,7 @@
         {
             "label": "Run tests",
             "type": "shell",
-            "command": "cd tests/cocotb && bash run_tests.sh",
+            "command": "cd tests/cocotb && clear && bash run_tests.sh",
             "problemMatcher": [
                 "$python"
             ]

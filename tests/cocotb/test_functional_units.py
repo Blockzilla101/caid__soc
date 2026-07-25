@@ -65,6 +65,14 @@ async def test_alu_op(dut, inst_val: TestInst, inst_name: str, should_be: AluOp)
     await Timer(1, "ns")
     assert dut.alu_op.value == should_be, f"{inst_name}: should set alu to {should_be}, is {dut.alu_op.value}"
 
+async def test_branch_op(dut, A: int, B: int, inst_val: TestInst, inst_name: str, should_branch: bool):
+    dut.instruction.value = inst_val
+    dut.A.value = A
+    dut.B.value = B
+    await Timer(1, "ns")
+    assert dut.bu.branch_taken.value == should_branch, f"{inst_name}: branch_taken should be {should_branch}, is {bool(dut.bu.branch_taken.value)}"
+
+
 def get_immediate(op):
     for key, val in op.args.items():
         if "imm" in key or key == 'shamtd':
@@ -74,6 +82,9 @@ def get_immediate(op):
 @cocotb.test()
 async def test_alu_operation(dut):
     """Testing ALU operations"""
+
+    dut.A.value = 0;
+    dut.B.value = 0;
 
     await Timer(1, "ns")
 
@@ -122,3 +133,30 @@ async def test_imm_gen_value(dut):
         imm_value = get_immediate(decoded)
         dut.instruction.value = key.value
         await test_imm_operand(dut, key.name, imm_value, decoded)
+
+@cocotb.test()
+async def test_branch_unit_operation(dut):
+    """Testing branch unit"""
+    await test_branch_op(dut, 10, 20, TestInst.BEQ, 'BEQ', False)
+    await test_branch_op(dut, 10, 10, TestInst.BEQ, 'BEQ', True)
+
+    await test_branch_op(dut, 10, 20, TestInst.BNE, 'BNE', True)
+    await test_branch_op(dut, 10, 10, TestInst.BNE, 'BNE', False)
+
+    await test_branch_op(dut, 10, 20, TestInst.BGE, 'BGE', False)
+    await test_branch_op(dut, -10, 20, TestInst.BGE, 'BGE', False)
+    await test_branch_op(dut, 20, 10, TestInst.BGE, 'BGE', True)
+    await test_branch_op(dut, -10, -20, TestInst.BGE, 'BGE', True)
+
+    await test_branch_op(dut, 10, 20, TestInst.BGEU, 'BGEU', False)
+    await test_branch_op(dut, 20, 10, TestInst.BGEU, 'BGEU', True)
+
+    await test_branch_op(dut, 10, 20, TestInst.BLT, 'BLT', True)
+    await test_branch_op(dut, -10, 20, TestInst.BLT, 'BLT', True)
+    await test_branch_op(dut, 20, 10, TestInst.BLT, 'BLT', False)
+    await test_branch_op(dut, -10, -20, TestInst.BLT, 'BLT', False)
+
+    await test_branch_op(dut, 10, 20, TestInst.BLTU, 'BLTU', True)
+
+    await test_branch_op(dut, 0, 0, TestInst.JAL, 'JALR', True)
+    await test_branch_op(dut, 0, 0, TestInst.JALR, 'JAL', True)

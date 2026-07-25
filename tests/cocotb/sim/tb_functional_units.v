@@ -3,7 +3,7 @@
 module tb_functional_units(
     input [31:0] A,
     input [31:0] B,
-    input [31:0] instruction,
+    input [31:0] instruction
 );
     wire [`CW_LEN] control_word;
     wire [3:0] alu_op;
@@ -32,7 +32,7 @@ module tb_functional_units(
         .B(B),
         .funct3(instruction[`INST_FUNCT3]),
         .branch(control_word[`CW_BRANCH]),
-        .non_conditional_jmp(control_word(`CW_BRANCH_UNCOND)),
+        .non_conditional_jmp(control_word[`CW_BRANCH_UNCOND]),
         .branch_taken(branch_taken)
     );
 

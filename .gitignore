@@ -2,3 +2,4 @@
 tests/*/waves
 tests/*/sim_build
 __pycache__
+.pytest_cache
