@@ -20,13 +20,15 @@ module riscv_top(
 
     wire [31:0] imm_value;
 
+    wire branch_taken;
+
     wire [31:0] pc_val;
     wire [31:0] pc_val_4 = pc_val + 4;
 
     wire [31:0] alu_op1 = control_word[`CW_ALU_SRC_OP1] ? pc_val : reg_data1;
     wire [31:0] alu_op2 = control_word[`CW_ALU_SRC_OP2] ? imm_value : reg_data2;
+    wire [31:0] pc_next_val = branch_taken ? alu_result : pc_val_4;
     wire [31:0] reg_write_val;
-    wire [31:0] pc_next_val;
 
     mux3 write_back(
         .A(alu_result),
@@ -91,6 +93,13 @@ module riscv_top(
     control_unit cu(
         .opcode(instruction[`INST_OPCODE]),
         .control_word(control_word)
+    );
+
+    branch_unit bu(
+        .funct3(instruction[`INST_FUNCT3]),
+        .branch(control_word[`CW_BRANCH]),
+        .non_conditional_jmp(control_word(`CW_BRANCH_UNCOND)),
+        .branch_taken(branch_taken)
     );
     
 endmodule
