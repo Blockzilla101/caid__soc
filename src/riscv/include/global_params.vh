@@ -50,6 +50,10 @@
 `define BRANCH_OP_BLTU 3'b110
 `define BRANCH_OP_BGEU 3'b111
 
+`define MEM_WIDTH_BYTE 2'b00
+`define MEM_WIDTH_HALF 2'b01
+`define MEM_WIDTH_WORD 2'b00
+
 `define OP_LUI 7'b0110111 // Load Upper Immediate
 `define OP_AUIPC 7'b0010111 // Add Upper Immediate to PC
 `define OP_JAL 7'b1101111 // Jump and Link

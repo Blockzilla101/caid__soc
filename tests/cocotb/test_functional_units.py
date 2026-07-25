@@ -155,8 +155,6 @@ async def test_alu_operation(dut):
 
     await test_alu_op(dut, 4, 1, AluOp.ALU_OP_SRA, 'ALU_OP_SRA', 4 >> 1)
 
-
-
 @cocotb.test()
 async def test_imm_gen_value(dut):
     """Testing Immediate value generator"""
