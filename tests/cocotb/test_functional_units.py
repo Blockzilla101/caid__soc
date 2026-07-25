@@ -15,12 +15,6 @@ class AluOp(StrEnum):
     ALU_OP_SLL = '1000'
     ALU_OP_SRL = '1001'
     ALU_OP_SRA = '1010'
-    ALU_OP_BEQ = '0010'
-    ALU_OP_BNE = '1100'
-    ALU_OP_BLT = '1101'
-    ALU_OP_BGE = '1110'
-    ALU_OP_BLTU = '1111'
-    ALU_OP_BGEU = '1011'
 
 class TestInst(StrEnum):
     LUI = '00001010101111110000011010110111'
@@ -110,12 +104,12 @@ async def test_alu_operation(dut):
     await test_alu_op(dut, TestInst.SB, 'SB', AluOp.ALU_OP_ADD)
     await test_alu_op(dut, TestInst.SH, 'SH', AluOp.ALU_OP_ADD)
     await test_alu_op(dut, TestInst.SW, 'SW', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.BEQ, 'BEQ', AluOp.ALU_OP_BEQ)
-    await test_alu_op(dut, TestInst.BNE, 'BNE', AluOp.ALU_OP_BNE)
-    await test_alu_op(dut, TestInst.BLT, 'BLT', AluOp.ALU_OP_BLT)
-    await test_alu_op(dut, TestInst.BGE, 'BGE', AluOp.ALU_OP_BGE)
-    await test_alu_op(dut, TestInst.BLTU, 'BLTU', AluOp.ALU_OP_BLTU)
-    await test_alu_op(dut, TestInst.BGEU, 'BGEU', AluOp.ALU_OP_BGEU)
+    await test_alu_op(dut, TestInst.BEQ, 'BEQ', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.BNE, 'BNE', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.BLT, 'BLT', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.BGE, 'BGE', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.BLTU, 'BLTU', AluOp.ALU_OP_ADD)
+    await test_alu_op(dut, TestInst.BGEU, 'BGEU', AluOp.ALU_OP_ADD)
 
 @cocotb.test()
 async def test_imm_gen_value(dut):
