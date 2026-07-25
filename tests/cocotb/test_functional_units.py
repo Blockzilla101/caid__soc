@@ -1,6 +1,7 @@
 import cocotb
 from cocotb.types import LogicArray
 from cocotb.triggers import FallingEdge, Timer
+from cocotb.handle import Force, Release
 from enum import StrEnum, Enum
 import tinyrv
 
@@ -60,7 +61,7 @@ async def test_imm_operand(dut, inst, should_be: int, op):
     should_be = should_be if should_be >= 0 else should_be + (1 << 32) # signed numbers
     assert dut.imm_value.value == should_be, f"{inst}: imm_value should be {bin(should_be)}, is {bin(int(str(dut.imm_value.value), 2))}, {op}"
 
-async def test_alu_op(dut, inst_val: TestInst, inst_name: str, should_be: AluOp):
+async def test_alu_ctrl_op(dut, inst_val: TestInst, inst_name: str, should_be: AluOp):
     dut.instruction.value = inst_val
     await Timer(1, "ns")
     assert dut.alu_op.value == should_be, f"{inst_name}: should set alu to {should_be}, is {dut.alu_op.value}"
@@ -72,6 +73,13 @@ async def test_branch_op(dut, A: int, B: int, inst_val: TestInst, inst_name: str
     await Timer(1, "ns")
     assert dut.bu.branch_taken.value == should_branch, f"{inst_name}: branch_taken should be {should_branch}, is {bool(dut.bu.branch_taken.value)}"
 
+async def test_alu_op(dut, A: int, B: int, alu_op_val: AluOp, op_name: str, should_be: int):
+    dut.alu_op.value = Force(alu_op_val)
+    dut.A.value = A
+    dut.B.value = B
+    await Timer(1, "ns")
+    assert dut.alu_result.value == should_be, f"{op_name}: alu_result should be {should_be} is {int(str(dut.alu_result.value), 2)}"
+    dut.alu_op.value = Release()
 
 def get_immediate(op):
     for key, val in op.args.items():
@@ -80,47 +88,74 @@ def get_immediate(op):
     return 0
 
 @cocotb.test()
-async def test_alu_operation(dut):
-    """Testing ALU operations"""
+async def test_alu_ctrl_operation(dut):
+    """Testing ALU Control operations"""
 
     dut.A.value = 0;
     dut.B.value = 0;
 
     await Timer(1, "ns")
 
-    await test_alu_op(dut, TestInst.ADDI, 'ADDI', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.SLTI, 'SLTI', AluOp.ALU_OP_SLT)
-    await test_alu_op(dut, TestInst.SLTIU, 'SLTIU', AluOp.ALU_OP_SLTU)
-    await test_alu_op(dut, TestInst.XORI, 'XORI', AluOp.ALU_OP_XOR)
-    await test_alu_op(dut, TestInst.ORI, 'ORI', AluOp.ALU_OP_OR)
-    await test_alu_op(dut, TestInst.ANDI, 'ANDI', AluOp.ALU_OP_AND)
-    await test_alu_op(dut, TestInst.SLLI, 'SLLI', AluOp.ALU_OP_SLL)
-    await test_alu_op(dut, TestInst.SRLI, 'SRLI', AluOp.ALU_OP_SRL)
-    await test_alu_op(dut, TestInst.SRAI, 'SRAI', AluOp.ALU_OP_SRA)
-    await test_alu_op(dut, TestInst.ADD, 'ADD', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.SUB, 'ADD', AluOp.ALU_OP_SUB)
-    await test_alu_op(dut, TestInst.SLL, 'ADD', AluOp.ALU_OP_SLL)
-    await test_alu_op(dut, TestInst.SLT, 'ADD', AluOp.ALU_OP_SLT)
-    await test_alu_op(dut, TestInst.SLTU, 'SLTU', AluOp.ALU_OP_SLTU)
-    await test_alu_op(dut, TestInst.XOR, 'XOR', AluOp.ALU_OP_XOR)
-    await test_alu_op(dut, TestInst.SRL, 'SRL', AluOp.ALU_OP_SRL)
-    await test_alu_op(dut, TestInst.SRA, 'SRA', AluOp.ALU_OP_SRA)
-    await test_alu_op(dut, TestInst.OR, 'OR', AluOp.ALU_OP_OR)
-    await test_alu_op(dut, TestInst.AND, 'AND', AluOp.ALU_OP_AND)
-    await test_alu_op(dut, TestInst.LB, 'LB', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.LH, 'LH', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.LW, 'LW', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.LBU, 'LBU', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.LHU, 'LHU', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.SB, 'SB', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.SH, 'SH', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.SW, 'SW', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.BEQ, 'BEQ', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.BNE, 'BNE', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.BLT, 'BLT', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.BGE, 'BGE', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.BLTU, 'BLTU', AluOp.ALU_OP_ADD)
-    await test_alu_op(dut, TestInst.BGEU, 'BGEU', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.ADDI, 'ADDI', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.SLTI, 'SLTI', AluOp.ALU_OP_SLT)
+    await test_alu_ctrl_op(dut, TestInst.SLTIU, 'SLTIU', AluOp.ALU_OP_SLTU)
+    await test_alu_ctrl_op(dut, TestInst.XORI, 'XORI', AluOp.ALU_OP_XOR)
+    await test_alu_ctrl_op(dut, TestInst.ORI, 'ORI', AluOp.ALU_OP_OR)
+    await test_alu_ctrl_op(dut, TestInst.ANDI, 'ANDI', AluOp.ALU_OP_AND)
+    await test_alu_ctrl_op(dut, TestInst.SLLI, 'SLLI', AluOp.ALU_OP_SLL)
+    await test_alu_ctrl_op(dut, TestInst.SRLI, 'SRLI', AluOp.ALU_OP_SRL)
+    await test_alu_ctrl_op(dut, TestInst.SRAI, 'SRAI', AluOp.ALU_OP_SRA)
+    await test_alu_ctrl_op(dut, TestInst.ADD, 'ADD', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.SUB, 'ADD', AluOp.ALU_OP_SUB)
+    await test_alu_ctrl_op(dut, TestInst.SLL, 'ADD', AluOp.ALU_OP_SLL)
+    await test_alu_ctrl_op(dut, TestInst.SLT, 'ADD', AluOp.ALU_OP_SLT)
+    await test_alu_ctrl_op(dut, TestInst.SLTU, 'SLTU', AluOp.ALU_OP_SLTU)
+    await test_alu_ctrl_op(dut, TestInst.XOR, 'XOR', AluOp.ALU_OP_XOR)
+    await test_alu_ctrl_op(dut, TestInst.SRL, 'SRL', AluOp.ALU_OP_SRL)
+    await test_alu_ctrl_op(dut, TestInst.SRA, 'SRA', AluOp.ALU_OP_SRA)
+    await test_alu_ctrl_op(dut, TestInst.OR, 'OR', AluOp.ALU_OP_OR)
+    await test_alu_ctrl_op(dut, TestInst.AND, 'AND', AluOp.ALU_OP_AND)
+    await test_alu_ctrl_op(dut, TestInst.LB, 'LB', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.LH, 'LH', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.LW, 'LW', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.LBU, 'LBU', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.LHU, 'LHU', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.SB, 'SB', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.SH, 'SH', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.SW, 'SW', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.BEQ, 'BEQ', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.BNE, 'BNE', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.BLT, 'BLT', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.BGE, 'BGE', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.BLTU, 'BLTU', AluOp.ALU_OP_ADD)
+    await test_alu_ctrl_op(dut, TestInst.BGEU, 'BGEU', AluOp.ALU_OP_ADD)
+
+@cocotb.test()
+async def test_alu_operation(dut):
+    """Testing ALU"""
+
+    await Timer(1, "ns")
+
+    await test_alu_op(dut, 1, 1, AluOp.ALU_OP_ADD, 'ALU_OP_ADD', 2)
+    await test_alu_op(dut, 1, 1, AluOp.ALU_OP_SUB, 'ALU_OP_SUB', 0)
+    await test_alu_op(dut, 10, 20, AluOp.ALU_OP_AND, 'ALU_OP_AND', 10 & 20)
+    await test_alu_op(dut, 10, 20, AluOp.ALU_OP_OR, 'ALU_OP_OR', 10 | 20)
+    await test_alu_op(dut, 10, 20, AluOp.ALU_OP_XOR, 'ALU_OP_XOR', 10 ^ 20)
+
+    await test_alu_op(dut, 4, 1, AluOp.ALU_OP_SLT, 'ALU_OP_SLT', 0)
+    await test_alu_op(dut, -4, -5, AluOp.ALU_OP_SLT, 'ALU_OP_SLT', 0)
+    await test_alu_op(dut, 1, 4, AluOp.ALU_OP_SLT, 'ALU_OP_SLT', 1)
+    await test_alu_op(dut, -1, 4, AluOp.ALU_OP_SLT, 'ALU_OP_SLT', 1)
+
+    await test_alu_op(dut, 5, 1, AluOp.ALU_OP_SLTU, 'ALU_OP_SLTU', 0)
+    await test_alu_op(dut, 1, 5, AluOp.ALU_OP_SLTU, 'ALU_OP_SLTU', 1)
+
+    await test_alu_op(dut, 4, 1, AluOp.ALU_OP_SLL, 'ALU_OP_SLL', 4 << 1)
+    await test_alu_op(dut, 4, 1, AluOp.ALU_OP_SRL, 'ALU_OP_SRL', 4 >> 1)
+
+    await test_alu_op(dut, 4, 1, AluOp.ALU_OP_SRA, 'ALU_OP_SRA', 4 >> 1)
+
+
 
 @cocotb.test()
 async def test_imm_gen_value(dut):

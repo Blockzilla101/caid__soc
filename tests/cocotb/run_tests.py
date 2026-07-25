@@ -37,6 +37,7 @@ def test_all_modules():
             f"{src_path}/riscv/branch_unit.v",
             f"{src_path}/riscv/control_unit.v",
             f"{src_path}/riscv/alu_control.v",
+            f"{src_path}/riscv/alu.v",
             f"{src_path}/riscv/imm_gen.v",
             f"{sim_path}/tb_functional_units.v"
         ], 

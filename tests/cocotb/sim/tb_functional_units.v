@@ -8,6 +8,7 @@ module tb_functional_units(
     wire [`CW_LEN] control_word;
     wire [3:0] alu_op;
     wire [31:0] imm_value;
+    wire [31:0] alu_result;
 
     control_unit cu(
         .opcode(instruction[`INST_OPCODE]),
@@ -20,6 +21,13 @@ module tb_functional_units(
         .funct3(instruction[`INST_FUNCT3]),
         .funct7(instruction[`INST_FUNCT7]),
         .alu_op(alu_op)
+    );
+
+    alu alu_unit(
+        .A(A),
+        .B(B),
+        .alu_op(alu_op),
+        .result(alu_result)
     );
 
     imm_gen imm(
