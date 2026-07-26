@@ -133,7 +133,7 @@ async def test_program_counter(dut):
 
 
 @cocotb.test()
-async def test_alu_ctrl_operation(dut):
+async def test_alu_ctrl(dut):
     """Testing ALU Control operations"""
 
     await setup_clock(dut)
@@ -177,7 +177,7 @@ async def test_alu_ctrl_operation(dut):
 
 
 @cocotb.test()
-async def test_alu_operation(dut):
+async def test_alu(dut):
     """Testing ALU"""
 
     await setup_clock(dut)
@@ -216,7 +216,7 @@ async def test_imm_gen_value(dut):
 
 
 @cocotb.test()
-async def test_branch_unit_operation(dut):
+async def test_branch_unit(dut):
     """Testing branch unit"""
 
     await setup_clock(dut)
@@ -244,3 +244,74 @@ async def test_branch_unit_operation(dut):
 
     await test_branch_op(dut, 0, 0, TestInst.JAL, "JALR", True)
     await test_branch_op(dut, 0, 0, TestInst.JALR, "JAL", True)
+
+
+@cocotb.test(skip=True)
+async def test_data_memory(dut):
+    """Testing data memory"""
+
+    await setup_clock(dut)
+
+
+@cocotb.test(skip=True)
+async def test_inst_memory(dut):
+    """Testing instruction memory"""
+
+    await setup_clock(dut)
+
+
+@cocotb.test(skip=True)
+async def test_reg_file(dut):
+    """Testing register file"""
+
+    await setup_clock(dut)
+
+    dut.rs1.value = 0
+    dut.rs2.value = 0
+    dut.rd.value = 0
+    dut.write_data.value = 0
+    dut.write_enable.value = 0
+
+    await dut.clk.falling_edge
+
+    dut.write_enable.value = 1
+    for i in range(0, 32):
+        dut.rd.value = i
+        dut.write_data.value = 0
+        await dut.clk.falling_edge
+
+    dut.write_enable.value = 1
+    for i in range(0, 32):
+        dut.rs1.value = i
+        dut.rs2.value = i
+
+        await dut.clk.falling_edge
+
+        assert dut.rs1_data.value == 0, f"register rs1=x{i} should have 0, has {dut.rs1_data.value}" 
+        assert dut.rs2_data.value == 0, f"register rs2=x{i} should have 0, has {dut.rs2_data.value}"
+
+        dut.rd.value = i
+        dut.write_data.value = i + 1
+
+        await dut.clk.falling_edge
+
+    dut.write_enable.value = 0
+    await dut.clk.falling_edge
+
+    for i in range(0, 32):
+        dut.rs1.value = i
+        dut.rs2.value = i
+
+        await dut.clk.falling_edge
+
+        should_have = 0 if i == 0 else i + 1
+
+        assert dut.rs1_data.value == should_have, f"register rs1=x{i} should have {should_have}, has {dut.rs1_data.value}"
+        assert dut.rs2_data.value == should_have, f"register rs2=x{i} should have {should_have}, has {dut.rs2_data.value}"
+
+
+@cocotb.test(skip=True)
+async def test_control_unit(dut):
+    """Testing control unit"""
+
+    await setup_clock(dut)
