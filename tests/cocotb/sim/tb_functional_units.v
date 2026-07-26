@@ -1,6 +1,8 @@
 `include "global_params.vh"
 
 module tb_functional_units(
+    input clk,
+    input rst,
     input [31:0] A,
     input [31:0] B,
     input [31:0] instruction
@@ -9,6 +11,9 @@ module tb_functional_units(
     wire [3:0] alu_op;
     wire [31:0] imm_value;
     wire [31:0] alu_result;
+
+    wire [31:0] pc_next_val;
+    wire [31:0] pc_val;
 
     control_unit cu(
         .opcode(instruction[`INST_OPCODE]),
@@ -42,6 +47,13 @@ module tb_functional_units(
         .branch(control_word[`CW_BRANCH]),
         .non_conditional_jmp(control_word[`CW_BRANCH_UNCOND]),
         .branch_taken(branch_taken)
+    );
+
+    program_counter pc(
+        .clk(clk),
+        .rst(rst),
+        .next_val(pc_next_val),
+        .pc_val(pc_val)
     );
 
 endmodule
