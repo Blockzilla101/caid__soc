@@ -1,6 +1,6 @@
 `define CW_LEN 9:0
 
-`define INST_OPCODE 6:0 
+`define INST_OPCODE 6:0
 `define INST_RD 11:7
 `define INST_FUNCT3 14:12
 `define INST_RS1 19:15

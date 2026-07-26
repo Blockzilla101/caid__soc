@@ -30,6 +30,7 @@ module alu_control (
                     11'b0100000_101_?: alu_op <= `ALU_OP_SRA;
                     11'b???????_110_?: alu_op <= `ALU_OP_OR;
                     11'b???????_111_?: alu_op <= `ALU_OP_AND;
+                    default: alu_op <= 0;
                 endcase
             end
             default: alu_op <= 0;

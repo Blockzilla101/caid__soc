@@ -13,6 +13,7 @@ module riscv_top (
     wire [31:0] alu_result;
     wire alu_compare_result;
 
+
     wire [31:0] reg_data1;
     wire [31:0] reg_data2;
 

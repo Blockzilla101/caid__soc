@@ -5,6 +5,19 @@
     "systemverilogFormatter.commandLineArguments": "--indentation_spaces 4  --column_limit 180",
     "systemverilogFormatter.veribleBuild": "linux-static-x86_64",
     "verible.arguments": [
-        "--rules=-always-comb,line-length=180"
-    ]
+        "--rules=-always-comb,line-length=180 --rules_config_search"
+    ],
+    "verilog.formatting.verilogHDL.formatter": "verible-verilog-format",
+    "verilog.linting.iverilog.includePath": [
+        "src/riscv/include"
+    ],
+    "verilog.linting.linter": "verible-verilog-lint",
+    "verilog.languageServer.veribleVerilogLs.enabled": true,
+    "verilog.languageServer.veribleVerilogLs.path": "/home/blockzilla/ic-design/verible/bin/verible-verilog-ls",
+    "verilog.languageServer.veribleVerilogLs.arguments": "--rules_config_search",
+    "verilog.linting.veribleVerilogLint.arguments": "--rules=-always-comb,line-length=180",
+    "verilog.formatting.veribleVerilogFormatter.path": "/home/blockzilla/ic-design/verible/bin/verible-verilog-format",
+    "verilog.formatting.veribleVerilogFormatter.arguments": "--indentation_spaces 4  --column_limit 180",
+    "verilog.ctags.enabled": true,
+    "verilog.ctags.path": "ctags",
 }

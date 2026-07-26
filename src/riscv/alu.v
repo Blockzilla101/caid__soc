@@ -17,8 +17,8 @@ module alu (
             `ALU_OP_AND: result <= A & B;
             `ALU_OP_OR: result <= A | B;
             `ALU_OP_XOR: result <= A ^ B;
-            `ALU_OP_SLT: result <= ($signed(A) < $signed(B)) ? 32'b1 : 32'b0;
-            `ALU_OP_SLTU: result <= (A < B) ? 32'b1 : 32'b0;
+            `ALU_OP_SLT: result <= ($signed(A) < $signed(B)) ? 1'b1 : 32'b0;
+            `ALU_OP_SLTU: result <= (A < B) ? 1'b1 : 32'b0;
             `ALU_OP_SLL: result <= A << B;
             `ALU_OP_SRL: result <= A >> B;
             `ALU_OP_SRA: result <= A >>> B;
