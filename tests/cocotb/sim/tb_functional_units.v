@@ -12,7 +12,7 @@ module tb_functional_units (
     wire [31:0] imm_value;
     wire [31:0] alu_result;
 
-    wire [31:0] pc_next_val;
+    reg [31:0] pc_next_val;
     wire [31:0] pc_val;
 
     control_unit cu (
@@ -54,6 +54,25 @@ module tb_functional_units (
         .rst(rst),
         .next_val(pc_next_val),
         .pc_val(pc_val)
+    );
+
+    reg [31:0] reg_rs1;
+    reg [31:0] reg_rs2;
+    reg [31:0] reg_rd;
+    reg [31:0] reg_write_data;
+    reg reg_write_enable;
+    wire [31:0] reg_rs1_data;
+    wire [31:0] reg_rs2_data;
+
+    register_file reg_file (
+        .clk(clk),
+        .rs1(reg_rs1),
+        .rs2(reg_rs2),
+        .rd(reg_rd),
+        .write_data(reg_write_data),
+        .write_enable(reg_write_enable),
+        .rs1_data(reg_rs1_data),
+        .rs2_data(reg_rs2_data)
     );
 
 endmodule

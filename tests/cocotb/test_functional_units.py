@@ -1,6 +1,7 @@
 import cocotb
 from cocotb.types import LogicArray
 from cocotb.clock import Clock
+from cocotb.triggers import Timer
 from cocotb.handle import Force, Release
 from enum import StrEnum, Enum
 import tinyrv
@@ -260,54 +261,62 @@ async def test_inst_memory(dut):
     await setup_clock(dut)
 
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_reg_file(dut):
     """Testing register file"""
 
     await setup_clock(dut)
 
-    dut.rs1.value = 0
-    dut.rs2.value = 0
-    dut.rd.value = 0
-    dut.write_data.value = 0
-    dut.write_enable.value = 0
+    dut.reg_rs1.value = 0
+    dut.reg_rs2.value = 0
+    dut.reg_rd.value = 0
+    dut.reg_write_data.value = 0
+    dut.reg_write_enable.value = 0
 
-    await dut.clk.falling_edge
+    await dut.clk.rising_edge
 
-    dut.write_enable.value = 1
+    dut.reg_write_enable.value = 1
     for i in range(0, 32):
-        dut.rd.value = i
-        dut.write_data.value = 0
-        await dut.clk.falling_edge
+        dut.reg_rd.value = i
+        dut.reg_write_data.value = 0
+        await dut.clk.rising_edge
 
-    dut.write_enable.value = 1
+    await dut.clk.rising_edge
+
+    dut.reg_write_enable.value = 0
     for i in range(0, 32):
-        dut.rs1.value = i
-        dut.rs2.value = i
+        dut.reg_rs1.value = i
+        dut.reg_rs2.value = i
 
-        await dut.clk.falling_edge
+        await dut.clk.rising_edge
 
-        assert dut.rs1_data.value == 0, f"register rs1=x{i} should have 0, has {dut.rs1_data.value}" 
-        assert dut.rs2_data.value == 0, f"register rs2=x{i} should have 0, has {dut.rs2_data.value}"
+        assert dut.reg_rs1_data.value == 0, f"register rs1=x{i} should have 0, has {dut.reg_rs1_data.value}" 
+        assert dut.reg_rs2_data.value == 0, f"register rs2=x{i} should have 0, has {dut.reg_rs2_data.value}"
 
-        dut.rd.value = i
-        dut.write_data.value = i + 1
+    await dut.clk.rising_edge
 
-        await dut.clk.falling_edge
-
-    dut.write_enable.value = 0
-    await dut.clk.falling_edge
-
+    dut.reg_write_enable.value = 1
     for i in range(0, 32):
-        dut.rs1.value = i
-        dut.rs2.value = i
+        dut.reg_rs1.value = i
+        dut.reg_rs2.value = i
+        dut.reg_rd.value = i
+        dut.reg_write_data.value = i + 1
+        await dut.clk.rising_edge
 
-        await dut.clk.falling_edge
+    await dut.clk.rising_edge
+
+    dut.reg_write_enable.value = 0
+    for i in range(0, 32):
+        dut.reg_rs1.value = i
+        dut.reg_rs2.value = i
+
+        await dut.clk.rising_edge
+        await Timer(1, 'step')
 
         should_have = 0 if i == 0 else i + 1
 
-        assert dut.rs1_data.value == should_have, f"register rs1=x{i} should have {should_have}, has {dut.rs1_data.value}"
-        assert dut.rs2_data.value == should_have, f"register rs2=x{i} should have {should_have}, has {dut.rs2_data.value}"
+        assert dut.reg_rs1_data.value == should_have, f"register rs1=x{i} should have {should_have}, has {dut.reg_rs1_data.value}"
+        assert dut.reg_rs2_data.value == should_have, f"register rs2=x{i} should have {should_have}, has {dut.reg_rs2_data.value}"
 
 
 @cocotb.test(skip=True)

@@ -10,7 +10,7 @@ module register_file (
     output reg [31:0] rs1_data,
     output reg [31:0] rs2_data
 );
-    reg [31:0] registers[31];
+    reg [31:0] registers[32];
 
     always @(posedge clk) begin
         if (write_enable && rd != 0) registers[rd] = write_data;

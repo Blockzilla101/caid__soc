@@ -2,6 +2,12 @@
     "black-formatter.args": [
         "--line-length 200"
     ],
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.quickSuggestions": {
+        "other": "on",
+        "comments": "off",
+        "strings": "off"
+    },
     "systemverilogFormatter.commandLineArguments": "--indentation_spaces 4  --column_limit 180",
     "systemverilogFormatter.veribleBuild": "linux-static-x86_64",
     "verible.arguments": [
@@ -19,7 +25,7 @@
     "verilog.linting.veribleVerilogLint.arguments": "--rules_config_search --rules=-always-comb,line-length=180 ",
     "verilog.formatting.veribleVerilogFormatter.path": "/home/blockzilla/ic-design/verible/bin/verible-verilog-format",
     "verilog.formatting.veribleVerilogFormatter.arguments": "--indentation_spaces 4  --column_limit 180",
-    "verilog.ctags.enabled": true,
+    "verilog.ctags.enabled": false,
     "verilog.ctags.path": "ctags",
     "systemverilog.defines": [],
     "systemverilog.excludeIndexing": [
@@ -28,5 +34,4 @@
     "systemverilog.includeIndexing": [
         "**/*.{v,vh}",
     ],
-    "verilog.languageServer.svls.enabled": false,
 }
