@@ -56,9 +56,9 @@ module tb_functional_units (
         .pc_val(pc_val)
     );
 
-    reg [31:0] reg_rs1;
-    reg [31:0] reg_rs2;
-    reg [31:0] reg_rd;
+    reg [4:0] reg_rs1;
+    reg [4:0] reg_rs2;
+    reg [4:0] reg_rd;
     reg [31:0] reg_write_data;
     reg reg_write_enable;
     wire [31:0] reg_rs1_data;
@@ -73,6 +73,29 @@ module tb_functional_units (
         .write_enable(reg_write_enable),
         .rs1_data(reg_rs1_data),
         .rs2_data(reg_rs2_data)
+    );
+
+    reg  [31:0] inst_addr;
+    wire [31:0] inst_read_data;
+
+    instruction_memory inst_mem (
+        .clk(clk),
+        .addr(inst_addr),
+        .read_data(inst_read_data)
+    );
+
+    reg [31:0] mem_addr;
+    reg [31:0] mem_write_data;
+    reg mem_write_enable;
+    reg [31:0] mem_read_data;
+
+    data_memory data_mem (
+        .clk(clk),
+        .addr(mem_addr),
+        .write_data(mem_write_data),
+        .write_enable(mem_write_enable),
+        .funct3(instruction[`INST_FUNCT3]),
+        .read_data(mem_read_data)
     );
 
 endmodule

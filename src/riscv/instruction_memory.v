@@ -3,7 +3,7 @@
 module instruction_memory (
     input clk,
     input [31:0] addr,
-    output reg read_data
+    output reg [31:0] read_data
 );
     reg [31:0] memory[512];
 

@@ -22,13 +22,13 @@ module data_memory (
                     memory[addr] <= write_data[15:8];
                     memory[addr+32'h1] <= write_data[7:0];
                 end
-                write_data <= read_unsigned ? {16'h0000, memory[addr], memory[addr+32'h1]} : $signed({memory[addr], memory[addr+32'h1]});
+                read_data <= read_unsigned ? {16'h0000, memory[addr], memory[addr+32'h1]} : $signed({memory[addr], memory[addr+32'h1]});
             end
             `MEM_WIDTH_BYTE: begin
                 if (write_enable) begin
                     memory[addr] <= write_data[7:0];
                 end
-                write_data <= read_unsigned ? {24'h0000_00, memory[addr]} : $signed(memory[addr]);
+                read_data <= read_unsigned ? {24'h0000_00, memory[addr]} : $signed(memory[addr]);
             end
             default: begin  // word
                 if (write_enable) begin
@@ -37,7 +37,7 @@ module data_memory (
                     memory[addr+32'h2] <= write_data[15:8];
                     memory[addr+32'h3] <= write_data[7:0];
                 end
-                write_data <= {memory[addr], memory[addr+32'h1], memory[addr+32'h2], memory[addr+32'h3]};
+                read_data <= {memory[addr], memory[addr+32'h1], memory[addr+32'h2], memory[addr+32'h3]};
             end
         endcase
     end

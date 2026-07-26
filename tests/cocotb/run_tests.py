@@ -43,6 +43,8 @@ def test_all_modules():
             f"{src_path}/riscv/imm_gen.v",
             f"{src_path}/riscv/program_counter.v",
             f"{src_path}/riscv/register_file.v",
+            f"{src_path}/riscv/instruction_memory.v",
+            f"{src_path}/riscv/data_memory.v",
             f"{sim_path}/tb_functional_units.v",
         ],
         hdl_toplevel="tb_functional_units",
