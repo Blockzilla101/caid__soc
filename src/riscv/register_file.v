@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
 
 module register_file (
     input clk,
@@ -10,7 +10,7 @@ module register_file (
     output reg [31:0] rs1_data,
     output reg [31:0] rs2_data
 );
-    reg [31:0] registers [31:0];
+    reg [31:0] registers[31];
 
     always @(posedge clk) begin
         if (write_enable && rd != 0) registers[rd] = write_data;

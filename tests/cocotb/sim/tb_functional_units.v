@@ -1,6 +1,6 @@
 `include "global_params.vh"
 
-module tb_functional_units(
+module tb_functional_units (
     input clk,
     input rst,
     input [31:0] A,
@@ -15,32 +15,32 @@ module tb_functional_units(
     wire [31:0] pc_next_val;
     wire [31:0] pc_val;
 
-    control_unit cu(
+    control_unit cu (
         .opcode(instruction[`INST_OPCODE]),
         .control_word(control_word)
     );
 
-    alu_control alu_ctrl_unit(
-        .opcode(instruction[`INST_OPCODE]),
+    alu_control alu_ctrl_unit (
+        .opcode  (instruction[`INST_OPCODE]),
         .alu_ctrl(control_word[`CW_ALU_CTRL]),
-        .funct3(instruction[`INST_FUNCT3]),
-        .funct7(instruction[`INST_FUNCT7]),
-        .alu_op(alu_op)
+        .funct3  (instruction[`INST_FUNCT3]),
+        .funct7  (instruction[`INST_FUNCT7]),
+        .alu_op  (alu_op)
     );
 
-    alu alu_unit(
+    alu alu_unit (
         .A(A),
         .B(B),
         .alu_op(alu_op),
         .result(alu_result)
     );
 
-    imm_gen imm(
+    imm_gen imm (
         .instruction(instruction),
-        .imm_value(imm_value)
+        .imm_value  (imm_value)
     );
 
-    branch_unit bu(
+    branch_unit bu (
         .A(A),
         .B(B),
         .funct3(instruction[`INST_FUNCT3]),
@@ -49,7 +49,7 @@ module tb_functional_units(
         .branch_taken(branch_taken)
     );
 
-    program_counter pc(
+    program_counter pc (
         .clk(clk),
         .rst(rst),
         .next_val(pc_next_val),

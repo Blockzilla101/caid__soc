@@ -8,11 +8,11 @@ module mux3 (
 
     always @(*) begin
         case (sel)
-            0: F <= A;
-            1: F <= B;
-            2: F <= C;
-            default: F <= 32'hzzzz_zzzz;
+            0: F = A;
+            1: F = B;
+            2: F = C;
+            default: F = 32'hzzzz_zzzz;
         endcase
     end
 
-endmodule;
+endmodule

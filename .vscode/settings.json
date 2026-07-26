@@ -1,5 +1,10 @@
 {
     "black-formatter.args": [
         "--line-length 200"
+    ],
+    "systemverilogFormatter.commandLineArguments": "--indentation_spaces 4  --column_limit 180",
+    "systemverilogFormatter.veribleBuild": "linux-static-x86_64",
+    "verible.arguments": [
+        "--rules=-always-comb,line-length=180"
     ]
 }

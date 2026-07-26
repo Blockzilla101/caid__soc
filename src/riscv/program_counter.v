@@ -1,8 +1,8 @@
 `include "global_params.vh"
 
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
 
-module program_counter(
+module program_counter (
     input clk,
     input rst,
     input [31:0] next_val,
