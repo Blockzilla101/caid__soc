@@ -1,6 +1,5 @@
 import cocotb
 from cocotb.types import LogicArray
-from cocotb.triggers import RisingEdge, FallingEdge
 from cocotb.clock import Clock
 from cocotb.handle import Force, Release
 from enum import StrEnum, Enum
@@ -61,7 +60,7 @@ class TestInst(StrEnum):
 
 
 async def test_imm_operand(dut, inst, should_be: int, op):
-    await RisingEdge(dut.clk)
+    await dut.clk.rising_edge
     should_be = should_be if should_be >= 0 else should_be + (1 << 32)  # signed numbers
     assert (
         dut.imm_value.value == should_be
@@ -70,7 +69,7 @@ async def test_imm_operand(dut, inst, should_be: int, op):
 
 async def test_alu_ctrl_op(dut, inst_val: TestInst, inst_name: str, should_be: AluOp):
     dut.instruction.value = inst_val
-    await RisingEdge(dut.clk)
+    await dut.clk.rising_edge
     assert (
         dut.alu_op.value == should_be
     ), f"{inst_name}: should set alu to {should_be}, is {dut.alu_op.value}"
@@ -82,7 +81,7 @@ async def test_branch_op(
     dut.instruction.value = inst_val
     dut.A.value = A
     dut.B.value = B
-    await RisingEdge(dut.clk)
+    await dut.clk.rising_edge
     assert (
         dut.bu.branch_taken.value == should_branch
     ), f"{inst_name}: branch_taken should be {should_branch}, is {bool(dut.bu.branch_taken.value)}"
@@ -94,7 +93,7 @@ async def test_alu_op(
     dut.alu_op.value = Force(alu_op_val)
     dut.A.value = A
     dut.B.value = B
-    await RisingEdge(dut.clk)
+    await dut.clk.rising_edge
     assert (
         dut.alu_result.value == should_be
     ), f"{op_name}: alu_result should be {should_be} is {int(str(dut.alu_result.value), 2)}"
@@ -109,10 +108,10 @@ def get_immediate(op):
 
 
 async def setup_clock(dut):
-    Clock(dut.clk, 1, "ns").start()
+    Clock(dut.clk, 1, "ns").start(False)
     dut.rst.value = 1
 
-    await RisingEdge(dut.clk)
+    await dut.clk.rising_edge
     dut.rst.value = 0
 
 
@@ -121,15 +120,16 @@ async def test_program_counter(dut):
     """Testing Program Counter"""
 
     await setup_clock(dut)
-    dut.pc_next_val = 0
 
-    await RisingEdge(dut.clk)
-    assert dut.pc_val == 0, "PC should be 0"
+    dut.pc_next_val.value = 0
+    await dut.clk.rising_edge
+    assert dut.pc_val.value == 0, "PC should be 0"
 
-    dut.pc_next_val = dut.pc_val + 4
+    dut.pc_next_val.value = int(str(dut.pc_val.value), 2) + 4
 
-    await RisingEdge(dut.clk)
-    assert dut.pc_val == 4, "PC should be 4"
+    await dut.clk.rising_edge
+    await dut.clk.falling_edge
+    assert dut.pc_val.value == 4, "PC should be 4"
 
 
 @cocotb.test()
