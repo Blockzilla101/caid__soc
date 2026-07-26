@@ -5,7 +5,6 @@ module mux3 (
     input [2:0] sel,
     output reg [31:0] F
 );
-
     always @(*) begin
         case (sel)
             0: F = A;

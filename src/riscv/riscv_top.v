@@ -112,5 +112,4 @@ module riscv_top (
         .non_conditional_jmp(control_word(`CW_BRANCH_UNCOND)),
         .branch_taken(branch_taken)
     );
-
 endmodule
