@@ -114,6 +114,7 @@ def get_immediate(op):
             return val
     return 0
 
+
 @cocotb.test()
 async def test_program_counter(dut):
     """Testing Program Counter"""
@@ -256,8 +257,8 @@ async def test_data_memory(dut):
 
     test_data_map = {
         4: [0xFBCD_ABCF],
-        2: [0xFBCD, None, 0xABCF],
-        1: [0xFB, 0xCD, 0xAB, 0xCF],
+        2: [0xABCF, None, 0xFBCD],
+        1: [0xCF, 0xAB, 0xCD, 0xFB],
     }
 
     width_offsets = {4: [0], 2: [0, 2], 1: [0, 1, 2, 3]}

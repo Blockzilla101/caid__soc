@@ -56,6 +56,7 @@ module control_unit (
             `OP_STORE: begin  // M[x[rs1] + sext(offset)] = x[rs2][31:0]
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
                 control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
+                control_word[`CW_MEM_WRITE] <= 1;
             end
 
             `OP_ALU: begin  // x[rd] = x[rs1] + x[rs2]
