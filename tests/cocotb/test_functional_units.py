@@ -3,8 +3,8 @@ from cocotb.types import LogicArray
 from cocotb.clock import Clock
 from cocotb.triggers import Timer
 from cocotb.handle import Force, Release
-from enum import StrEnum, Enum
-import tinyrv
+from enum import StrEnum, Enum 
+import tinyrv 
 
 
 class AluOp(StrEnum):
@@ -251,7 +251,6 @@ async def test_branch_unit(dut):
     await test_branch_op(dut, 0, 0, TestInst.JAL, "JALR", True)
     await test_branch_op(dut, 0, 0, TestInst.JALR, "JAL", True)
 
-
 @cocotb.test()
 async def test_data_memory(dut):
     """Testing data memory"""
@@ -315,14 +314,24 @@ async def test_data_memory(dut):
                 should_be = test_data_map[width][offset]
                 assert dut.mem_read_data.value == should_be, f"W={width}: mem[{hex(affective_addr)}] != {hex(should_be)}, is {dut.mem_read_data.value}"
 
-
-
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_inst_memory(dut):
     """Testing instruction memory"""
 
     await setup_clock(dut)
 
+    test_val = 0xabcd_dcba
+
+    for i in range(0, 32):
+        dut.inst_mem.memory[i].value = test_val
+        await dut.clk.rising_edge
+
+
+    for i in range(0, 32):
+        dut.inst_addr.value = i
+        await dut.clk.rising_edge
+        await Timer(1, 'step')
+        assert dut.inst_read_data.value == test_val, f"inst_mem[{hex(i)}] != {hex(test_val)}, is {dut.inst_read_data.value}"
 
 @cocotb.test()
 async def test_reg_file(dut):
@@ -382,8 +391,8 @@ async def test_reg_file(dut):
         assert dut.reg_rs2_data.value == should_have, f"register rs2=x{i} should have {should_have}, has {dut.reg_rs2_data.value}"
 
 
-@cocotb.test(skip=True)
-async def test_control_unit(dut):
-    """Testing control unit"""
+# @cocotb.test(skip=True)
+# async def test_control_unit(dut):
+#     """Testing control unit"""
 
-    await setup_clock(dut)
+#     await setup_clock(dut)
