@@ -60,6 +60,11 @@ class TestInst(StrEnum):
     BGEU = "11101010100001111111111011100011"
 
 
+class MemWidth(StrEnum):
+    byte = '00'
+    half = '01'
+    word = '10'
+
 async def test_imm_operand(dut, inst, should_be: int, op):
     await dut.clk.rising_edge
     should_be = should_be if should_be >= 0 else should_be + (1 << 32)  # signed numbers
@@ -247,11 +252,69 @@ async def test_branch_unit(dut):
     await test_branch_op(dut, 0, 0, TestInst.JALR, "JAL", True)
 
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_data_memory(dut):
     """Testing data memory"""
 
     await setup_clock(dut)
+
+    widths = [4, 2, 1]
+    width_map = {
+        4: MemWidth.word,
+        2: MemWidth.half,
+        1: MemWidth.byte
+    }
+
+    test_data_map = {
+        4: [0xfbcd_abcf],
+        2: [0xfbcd, None, 0xabcf],
+        1: [0xfb, 0xcd, 0xab, 0xcf]
+    }
+
+    width_offsets = {
+        4: [0],
+        2: [0, 2],
+        1: [0, 1, 2, 3]
+    }
+
+    for width in widths:
+        dut.mem_unsigned.value = 1
+        dut.mem_width.value = width_map[width]
+
+        dut.mem_write_enable.value = 1
+        for i in range(0, 32 * width, width):
+            dut.mem_addr.value = i
+            dut.mem_write_data.value = 0
+            await dut.clk.rising_edge
+
+        dut.mem_write_enable.value = 0
+        for i in range(0, 32 * width, width):
+            dut.mem_addr.value = i
+            await dut.clk.rising_edge
+            await Timer(1, 'step')
+            assert dut.mem_read_data.value == 0, f"W={width}: mem[{hex(i)}] != 0, is {hex(dut.mem_read_data.value)}"
+
+    dut.mem_unsigned.value = 1
+    dut.mem_write_enable.value = 1
+    dut.mem_width.value = MemWidth.word
+    for i in range(0, 32 * 4, 4):
+        dut.mem_addr.value = i
+        dut.mem_write_data.value = test_data_map[4][0]
+        await dut.clk.rising_edge
+
+
+    dut.mem_write_enable.value = 0
+    for i in range(0, 32 * 4, 4):
+        for width in widths:
+            for offset in width_offsets[width]:
+                affective_addr =  i + offset
+                dut.mem_addr.value = affective_addr
+                dut.mem_width.value = width_map[width]
+                await dut.clk.rising_edge
+                await Timer(1, 'step')
+                should_be = test_data_map[width][offset]
+                assert dut.mem_read_data.value == should_be, f"W={width}: mem[{hex(affective_addr)}] != {hex(should_be)}, is {dut.mem_read_data.value}"
+
 
 
 @cocotb.test(skip=True)

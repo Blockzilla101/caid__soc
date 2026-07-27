@@ -88,13 +88,15 @@ module tb_functional_units (
     reg [31:0] mem_write_data;
     reg mem_write_enable;
     reg [31:0] mem_read_data;
+    reg mem_unsigned = 0;
+    reg [1:0] mem_width = 0;
 
     data_memory data_mem (
         .clk(clk),
         .addr(mem_addr),
         .write_data(mem_write_data),
         .write_enable(mem_write_enable),
-        .funct3(instruction[`INST_FUNCT3]),
+        .funct3({mem_unsigned, mem_width}),
         .read_data(mem_read_data)
     );
 

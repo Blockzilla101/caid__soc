@@ -52,7 +52,7 @@
 
 `define MEM_WIDTH_BYTE 2'b00
 `define MEM_WIDTH_HALF 2'b01
-`define MEM_WIDTH_WORD 2'b00
+`define MEM_WIDTH_WORD 2'b10
 
 `define OP_LUI 7'b0110111 // Load Upper Immediate
 `define OP_AUIPC 7'b0010111 // Add Upper Immediate to PC
