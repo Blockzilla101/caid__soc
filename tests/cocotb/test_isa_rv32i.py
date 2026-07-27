@@ -8,7 +8,7 @@ inst_nop = 0x00000013
 
 
 def asm_inst(inst: list[str]):
-    assembled = asm.convert(str.join("\n", inst))
+    assembled = asm(str.join("\n", inst))
     if assembled is None:
         raise ValueError(f"Invalid instruction: {inst}")
     return [int(x, 16) for x in assembled]
@@ -195,8 +195,8 @@ async def test_store_inst(dut):
     await exec_imm(dut, f"or x4, x5, x6")
     assert_reg(dut, 4, x5)
 
-    await exec_imm(dut, f"sw x4, 0(x0)")
-    assert_mem(dut, 0, x5)
+    await exec_imm(dut, 0x00402223)  # f"sw x4, 4(x0)")
+    assert_mem(dut, 4, x5)
 
     await exec_imm(dut, f"sw x0, 0(x0)")
     await exec_imm(dut, f"sh x4, 0(x0)")
@@ -221,21 +221,25 @@ async def test_load_inst(dut):
     await exec_imm(dut, f"or x4, x5, x6")
     assert_reg(dut, 4, x5)
 
-    await exec_imm(dut, f"sw x4, 0(x0)")
+    await exec_imm(dut, "addi x2, x0, 3")
 
-    await exec_imm(dut, f"lw x10, 0(x0)")
+    await exec_imm(dut, 0x004121A3)  # f"sw x4, 6(x2)")
+
+    # await exec_imm(dut, f"sw x4, 0(x0)")
+
+    await exec_imm(dut, f"lw x10, 3(x2)")
     assert_reg(dut, 10, x5)
 
-    await exec_imm(dut, 0x00001503)  # f"lh x10, 0(x0)")
+    await exec_imm(dut, 0x00311503)  # f"lh x10, 3(x2)")
     assert_reg(dut, 10, sign_extend(x5 & 0xFFFF, 16))
 
-    await exec_imm(dut, 0x00000503)  # lb x10, 0(x0)
+    await exec_imm(dut, 0x00310503)  # lb x10, 3(x2)
     assert_reg(dut, 10, sign_extend(x5 & 0xFF, 8))
 
-    await exec_imm(dut, 0x00005503)  # f"lhu x10, 0(x0)")
+    await exec_imm(dut, 0x00315503)  # f"lhu x10, 3(x2)")
     assert_reg(dut, 10, x5 & 0xFFFF)
 
-    await exec_imm(dut, 0x00004503)  # f"lbu x10, 0(x0)")
+    await exec_imm(dut, 0x00314503)  # f"lbu x10, 3(x2)")
     assert_reg(dut, 10, x5 & 0xFF, 8)
 
 
