@@ -8,6 +8,7 @@ sim_path = "./sim"
 
 runner = get_runner("icarus")
 
+
 def run_test_single(module: str):
     run_test(
         sources=[f"../../src/riscv/{module}.v"],
@@ -50,6 +51,25 @@ def test_all_modules():
         hdl_toplevel="tb_functional_units",
         test_module="test_functional_units",
     )
+
+    run_test(
+        sources=[
+            f"{src_path}/riscv/branch_unit.v",
+            f"{src_path}/riscv/control_unit.v",
+            f"{src_path}/riscv/alu_control.v",
+            f"{src_path}/riscv/alu.v",
+            f"{src_path}/riscv/imm_gen.v",
+            f"{src_path}/riscv/program_counter.v",
+            f"{src_path}/riscv/register_file.v",
+            f"{src_path}/riscv/instruction_memory.v",
+            f"{src_path}/riscv/data_memory.v",
+            f"{src_path}/riscv/riscv_top.v",
+            f"{sim_path}/tb_riscv_top.v",
+        ],
+        hdl_toplevel="tb_riscv_top",
+        test_module="test_isa_rv32i",
+    )
+
 
 if __name__ == "__main__":
     test_all_modules()

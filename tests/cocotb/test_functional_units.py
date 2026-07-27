@@ -5,6 +5,7 @@ from cocotb.triggers import Timer
 from cocotb.handle import Force, Release
 from enum import StrEnum, Enum
 import tinyrv
+from util import setup_clock
 
 
 class AluOp(StrEnum):
@@ -112,15 +113,6 @@ def get_immediate(op):
         if "imm" in key or key == "shamtd":
             return val
     return 0
-
-
-async def setup_clock(dut):
-    Clock(dut.clk, 1, "ns").start(False)
-    dut.rst.value = 1
-
-    await dut.clk.rising_edge
-    dut.rst.value = 0
-
 
 @cocotb.test()
 async def test_program_counter(dut):
