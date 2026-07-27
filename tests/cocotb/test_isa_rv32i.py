@@ -243,9 +243,29 @@ async def test_load_inst(dut):
     assert_reg(dut, 10, x5 & 0xFF, 8)
 
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_jump_inst(dut):
     """Testing jump instructions"""
+
+    await setup_clock(dut)
+    await reset_state(dut)
+
+    await exec_imm(dut, inst_nop)
+    await exec_imm(dut, inst_nop)
+
+    pc_val = int(str(dut.pc.counter.value), 2)
+    await exec_imm(dut, 0x00A0016F)  # "jal x2, 10")
+    assert_reg(dut, 2, pc_val + 4)
+
+    assert dut.pc.counter.value == pc_val + 10
+
+    x4 = 4
+    await exec_imm(dut, f"addi x4, x0, {x4}")
+    pc_val = int(str(dut.pc.counter.value), 2)
+    await exec_imm(dut, 0x00820167)  # jalr x2, 8(x4)
+    assert_reg(dut, 2, pc_val + 4)
+
+    assert dut.pc.counter.value == 8 + x4
 
 
 @cocotb.test(skip=True)

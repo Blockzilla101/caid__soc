@@ -116,6 +116,6 @@ module riscv_top (
         .F  (reg_write_data)
     );
 
-    assign pc_next_val = branch_taken ? alu_result : pc_plus_4;
+    assign pc_next_val = branch_taken ? alu_result & ~32'b1 : pc_plus_4;
 
 endmodule

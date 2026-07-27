@@ -29,6 +29,8 @@ module control_unit (
                 control_word[`CW_BRANCH_UNCOND] <= 1;
                 control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_PC;
                 control_word[`CW_REG_WRITE_EN] <= 1;
+                control_word[`CW_ALU_SRC_OP1] <= `ALU_SRC_OP1_PC;
+                control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
             end
 
@@ -36,6 +38,8 @@ module control_unit (
                 control_word[`CW_BRANCH_UNCOND] <= 1;
                 control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_PC;
                 control_word[`CW_REG_WRITE_EN] <= 1;
+                control_word[`CW_ALU_SRC_OP1] <= `ALU_SRC_OP1_REG;
+                control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
             end
 
