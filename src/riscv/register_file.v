@@ -14,6 +14,9 @@ module register_file (
 
     always @(posedge clk) begin
         if (write_enable && rd != 0) registers[rd] = write_data;
+    end
+
+    always @(*) begin
         rs1_data <= rs1 == 0 ? 0 : registers[rs1];
         rs2_data <= rs2 == 0 ? 0 : registers[rs2];
     end

@@ -63,10 +63,11 @@ def test_all_modules():
             f"{src_path}/riscv/register_file.v",
             f"{src_path}/riscv/instruction_memory.v",
             f"{src_path}/riscv/data_memory.v",
+            f"{src_path}/riscv/mux3.v",
             f"{src_path}/riscv/riscv_top.v",
             f"{sim_path}/tb_riscv_top.v",
         ],
-        hdl_toplevel="tb_riscv_top",
+        hdl_toplevel="riscv_top",
         test_module="test_isa_rv32i",
     )
 

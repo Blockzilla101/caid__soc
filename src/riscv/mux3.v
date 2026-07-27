@@ -2,7 +2,7 @@ module mux3 (
     input [31:0] A,
     input [31:0] B,
     input [31:0] C,
-    input [2:0] sel,
+    input [1:0] sel,
     output reg [31:0] F
 );
     always @(*) begin
