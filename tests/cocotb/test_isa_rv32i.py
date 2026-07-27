@@ -22,7 +22,7 @@ async def reset_state(dut):
     for i in range(0, 1024):
         dut.data_mem.memory[i].value = 0
 
-    for i in range(0, 512):
+    for i in range(0, 2048):
         dut.inst_mem.memory[i].value = inst_nop
 
     dut.rst.value = 1
@@ -72,6 +72,15 @@ def assert_mem(dut, mem_addr, val, width=4):
         assert dut.data_mem.memory[mem_addr + 2].value == val >> 16 & 0xFF
     if width == 4:
         assert dut.data_mem.memory[mem_addr + 3].value == val >> 24 & 0xFF
+
+
+async def assert_branch(dut, branch_inst, branch_taken):
+    pc_val = int(str(dut.pc.counter.value), 2)
+    await exec_imm(dut, branch_inst)
+    if branch_taken:
+        assert dut.pc.counter.value == pc_val + 8
+    else:
+        assert dut.pc.counter.value == pc_val + 4
 
 
 @cocotb.test()
@@ -268,6 +277,36 @@ async def test_jump_inst(dut):
     assert dut.pc.counter.value == 8 + x4
 
 
-@cocotb.test(skip=True)
+@cocotb.test()
 async def test_branch_inst(dut):
     """Testing branch instructions"""
+
+    await setup_clock(dut)
+    await reset_state(dut)
+
+    x4 = 10
+    x5 = -10
+    await exec_imm(dut, f"addi x4, x0, {x4}")
+    await exec_imm(dut, f"addi x5, x0, {x5}")
+
+    await assert_branch(dut, 0x00420463, x4 == x4)  # beq, x4, x4, 8
+    await assert_branch(dut, 0x00520463, x4 == x5)  # beq, x4, x5, 8
+
+    await assert_branch(dut, 0x00521463, x4 != x5)  # bne, x4, x5, 8
+    await assert_branch(dut, 0x00421463, x4 != x4)  # bne, x4, x4, 8
+
+    # bge
+    await assert_branch(dut, 0x00525463, x4 >= x5)  # bge, x4, x5, 8
+    await assert_branch(dut, 0x0042D463, x5 >= x4)  # bge, x5, x4, 8
+
+    # blt
+    await assert_branch(dut, 0x00524463, x4 < x5)  # blt, x4, x5, 8
+    await assert_branch(dut, 0x0042C463, x5 < x4)  # blt, x5, x4, 8
+
+    # bgeu
+    await assert_branch(dut, 0x00527463, x4 >= x5 & 0xFFFF_FFFF)  # bgeu, x4, x5, 8
+    await assert_branch(dut, 0x0042F463, x5 & 0xFFFF_FFFF >= x4)  # bgeu, x5, x4, 8
+
+    # bltu
+    await assert_branch(dut, 0x00526463, x4 < x5 & 0xFFFF_FFFF)  # bltu, x4, x5, 8
+    await assert_branch(dut, 0x0042E463, x5 & 0xFFFF_FFFF < x4)  # bltu, x5, x4, 8

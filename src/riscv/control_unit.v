@@ -44,7 +44,9 @@ module control_unit (
             end
 
             `OP_BRANCH: begin  // if (x[rs1] == x[rs2]) pc += sext(offset)
-                control_word[`CW_BRANCH]   <= 1;
+                control_word[`CW_BRANCH] <= 1;
+                control_word[`CW_ALU_SRC_OP1] <= `ALU_SRC_OP1_PC;
+                control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
             end
 

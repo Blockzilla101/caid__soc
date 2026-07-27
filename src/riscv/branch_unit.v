@@ -18,9 +18,9 @@ module branch_unit (
             `BRANCH_OP_BEQ: compare_result <= A == B;
             `BRANCH_OP_BNE: compare_result <= A != B;
             `BRANCH_OP_BLT: compare_result <= $signed(A) < $signed(B);
-            `BRANCH_OP_BGE: compare_result <= $signed(A) > $signed(B);
+            `BRANCH_OP_BGE: compare_result <= $signed(A) >= $signed(B);
             `BRANCH_OP_BLTU: compare_result <= A < B;
-            `BRANCH_OP_BGEU: compare_result <= A > B;
+            `BRANCH_OP_BGEU: compare_result <= A >= B;
             default: compare_result <= 0;
         endcase
     end

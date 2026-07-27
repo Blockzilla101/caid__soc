@@ -5,7 +5,7 @@ module instruction_memory (
     input [31:0] addr,
     output reg [31:0] read_data
 );
-    reg [31:0] memory[512];
+    reg [31:0] memory[2048];
 
     always @(posedge clk) begin
         read_data <= memory[addr];
