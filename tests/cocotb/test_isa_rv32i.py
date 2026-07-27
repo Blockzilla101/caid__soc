@@ -1,6 +1,6 @@
 import cocotb
 from cocotb.triggers import Timer
-from util import setup_clock
+from util import setup_clock, sign_extend
 from riscv_assembler.convert import AssemblyConverter
 
 asm = AssemblyConverter(hex_mode=True)
@@ -64,11 +64,14 @@ def assert_reg(dut, reg_num, val, msg=None):
     )
 
 
-def assert_mem(dut, mem_addr, val, msg=None):
+def assert_mem(dut, mem_addr, val, width=4):
     assert dut.data_mem.memory[mem_addr].value == val & 0xFF
-    assert dut.data_mem.memory[mem_addr + 1].value == val >> 8 & 0xFF
-    assert dut.data_mem.memory[mem_addr + 2].value == val >> 16 & 0xFF
-    assert dut.data_mem.memory[mem_addr + 3].value == val >> 24 & 0xFF
+    if width >= 2:
+        assert dut.data_mem.memory[mem_addr + 1].value == val >> 8 & 0xFF
+    if width == 4:
+        assert dut.data_mem.memory[mem_addr + 2].value == val >> 16 & 0xFF
+    if width == 4:
+        assert dut.data_mem.memory[mem_addr + 3].value == val >> 24 & 0xFF
 
 
 @cocotb.test()
@@ -219,6 +222,21 @@ async def test_load_inst(dut):
     assert_reg(dut, 4, x5)
 
     await exec_imm(dut, f"sw x4, 0(x0)")
+
+    await exec_imm(dut, f"lw x10, 0(x0)")
+    assert_reg(dut, 10, x5)
+
+    await exec_imm(dut, 0x00001503)  # f"lh x10, 0(x0)")
+    assert_reg(dut, 10, sign_extend(x5 & 0xFFFF, 16))
+
+    await exec_imm(dut, 0x00000503)  # lb x10, 0(x0)
+    assert_reg(dut, 10, sign_extend(x5 & 0xFF, 8))
+
+    await exec_imm(dut, 0x00005503)  # f"lhu x10, 0(x0)")
+    assert_reg(dut, 10, x5 & 0xFFFF)
+
+    await exec_imm(dut, 0x00004503)  # f"lbu x10, 0(x0)")
+    assert_reg(dut, 10, x5 & 0xFF, 8)
 
 
 @cocotb.test(skip=True)

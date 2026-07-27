@@ -38,10 +38,10 @@ module data_memory (
     always @(*) begin
         case (width)
             `MEM_WIDTH_HALF: begin
-                read_data <= read_unsigned ? {16'h0000, memory[addr+32'h1], memory[addr]} : $signed({memory[addr+32'h1], memory[addr]});
+                read_data <= {read_unsigned ? 16'h0000 : {16{memory[addr+32'h1][7]}}, memory[addr+32'h1], memory[addr]};
             end
             `MEM_WIDTH_BYTE: begin
-                read_data <= read_unsigned ? {24'h0, memory[addr]} : $signed(memory[addr]);
+                read_data <= {read_unsigned ? 24'h0 : {24{memory[addr][7]}}, memory[addr]};
             end
             default: begin  // word
                 read_data <= {memory[addr+32'h3], memory[addr+32'h2], memory[addr+32'h1], memory[addr]};
