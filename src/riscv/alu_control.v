@@ -9,9 +9,6 @@ module alu_control (
     input [`INST_FUNCT7] funct7,
     output reg [3:0] alu_op
 );
-
-    wire [10:0] w = {funct7, funct3, opcode[5]};
-
     always @(*) begin
         alu_op <= 0;
 
@@ -19,7 +16,9 @@ module alu_control (
             `ALU_CTRL_ADD: alu_op <= `ALU_OP_ADD;
             `ALU_CTRL_SUB: alu_op <= `ALU_OP_SUB;
             `ALU_CTRL_FUNCT: begin
-                casez (w)  // ? => funct7 is used for immediate
+                casez ({
+                    funct7, funct3, opcode[5]
+                })  // ? => funct7 is used for immediate
                     11'b0100000_000_1: alu_op <= `ALU_OP_SUB;
                     11'b???????_000_?: alu_op <= `ALU_OP_ADD;
                     11'b0000000_001_?: alu_op <= `ALU_OP_SLL;

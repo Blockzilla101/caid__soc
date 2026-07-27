@@ -3,8 +3,8 @@ from cocotb.types import LogicArray
 from cocotb.clock import Clock
 from cocotb.triggers import Timer
 from cocotb.handle import Force, Release
-from enum import StrEnum, Enum 
-import tinyrv 
+from enum import StrEnum, Enum
+import tinyrv
 
 
 class AluOp(StrEnum):
@@ -61,9 +61,10 @@ class TestInst(StrEnum):
 
 
 class MemWidth(StrEnum):
-    byte = '00'
-    half = '01'
-    word = '10'
+    byte = "00"
+    half = "01"
+    word = "10"
+
 
 async def test_imm_operand(dut, inst, should_be: int, op):
     await dut.clk.rising_edge
@@ -251,6 +252,7 @@ async def test_branch_unit(dut):
     await test_branch_op(dut, 0, 0, TestInst.JAL, "JALR", True)
     await test_branch_op(dut, 0, 0, TestInst.JALR, "JAL", True)
 
+
 @cocotb.test()
 async def test_data_memory(dut):
     """Testing data memory"""
@@ -258,23 +260,15 @@ async def test_data_memory(dut):
     await setup_clock(dut)
 
     widths = [4, 2, 1]
-    width_map = {
-        4: MemWidth.word,
-        2: MemWidth.half,
-        1: MemWidth.byte
-    }
+    width_map = {4: MemWidth.word, 2: MemWidth.half, 1: MemWidth.byte}
 
     test_data_map = {
-        4: [0xfbcd_abcf],
-        2: [0xfbcd, None, 0xabcf],
-        1: [0xfb, 0xcd, 0xab, 0xcf]
+        4: [0xFBCD_ABCF],
+        2: [0xFBCD, None, 0xABCF],
+        1: [0xFB, 0xCD, 0xAB, 0xCF],
     }
 
-    width_offsets = {
-        4: [0],
-        2: [0, 2],
-        1: [0, 1, 2, 3]
-    }
+    width_offsets = {4: [0], 2: [0, 2], 1: [0, 1, 2, 3]}
 
     for width in widths:
         dut.mem_unsigned.value = 1
@@ -290,8 +284,10 @@ async def test_data_memory(dut):
         for i in range(0, 32 * width, width):
             dut.mem_addr.value = i
             await dut.clk.rising_edge
-            await Timer(1, 'step')
-            assert dut.mem_read_data.value == 0, f"W={width}: mem[{hex(i)}] != 0, is {hex(dut.mem_read_data.value)}"
+            await Timer(1, "step")
+            assert (
+                dut.mem_read_data.value == 0
+            ), f"W={width}: mem[{hex(i)}] != 0, is {hex(dut.mem_read_data.value)}"
 
     dut.mem_unsigned.value = 1
     dut.mem_write_enable.value = 1
@@ -301,18 +297,20 @@ async def test_data_memory(dut):
         dut.mem_write_data.value = test_data_map[4][0]
         await dut.clk.rising_edge
 
-
     dut.mem_write_enable.value = 0
     for i in range(0, 32 * 4, 4):
         for width in widths:
             for offset in width_offsets[width]:
-                affective_addr =  i + offset
+                affective_addr = i + offset
                 dut.mem_addr.value = affective_addr
                 dut.mem_width.value = width_map[width]
                 await dut.clk.rising_edge
-                await Timer(1, 'step')
+                await Timer(1, "step")
                 should_be = test_data_map[width][offset]
-                assert dut.mem_read_data.value == should_be, f"W={width}: mem[{hex(affective_addr)}] != {hex(should_be)}, is {dut.mem_read_data.value}"
+                assert (
+                    dut.mem_read_data.value == should_be
+                ), f"W={width}: mem[{hex(affective_addr)}] != {hex(should_be)}, is {dut.mem_read_data.value}"
+
 
 @cocotb.test()
 async def test_inst_memory(dut):
@@ -320,18 +318,20 @@ async def test_inst_memory(dut):
 
     await setup_clock(dut)
 
-    test_val = 0xabcd_dcba
+    test_val = 0xABCD_DCBA
 
     for i in range(0, 32):
         dut.inst_mem.memory[i].value = test_val
         await dut.clk.rising_edge
 
-
     for i in range(0, 32):
         dut.inst_addr.value = i
         await dut.clk.rising_edge
-        await Timer(1, 'step')
-        assert dut.inst_read_data.value == test_val, f"inst_mem[{hex(i)}] != {hex(test_val)}, is {dut.inst_read_data.value}"
+        await Timer(1, "step")
+        assert (
+            dut.inst_read_data.value == test_val
+        ), f"inst_mem[{hex(i)}] != {hex(test_val)}, is {dut.inst_read_data.value}"
+
 
 @cocotb.test()
 async def test_reg_file(dut):
@@ -362,8 +362,12 @@ async def test_reg_file(dut):
 
         await dut.clk.rising_edge
 
-        assert dut.reg_rs1_data.value == 0, f"register rs1=x{i} should have 0, has {dut.reg_rs1_data.value}" 
-        assert dut.reg_rs2_data.value == 0, f"register rs2=x{i} should have 0, has {dut.reg_rs2_data.value}"
+        assert (
+            dut.reg_rs1_data.value == 0
+        ), f"register rs1=x{i} should have 0, has {dut.reg_rs1_data.value}"
+        assert (
+            dut.reg_rs2_data.value == 0
+        ), f"register rs2=x{i} should have 0, has {dut.reg_rs2_data.value}"
 
     await dut.clk.rising_edge
 
@@ -383,16 +387,13 @@ async def test_reg_file(dut):
         dut.reg_rs2.value = i
 
         await dut.clk.rising_edge
-        await Timer(1, 'step')
+        await Timer(1, "step")
 
         should_have = 0 if i == 0 else i + 1
 
-        assert dut.reg_rs1_data.value == should_have, f"register rs1=x{i} should have {should_have}, has {dut.reg_rs1_data.value}"
-        assert dut.reg_rs2_data.value == should_have, f"register rs2=x{i} should have {should_have}, has {dut.reg_rs2_data.value}"
-
-
-# @cocotb.test(skip=True)
-# async def test_control_unit(dut):
-#     """Testing control unit"""
-
-#     await setup_clock(dut)
+        assert (
+            dut.reg_rs1_data.value == should_have
+        ), f"register rs1=x{i} should have {should_have}, has {dut.reg_rs1_data.value}"
+        assert (
+            dut.reg_rs2_data.value == should_have
+        ), f"register rs2=x{i} should have {should_have}, has {dut.reg_rs2_data.value}"
