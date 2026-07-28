@@ -1,4 +1,5 @@
 import cocotb
+from cocotb.triggers import Timer
 from util import setup_clock, set_inst, inst_nop
 import tinyrv
 
@@ -35,7 +36,7 @@ async def test_hex_file(dut):
     cycles = 0
 
     while True:
-        if cycles > 10000:
+        if cycles > 20000:
             break
 
         inst = str(dut.instruction.value)
@@ -46,9 +47,15 @@ async def test_hex_file(dut):
             if "X" in inst:
                 break
 
+        last_pc_val = int(str(dut.pc_val.value), 2)
         inst = int(inst, 2)
-        # print(tinyrv.decode(inst))
         await dut.clk.rising_edge
+        await Timer(1, "ns")
+        pc_val = int(str(dut.pc_val.value), 2)
+
+        if last_pc_val == pc_val:
+            break
+
         cycles = cycles + 1
 
     await dut.clk.rising_edge
