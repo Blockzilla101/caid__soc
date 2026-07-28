@@ -37,7 +37,12 @@ def run_test(
         defines=defines,
     )
 
-    runner.test(hdl_toplevel=hdl_toplevel, test_module=test_module, waves=True)
+    runner.test(
+        hdl_toplevel=hdl_toplevel,
+        test_module=test_module,
+        waves=True,
+        extra_env=defines,
+    )
 
     waveform = f"{hdl_toplevel}.fst"
     shutil.copyfile(
@@ -91,8 +96,9 @@ def test_all_modules():
             hdl_toplevel="riscv_top",
             test_module="test_hex_file",
             defines={
-                "IMEM_LOAD_HEX": True,
+                "IMEM_LOAD_HEX": "1",
                 "IMEM_HEX_PATH": path.abspath(f"{asm_build_path}/{mem}.mem"),
+                "HEX_NAME": f"asm_{mem}",
             },
             waveform_name=f"asm__{mem}_riscv.fst",
         )
@@ -103,8 +109,9 @@ def test_all_modules():
             hdl_toplevel="riscv_top",
             test_module="test_hex_file",
             defines={
-                "IMEM_LOAD_HEX": True,
+                "IMEM_LOAD_HEX": "1",
                 "IMEM_HEX_PATH": path.abspath(f"{gcc_build_path}/{mem}.mem"),
+                "HEX_NAME": f"gcc_{mem}",
             },
             waveform_name=f"gcc__{mem}_riscv.fst",
         )

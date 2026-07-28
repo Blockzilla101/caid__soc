@@ -1,6 +1,6 @@
 import cocotb
 from cocotb.triggers import Timer
-from util import setup_clock, sign_extend, set_inst, inst_nop
+from util import setup_clock, sign_extend, set_inst, inst_nop, assert_mem, assert_reg
 from riscv_assembler.convert import AssemblyConverter
 
 asm = AssemblyConverter(hex_mode=True)
@@ -53,24 +53,6 @@ async def exec_imm(dut, inst: str | int):
 
     await dut.clk.rising_edge
     await Timer(1, "step")
-
-
-def assert_reg(dut, reg_num, val, msg=None):
-    assert dut.reg_file.registers[reg_num].value == val & 0xFFFF_FFFF, (
-        f"x{reg_num} != {val}, is {dut.reg_file.registers[reg_num].value}"
-        if msg is None
-        else msg
-    )
-
-
-def assert_mem(dut, mem_addr, val, width=4):
-    assert dut.data_mem.memory[mem_addr].value == val & 0xFF
-    if width >= 2:
-        assert dut.data_mem.memory[mem_addr + 1].value == val >> 8 & 0xFF
-    if width == 4:
-        assert dut.data_mem.memory[mem_addr + 2].value == val >> 16 & 0xFF
-    if width == 4:
-        assert dut.data_mem.memory[mem_addr + 3].value == val >> 24 & 0xFF
 
 
 async def assert_branch(dut, branch_inst, branch_taken):

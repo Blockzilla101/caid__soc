@@ -21,3 +21,21 @@ def set_inst(dut, addr, inst):
     dut.inst_mem.memory[addr + 1].value = (inst >> 8) & 0xFF
     dut.inst_mem.memory[addr + 2].value = (inst >> 16) & 0xFF
     dut.inst_mem.memory[addr + 3].value = (inst >> 24) & 0xFF
+
+
+def assert_reg(dut, reg_num, val, msg=None):
+    assert dut.reg_file.registers[reg_num].value == val & 0xFFFF_FFFF, (
+        f"x{reg_num} != {val}, is {dut.reg_file.registers[reg_num].value}"
+        if msg is None
+        else msg
+    )
+
+
+def assert_mem(dut, mem_addr, val, width=4):
+    assert dut.data_mem.memory[mem_addr].value == val & 0xFF
+    if width >= 2:
+        assert dut.data_mem.memory[mem_addr + 1].value == val >> 8 & 0xFF
+    if width == 4:
+        assert dut.data_mem.memory[mem_addr + 2].value == val >> 16 & 0xFF
+    if width == 4:
+        assert dut.data_mem.memory[mem_addr + 3].value == val >> 24 & 0xFF

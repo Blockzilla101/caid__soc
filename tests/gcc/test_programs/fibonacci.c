@@ -1,3 +1,5 @@
+#define DMEM_BASE ((volatile unsigned int *)0x4)
+
 int main()
 {
     volatile int f0 = 0;
@@ -9,16 +11,6 @@ int main()
         f1 = fn;
     }
 
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
-    __asm__("addi x0, x0, 0");
+    DMEM_BASE[0] = 1;
+    DMEM_BASE[1] = f1;
 }

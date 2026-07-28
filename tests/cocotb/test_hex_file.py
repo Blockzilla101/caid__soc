@@ -1,57 +1,45 @@
 import cocotb
+from cocotb import log
 from cocotb.triggers import Timer
-from util import setup_clock, set_inst, inst_nop
+from util import setup_clock, assert_reg, assert_mem
 import tinyrv
+import os
 
 
 async def reset_state(dut):
     dut.pc.counter.value = 0
-    for i in range(0, 32):
-        dut.reg_file.registers[i].value = 0
 
 
 @cocotb.test()
 async def test_hex_file(dut):
-    """Testing Hex file"""
+    """Executing Hex file"""
+    hex_name = os.environ.get("HEX_NAME")
+
+    log.info(f"running hex file '{hex_name}'")
 
     await setup_clock(dut)
     await reset_state(dut)
-
-    # for i in range(0, 2048, 4):
-    #     val = [
-    #         str(dut.inst_mem.memory[i + 3].value),
-    #         str(dut.inst_mem.memory[i + 2].value),
-    #         str(dut.inst_mem.memory[i + 1].value),
-    #         str(dut.inst_mem.memory[i + 0].value),
-    #     ]
-
-    #     if len([s for s in val if "X" in s]) == 0:
-    #         val = [int(v, 2) for v in val]
-    #         inst = val[0] << 24 | val[1] << 16 | val[2] << 8 | val[3]
-    #         print(tinyrv.decode(inst))
-    #         await dut.clk.rising_edge
-
-    # await dut.clk.rising_edge
 
     cycles = 0
 
     while True:
         if cycles > 20000:
-            break
+            assert False, "Ran for more than 20k cycles"
 
         inst = str(dut.instruction.value)
         if "X" in inst:
             await dut.clk.rising_edge
             await dut.clk.rising_edge
             inst = str(dut.instruction.value)
+            assert "X" not in inst and cycles < 10, "Encountered undefined instruction"
             if "X" in inst:
                 break
 
-        last_pc_val = int(str(dut.pc_val.value), 2)
+        last_pc_val = str(dut.pc_val.value)
         inst = int(inst, 2)
         await dut.clk.rising_edge
         await Timer(1, "ns")
-        pc_val = int(str(dut.pc_val.value), 2)
+        pc_val = str(dut.pc_val.value)
 
         if last_pc_val == pc_val:
             break
@@ -59,3 +47,19 @@ async def test_hex_file(dut):
         cycles = cycles + 1
 
     await dut.clk.rising_edge
+
+    hex_name = os.environ.get("HEX_NAME")
+    if hex_name == "gcc_fibonacci":
+        assert_mem(dut, 4, 1)
+        assert_mem(dut, 8, 144)
+    elif hex_name == "asm_fibbonacci":
+        assert_reg(dut, 5, 144)
+    elif hex_name == "gcc_mem_test":
+        for i in range(0, 32 * 4, 4):
+            # log.debug(f"mem[{i+4}] = {dut.data_mem.memory[i+4].value}")
+            # log.debug(f"mem[{i+4+1}] = {dut.data_mem.memory[i+4+1].value}")
+            # log.debug(f"mem[{i+4+2}] = {dut.data_mem.memory[i+4+2].value}")
+            # log.debug(f"mem[{i+4+3}] = {dut.data_mem.memory[i+4+3].value}")
+            assert_mem(dut, i + 4, i // 4)
+    else:
+        raise ValueError(f"No checks defined for hex file: {hex_name}")

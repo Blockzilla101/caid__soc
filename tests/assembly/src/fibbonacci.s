@@ -6,3 +6,6 @@ fib:
     add  x3 , x0 , x4
     add  x4 , x0 , x5
     bne  x5 , x10, fib
+
+halt:
+    jal  x0 , halt
