@@ -6,6 +6,7 @@ import os
 src_path = "../../src"
 sim_path = "./sim"
 gcc_build_path = "../gcc/build"
+asm_build_path = "../assembly/build"
 
 runner = get_runner("icarus")
 
@@ -18,7 +19,13 @@ def run_test_single(module: str):
     )
 
 
-def run_test(sources: list[str], hdl_toplevel: str, test_module: str, defines={}):
+def run_test(
+    sources: list[str],
+    hdl_toplevel: str,
+    test_module: str,
+    defines={},
+    waveform_name=None,
+):
     if not path.exists("waves"):
         os.mkdir("waves")
 
@@ -33,21 +40,30 @@ def run_test(sources: list[str], hdl_toplevel: str, test_module: str, defines={}
     runner.test(hdl_toplevel=hdl_toplevel, test_module=test_module, waves=True)
 
     waveform = f"{hdl_toplevel}.fst"
-    shutil.copyfile(path.join("sim_build", waveform), path.join("waves", waveform))
+    shutil.copyfile(
+        path.join("sim_build", waveform),
+        path.join("waves", waveform_name if waveform_name else waveform),
+    )
 
 
 def test_all_modules():
+    riscv_sources = [
+        f"{src_path}/riscv/branch_unit.v",
+        f"{src_path}/riscv/control_unit.v",
+        f"{src_path}/riscv/alu_control.v",
+        f"{src_path}/riscv/alu.v",
+        f"{src_path}/riscv/imm_gen.v",
+        f"{src_path}/riscv/program_counter.v",
+        f"{src_path}/riscv/register_file.v",
+        f"{src_path}/riscv/instruction_memory.v",
+        f"{src_path}/riscv/data_memory.v",
+        f"{src_path}/riscv/riscv_top.v",
+        f"{src_path}/riscv/mux3.v",
+    ]
+
     run_test(
         sources=[
-            f"{src_path}/riscv/branch_unit.v",
-            f"{src_path}/riscv/control_unit.v",
-            f"{src_path}/riscv/alu_control.v",
-            f"{src_path}/riscv/alu.v",
-            f"{src_path}/riscv/imm_gen.v",
-            f"{src_path}/riscv/program_counter.v",
-            f"{src_path}/riscv/register_file.v",
-            f"{src_path}/riscv/instruction_memory.v",
-            f"{src_path}/riscv/data_memory.v",
+            *riscv_sources,
             f"{sim_path}/tb_functional_units.v",
         ],
         hdl_toplevel="tb_functional_units",
@@ -55,46 +71,43 @@ def test_all_modules():
     )
 
     run_test(
-        sources=[
-            f"{src_path}/riscv/branch_unit.v",
-            f"{src_path}/riscv/control_unit.v",
-            f"{src_path}/riscv/alu_control.v",
-            f"{src_path}/riscv/alu.v",
-            f"{src_path}/riscv/imm_gen.v",
-            f"{src_path}/riscv/program_counter.v",
-            f"{src_path}/riscv/register_file.v",
-            f"{src_path}/riscv/instruction_memory.v",
-            f"{src_path}/riscv/data_memory.v",
-            f"{src_path}/riscv/mux3.v",
-            f"{src_path}/riscv/riscv_top.v",
-            f"{sim_path}/tb_riscv_top.v",
-        ],
+        sources=riscv_sources,
         hdl_toplevel="riscv_top",
         test_module="test_isa_rv32i",
     )
 
-    run_test(
-        sources=[
-            f"{src_path}/riscv/branch_unit.v",
-            f"{src_path}/riscv/control_unit.v",
-            f"{src_path}/riscv/alu_control.v",
-            f"{src_path}/riscv/alu.v",
-            f"{src_path}/riscv/imm_gen.v",
-            f"{src_path}/riscv/program_counter.v",
-            f"{src_path}/riscv/register_file.v",
-            f"{src_path}/riscv/instruction_memory.v",
-            f"{src_path}/riscv/data_memory.v",
-            f"{src_path}/riscv/mux3.v",
-            f"{src_path}/riscv/riscv_top.v",
-            f"{sim_path}/tb_riscv_top.v",
-        ],
-        hdl_toplevel="riscv_top",
-        test_module="test_hex_file",
-        defines={
-            "IMEM_LOAD_HEX": True,
-            "IMEM_HEX_PATH": path.abspath(f"{gcc_build_path}/sample_one.mem"),
-        },
-    )
+    gcc_memory_files = []
+    asm_memory_files = []
+
+    for _, _, filenames in os.walk(path.abspath(f"{gcc_build_path}/")):
+        gcc_memory_files.extend([f[:-4] for f in filenames if f.endswith(".mem")])
+
+    for _, _, filenames in os.walk(path.abspath(f"{asm_build_path}/")):
+        asm_memory_files.extend([f[:-4] for f in filenames if f.endswith(".mem")])
+
+    for mem in asm_memory_files:
+        run_test(
+            sources=riscv_sources,
+            hdl_toplevel="riscv_top",
+            test_module="test_hex_file",
+            defines={
+                "IMEM_LOAD_HEX": True,
+                "IMEM_HEX_PATH": path.abspath(f"{asm_build_path}/{mem}.mem"),
+            },
+            waveform_name=f"asm__{mem}_riscv.fst",
+        )
+
+    for mem in gcc_memory_files:
+        run_test(
+            sources=riscv_sources,
+            hdl_toplevel="riscv_top",
+            test_module="test_hex_file",
+            defines={
+                "IMEM_LOAD_HEX": True,
+                "IMEM_HEX_PATH": path.abspath(f"{gcc_build_path}/{mem}.mem"),
+            },
+            waveform_name=f"gcc__{mem}_riscv.fst",
+        )
 
 
 if __name__ == "__main__":

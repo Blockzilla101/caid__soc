@@ -10,6 +10,16 @@
             "problemMatcher": [
                 "$python"
             ]
+        },
+        {
+            "label": "Build GCC programs",
+            "type": "shell",
+            "command": "cd tests/gcc && clear && bash build.sh",
+        },
+        {
+            "label": "Build ASM programs",
+            "type": "shell",
+            "command": "cd tests/assembly && clear && bash build.sh",
         }
     ]
 }

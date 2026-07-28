@@ -5,6 +5,7 @@ from riscv_assembler.convert import AssemblyConverter
 
 asm = AssemblyConverter(hex_mode=True)
 
+
 def asm_inst(inst: list[str]):
     assembled = asm(str.join("\n", inst))
     if assembled is None:
@@ -20,8 +21,8 @@ async def reset_state(dut):
     for i in range(0, 1024):
         dut.data_mem.memory[i].value = 0
 
-    for i in range(0, 2048):
-        dut.inst_mem.memory[i].value = inst_nop
+    for i in range(0, 2048, 4):
+        set_inst(dut, i, inst_nop)
 
     dut.rst.value = 1
     await dut.clk.rising_edge

@@ -9,4 +9,7 @@ eval "$(nix print-dev-env)"
 
 cd $CWD
 
+mkdir -p waves
+rm waves/*
+
 WAVES=1 uv run run_tests.py

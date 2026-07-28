@@ -3,7 +3,7 @@ ENTRY(_start)
 MEMORY
 {
     IMEM (rx)  : ORIGIN = 0x00000000, LENGTH = 2K
-    DMEM (rwx) : ORIGIN = 0x00001000, LENGTH = 2K
+    DMEM  (rwx) : ORIGIN = 0x00001000, LENGTH = 2K
 }
 
 /* Explicitly tell the linker NOT to emit program headers into memory */

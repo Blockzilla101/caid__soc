@@ -22,7 +22,7 @@
     autoload_sibling_state_files: None,
     autoreload_files: None,
     waves: Some((
-        source: File("tests/cocotb/waves/riscv_top.fst"),
+        source: File("/home/blockzilla/ic-design/projects/caid__soc/tests/cocotb/waves/asm__fibbonacci_riscv.fst"),
         format: Fst,
         active_scope: Some(WaveScope((
             strs: [
@@ -95,7 +95,7 @@
                 (
                     item_ref: (66),
                     level: 1,
-                    unfolded: false,
+                    unfolded: true,
                     selected: false,
                 ),
                 (
@@ -123,6 +123,12 @@
                     selected: false,
                 ),
                 (
+                    item_ref: (71),
+                    level: 2,
+                    unfolded: true,
+                    selected: false,
+                ),
+                (
                     item_ref: (53),
                     level: 1,
                     unfolded: true,
@@ -143,7 +149,7 @@
                 (
                     item_ref: (67),
                     level: 1,
-                    unfolded: false,
+                    unfolded: true,
                     selected: false,
                 ),
                 (
@@ -173,7 +179,7 @@
                 (
                     item_ref: (1),
                     level: 0,
-                    unfolded: true,
+                    unfolded: false,
                     selected: false,
                 ),
                 (
@@ -381,13 +387,13 @@
                     selected: false,
                 ),
                 (
-                    item_ref: (36),
+                    item_ref: (37),
                     level: 1,
                     unfolded: true,
                     selected: false,
                 ),
                 (
-                    item_ref: (37),
+                    item_ref: (36),
                     level: 1,
                     unfolded: true,
                     selected: false,
@@ -401,7 +407,7 @@
                 (
                     item_ref: (39),
                     level: 0,
-                    unfolded: true,
+                    unfolded: false,
                     selected: false,
                 ),
                 (
@@ -455,7 +461,7 @@
             ],
         ),
         displayed_items: {
-            (49): Variable((
+            (65): Variable((
                 variable_ref: (
                     path: (
                         strs: [
@@ -463,12 +469,206 @@
                         ],
                         id: Wellen((1)),
                     ),
-                    name: "alu_op",
-                    id: Wellen((17)),
+                    name: "rst",
+                    id: Wellen((2)),
                 ),
                 color: None,
                 background_color: None,
-                display_name: "riscv_top.alu_op [3:0]",
+                display_name: "rst",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (57): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "instruction",
+                    id: Wellen((10)),
+                ),
+                color: Some("Orange"),
+                background_color: None,
+                display_name: "riscv_top.instruction [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: Some("RV32"),
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (7): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "reg_file",
+                        ],
+                        id: Wellen((11)),
+                    ),
+                    name: "rs2_data",
+                    id: Wellen((66)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "rs2_data [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (9): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "reg_file",
+                        ],
+                        id: Wellen((11)),
+                    ),
+                    name: "write_enable",
+                    id: Wellen((63)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…reg_file.write_enable",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (52): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "alu_result",
+                    id: Wellen((14)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "alu_result [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (33): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "imm",
+                        ],
+                        id: Wellen((8)),
+                    ),
+                    name: "imm_value",
+                    id: Wellen((50)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…imm.imm_value [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (24): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "alu_ctrl",
+                        ],
+                        id: Wellen((3)),
+                    ),
+                    name: "funct3",
+                    id: Wellen((23)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…alu_ctrl.funct3 [14:12]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (48): Group((
+                name: "riscv_top",
+                color: None,
+                background_color: Some("Pink"),
+                content: [],
+                is_open: false,
+            )),
+            (70): Group((
+                name: "Instruction",
+                color: None,
+                background_color: None,
+                content: [],
+                is_open: false,
+            )),
+            (13): Group((
+                name: "bu",
+                color: None,
+                background_color: None,
+                content: [],
+                is_open: false,
+            )),
+            (22): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "alu_ctrl",
+                        ],
+                        id: Wellen((3)),
+                    ),
+                    name: "alu_ctrl",
+                    id: Wellen((22)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "alu_ctrl [1:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (27): Group((
+                name: "alu",
+                color: None,
+                background_color: None,
+                content: [],
+                is_open: false,
+            )),
+            (15): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "bu",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "B",
+                    id: Wellen((36)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…bu.B [31:0]",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
@@ -496,27 +696,28 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (69): Variable((
+            (12): Variable((
                 variable_ref: (
                     path: (
                         strs: [
                             "riscv_top",
+                            "cu",
                         ],
-                        id: Wellen((1)),
+                        id: Wellen((6)),
                     ),
-                    name: "instruction",
-                    id: Wellen((10)),
+                    name: "opcode",
+                    id: Wellen((39)),
                 ),
                 color: None,
                 background_color: None,
-                display_name: "riscv_top.instruction [31:0]",
+                display_name: "…cu.opcode [6:0]",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (63): Variable((
+            (71): Variable((
                 variable_ref: (
                     path: (
                         strs: [
@@ -524,19 +725,40 @@
                         ],
                         id: Wellen((1)),
                     ),
-                    name: "reg_rs2_data",
-                    id: Wellen((4)),
+                    name: "alu_result",
+                    id: Wellen((14)),
                 ),
                 color: None,
                 background_color: None,
-                display_name: "reg_rs2_data [31:0]",
+                display_name: "alu_result [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: Some("Signed"),
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (6): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "reg_file",
+                        ],
+                        id: Wellen((11)),
+                    ),
+                    name: "rs2",
+                    id: Wellen((62)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "rs2 [4:0]",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (50): Variable((
+            (49): Variable((
                 variable_ref: (
                     path: (
                         strs: [
@@ -544,12 +766,309 @@
                         ],
                         id: Wellen((1)),
                     ),
-                    name: "alu_op1",
-                    id: Wellen((16)),
+                    name: "alu_op",
+                    id: Wellen((17)),
                 ),
                 color: None,
                 background_color: None,
-                display_name: "alu_op1 [31:0]",
+                display_name: "riscv_top.alu_op [3:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (53): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "branch_taken",
+                    id: Wellen((13)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "riscv_top.branch_taken",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (55): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "control_word",
+                    id: Wellen((12)),
+                ),
+                color: Some("Green"),
+                background_color: None,
+                display_name: "riscv_top.control_word [10:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: Some("Binary (with groups)"),
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (36): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "inst_mem",
+                        ],
+                        id: Wellen((9)),
+                    ),
+                    name: "addr",
+                    id: Wellen((53)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…inst_mem.addr [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (62): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "reg_rs1_data",
+                    id: Wellen((5)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "reg_rs1_data [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (17): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "bu",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "branch_taken",
+                    id: Wellen((33)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…bu.branch_taken",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (45): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "data_mem",
+                        ],
+                        id: Wellen((7)),
+                    ),
+                    name: "width",
+                    id: Wellen((46)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "width [2:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (4): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "reg_file",
+                        ],
+                        id: Wellen((11)),
+                    ),
+                    name: "rs1",
+                    id: Wellen((61)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "rs1 [4:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (14): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "bu",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "A",
+                    id: Wellen((37)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…bu.A [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (35): Group((
+                name: "inst_mem",
+                color: None,
+                background_color: None,
+                content: [],
+                is_open: false,
+            )),
+            (60): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "pc_plus_4",
+                    id: Wellen((7)),
+                ),
+                color: Some("Gray"),
+                background_color: None,
+                display_name: "pc_plus_4 [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (29): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "alu",
+                        ],
+                        id: Wellen((2)),
+                    ),
+                    name: "B",
+                    id: Wellen((18)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…alu.B [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (41): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "data_mem",
+                        ],
+                        id: Wellen((7)),
+                    ),
+                    name: "clk",
+                    id: Wellen((42)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…data_mem.clk",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (3): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "reg_file",
+                        ],
+                        id: Wellen((11)),
+                    ),
+                    name: "rd",
+                    id: Wellen((60)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "rd [4:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (38): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "inst_mem",
+                        ],
+                        id: Wellen((9)),
+                    ),
+                    name: "read_data",
+                    id: Wellen((52)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…inst_mem.read_data [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (37): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "inst_mem",
+                        ],
+                        id: Wellen((9)),
+                    ),
+                    name: "clk",
+                    id: Wellen((51)),
+                ),
+                color: Some("Blue"),
+                background_color: None,
+                display_name: "…inst_mem.clk",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
@@ -577,12 +1096,127 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (35): Group((
-                name: "inst_mem",
+            (67): Group((
+                name: "reg_file",
                 color: None,
                 background_color: None,
                 content: [],
                 is_open: false,
+            )),
+            (25): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "alu_ctrl",
+                        ],
+                        id: Wellen((3)),
+                    ),
+                    name: "funct7",
+                    id: Wellen((24)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "funct7 [31:25]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (68): Divider((
+                color: Some("Blue"),
+                background_color: Some("Orange"),
+                name: Some("Invdividual Components"),
+            )),
+            (58): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "mem_read_data",
+                    id: Wellen((9)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "mem_read_data [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (42): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "data_mem",
+                        ],
+                        id: Wellen((7)),
+                    ),
+                    name: "funct3",
+                    id: Wellen((43)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…data_mem.funct3 [2:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (39): Group((
+                name: "data_mem",
+                color: None,
+                background_color: None,
+                content: [],
+                is_open: false,
+            )),
+            (61): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "pc_val",
+                    id: Wellen((6)),
+                ),
+                color: Some("Violet"),
+                background_color: None,
+                display_name: "pc_val [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (5): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "reg_file",
+                        ],
+                        id: Wellen((11)),
+                    ),
+                    name: "rs1_data",
+                    id: Wellen((65)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "rs1_data [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
             )),
             (8): Variable((
                 variable_ref: (
@@ -599,6 +1233,47 @@
                 color: None,
                 background_color: None,
                 display_name: "…reg_file.write_data [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (63): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "reg_rs2_data",
+                    id: Wellen((4)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "reg_rs2_data [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (19): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "bu",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "funct3",
+                    id: Wellen((34)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…bu.funct3 [2:0]",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
@@ -626,28 +1301,62 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (32): Group((
-                name: "imm",
-                color: None,
-                background_color: None,
-                content: [],
-                is_open: false,
-            )),
-            (4): Variable((
+            (28): Variable((
                 variable_ref: (
                     path: (
                         strs: [
                             "riscv_top",
-                            "reg_file",
+                            "alu",
                         ],
-                        id: Wellen((11)),
+                        id: Wellen((2)),
                     ),
-                    name: "rs1",
-                    id: Wellen((61)),
+                    name: "A",
+                    id: Wellen((20)),
                 ),
                 color: None,
                 background_color: None,
-                display_name: "rs1 [4:0]",
+                display_name: "…alu.A [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (54): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "clk",
+                    id: Wellen((1)),
+                ),
+                color: Some("Blue"),
+                background_color: None,
+                display_name: "riscv_top.clk",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (31): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "alu",
+                        ],
+                        id: Wellen((2)),
+                    ),
+                    name: "result",
+                    id: Wellen((21)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "result [31:0]",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
@@ -661,14 +1370,47 @@
                 content: [],
                 is_open: false,
             )),
-            (27): Group((
-                name: "alu",
+            (69): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "instruction",
+                    id: Wellen((10)),
+                ),
                 color: None,
                 background_color: None,
-                content: [],
-                is_open: false,
+                display_name: "riscv_top.instruction [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
             )),
-            (29): Variable((
+            (51): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "alu_op2",
+                    id: Wellen((15)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "alu_op2 [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (30): Variable((
                 variable_ref: (
                     path: (
                         strs: [
@@ -677,38 +1419,37 @@
                         ],
                         id: Wellen((2)),
                     ),
-                    name: "B",
-                    id: Wellen((18)),
+                    name: "alu_op",
+                    id: Wellen((19)),
                 ),
                 color: None,
                 background_color: None,
-                display_name: "…alu.B [31:0]",
+                display_name: "…alu.alu_op [3:0]",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (6): Variable((
+            (59): Variable((
                 variable_ref: (
                     path: (
                         strs: [
                             "riscv_top",
-                            "reg_file",
                         ],
-                        id: Wellen((11)),
+                        id: Wellen((1)),
                     ),
-                    name: "rs2",
-                    id: Wellen((62)),
+                    name: "pc_next_val",
+                    id: Wellen((8)),
                 ),
-                color: None,
+                color: Some("Violet"),
                 background_color: None,
-                display_name: "rs2 [4:0]",
+                display_name: "pc_next_val [31:0]",
                 display_name_type: Unique,
                 manual_name: None,
                 format: None,
                 field_formats: [],
-                height_scaling_factor: None,
+                height_scaling_factor: Some(1.0),
             )),
             (34): Variable((
                 variable_ref: (
@@ -731,8 +1472,216 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (39): Group((
-                name: "data_mem",
+            (2): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "reg_file",
+                        ],
+                        id: Wellen((11)),
+                    ),
+                    name: "clk",
+                    id: Wellen((59)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…reg_file.clk",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (21): Group((
+                name: "alu_ctrl",
+                color: None,
+                background_color: None,
+                content: [],
+                is_open: false,
+            )),
+            (64): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "reg_write_data",
+                    id: Wellen((3)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "reg_write_data [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (20): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "bu",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "non_conditional_jmp",
+                    id: Wellen((35)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "non_conditional_jmp",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (23): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "alu_ctrl",
+                        ],
+                        id: Wellen((3)),
+                    ),
+                    name: "alu_op",
+                    id: Wellen((26)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…alu_ctrl.alu_op [3:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (10): Group((
+                name: "cu",
+                color: None,
+                background_color: None,
+                content: [],
+                is_open: false,
+            )),
+            (11): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "cu",
+                        ],
+                        id: Wellen((6)),
+                    ),
+                    name: "control_word",
+                    id: Wellen((40)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…cu.control_word [10:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (26): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "alu_ctrl",
+                        ],
+                        id: Wellen((3)),
+                    ),
+                    name: "opcode",
+                    id: Wellen((25)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "…alu_ctrl.opcode [6:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (44): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "data_mem",
+                        ],
+                        id: Wellen((7)),
+                    ),
+                    name: "read_unsigned",
+                    id: Wellen((47)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "read_unsigned",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (16): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                            "bu",
+                        ],
+                        id: Wellen((5)),
+                    ),
+                    name: "branch",
+                    id: Wellen((32)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "branch",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (50): Variable((
+                variable_ref: (
+                    path: (
+                        strs: [
+                            "riscv_top",
+                        ],
+                        id: Wellen((1)),
+                    ),
+                    name: "alu_op1",
+                    id: Wellen((16)),
+                ),
+                color: None,
+                background_color: None,
+                display_name: "alu_op1 [31:0]",
+                display_name_type: Unique,
+                manual_name: None,
+                format: None,
+                field_formats: [],
+                height_scaling_factor: None,
+            )),
+            (32): Group((
+                name: "imm",
+                color: None,
+                background_color: None,
+                content: [],
+                is_open: false,
+            )),
+            (66): Group((
+                name: "alu",
                 color: None,
                 background_color: None,
                 content: [],
@@ -779,159 +1728,6 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (60): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "pc_plus_4",
-                    id: Wellen((7)),
-                ),
-                color: Some("Gray"),
-                background_color: None,
-                display_name: "pc_plus_4 [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (38): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "inst_mem",
-                        ],
-                        id: Wellen((9)),
-                    ),
-                    name: "read_data",
-                    id: Wellen((53)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…inst_mem.read_data [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (9): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "reg_file",
-                        ],
-                        id: Wellen((11)),
-                    ),
-                    name: "write_enable",
-                    id: Wellen((63)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…reg_file.write_enable",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (20): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "bu",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "non_conditional_jmp",
-                    id: Wellen((35)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "non_conditional_jmp",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (45): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "data_mem",
-                        ],
-                        id: Wellen((7)),
-                    ),
-                    name: "width",
-                    id: Wellen((46)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "width [2:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (48): Group((
-                name: "riscv_top",
-                color: None,
-                background_color: Some("Pink"),
-                content: [],
-                is_open: false,
-            )),
-            (14): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "bu",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "A",
-                    id: Wellen((37)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…bu.A [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (33): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "imm",
-                        ],
-                        id: Wellen((8)),
-                    ),
-                    name: "imm_value",
-                    id: Wellen((50)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…imm.imm_value [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
             (47): Variable((
                 variable_ref: (
                     path: (
@@ -953,795 +1749,25 @@
                 field_formats: [],
                 height_scaling_factor: None,
             )),
-            (7): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "reg_file",
-                        ],
-                        id: Wellen((11)),
-                    ),
-                    name: "rs2_data",
-                    id: Wellen((66)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "rs2_data [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (11): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "cu",
-                        ],
-                        id: Wellen((6)),
-                    ),
-                    name: "control_word",
-                    id: Wellen((40)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…cu.control_word [10:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (22): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "alu_ctrl",
-                        ],
-                        id: Wellen((3)),
-                    ),
-                    name: "alu_ctrl",
-                    id: Wellen((22)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "alu_ctrl [1:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (19): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "bu",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "funct3",
-                    id: Wellen((34)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…bu.funct3 [2:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (13): Group((
-                name: "bu",
-                color: None,
-                background_color: None,
-                content: [],
-                is_open: false,
-            )),
-            (17): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "bu",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "branch_taken",
-                    id: Wellen((33)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…bu.branch_taken",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (30): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "alu",
-                        ],
-                        id: Wellen((2)),
-                    ),
-                    name: "alu_op",
-                    id: Wellen((19)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…alu.alu_op [3:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (68): Divider((
-                color: Some("Blue"),
-                background_color: Some("Orange"),
-                name: Some("Invdividual Components"),
-            )),
-            (55): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "control_word",
-                    id: Wellen((12)),
-                ),
-                color: Some("Green"),
-                background_color: None,
-                display_name: "riscv_top.control_word [10:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: Some("Binary (with groups)"),
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (41): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "data_mem",
-                        ],
-                        id: Wellen((7)),
-                    ),
-                    name: "clk",
-                    id: Wellen((42)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…data_mem.clk",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (26): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "alu_ctrl",
-                        ],
-                        id: Wellen((3)),
-                    ),
-                    name: "opcode",
-                    id: Wellen((25)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…alu_ctrl.opcode [6:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (21): Group((
-                name: "alu_ctrl",
-                color: None,
-                background_color: None,
-                content: [],
-                is_open: false,
-            )),
-            (31): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "alu",
-                        ],
-                        id: Wellen((2)),
-                    ),
-                    name: "result",
-                    id: Wellen((21)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "result [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (70): Group((
-                name: "Instruction",
-                color: None,
-                background_color: None,
-                content: [],
-                is_open: false,
-            )),
-            (64): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "reg_write_data",
-                    id: Wellen((3)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "reg_write_data [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (10): Group((
-                name: "cu",
-                color: None,
-                background_color: None,
-                content: [],
-                is_open: false,
-            )),
-            (58): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "mem_read_data",
-                    id: Wellen((9)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "mem_read_data [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (62): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "reg_rs1_data",
-                    id: Wellen((5)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "reg_rs1_data [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (53): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "branch_taken",
-                    id: Wellen((13)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "riscv_top.branch_taken",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (57): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "instruction",
-                    id: Wellen((10)),
-                ),
-                color: Some("Orange"),
-                background_color: None,
-                display_name: "riscv_top.instruction [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: Some("RV32"),
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (44): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "data_mem",
-                        ],
-                        id: Wellen((7)),
-                    ),
-                    name: "read_unsigned",
-                    id: Wellen((47)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "read_unsigned",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (67): Group((
-                name: "reg_file",
-                color: None,
-                background_color: None,
-                content: [],
-                is_open: false,
-            )),
-            (3): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "reg_file",
-                        ],
-                        id: Wellen((11)),
-                    ),
-                    name: "rd",
-                    id: Wellen((60)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "rd [4:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (5): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "reg_file",
-                        ],
-                        id: Wellen((11)),
-                    ),
-                    name: "rs1_data",
-                    id: Wellen((65)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "rs1_data [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (66): Group((
-                name: "alu",
-                color: None,
-                background_color: None,
-                content: [],
-                is_open: false,
-            )),
-            (52): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "alu_result",
-                    id: Wellen((14)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "alu_result [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (16): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "bu",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "branch",
-                    id: Wellen((32)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "branch",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (37): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "inst_mem",
-                        ],
-                        id: Wellen((9)),
-                    ),
-                    name: "clk",
-                    id: Wellen((51)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…inst_mem.clk",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (28): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "alu",
-                        ],
-                        id: Wellen((2)),
-                    ),
-                    name: "A",
-                    id: Wellen((20)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…alu.A [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (61): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "pc_val",
-                    id: Wellen((6)),
-                ),
-                color: Some("Violet"),
-                background_color: None,
-                display_name: "pc_val [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (23): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "alu_ctrl",
-                        ],
-                        id: Wellen((3)),
-                    ),
-                    name: "alu_op",
-                    id: Wellen((26)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…alu_ctrl.alu_op [3:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (24): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "alu_ctrl",
-                        ],
-                        id: Wellen((3)),
-                    ),
-                    name: "funct3",
-                    id: Wellen((23)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…alu_ctrl.funct3 [14:12]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (54): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "clk",
-                    id: Wellen((1)),
-                ),
-                color: Some("Blue"),
-                background_color: None,
-                display_name: "riscv_top.clk",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (51): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "alu_op2",
-                    id: Wellen((15)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "alu_op2 [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (25): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "alu_ctrl",
-                        ],
-                        id: Wellen((3)),
-                    ),
-                    name: "funct7",
-                    id: Wellen((24)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "funct7 [31:25]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (15): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "bu",
-                        ],
-                        id: Wellen((5)),
-                    ),
-                    name: "B",
-                    id: Wellen((36)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…bu.B [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (12): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "cu",
-                        ],
-                        id: Wellen((6)),
-                    ),
-                    name: "opcode",
-                    id: Wellen((39)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…cu.opcode [6:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (59): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "pc_next_val",
-                    id: Wellen((8)),
-                ),
-                color: Some("Violet"),
-                background_color: None,
-                display_name: "pc_next_val [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: Some(1.0),
-            )),
-            (65): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                        ],
-                        id: Wellen((1)),
-                    ),
-                    name: "rst",
-                    id: Wellen((2)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "rst",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (2): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "reg_file",
-                        ],
-                        id: Wellen((11)),
-                    ),
-                    name: "clk",
-                    id: Wellen((59)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…reg_file.clk",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (36): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "inst_mem",
-                        ],
-                        id: Wellen((9)),
-                    ),
-                    name: "addr",
-                    id: Wellen((52)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…inst_mem.addr [31:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
-            (42): Variable((
-                variable_ref: (
-                    path: (
-                        strs: [
-                            "riscv_top",
-                            "data_mem",
-                        ],
-                        id: Wellen((7)),
-                    ),
-                    name: "funct3",
-                    id: Wellen((43)),
-                ),
-                color: None,
-                background_color: None,
-                display_name: "…data_mem.funct3 [2:0]",
-                display_name_type: Unique,
-                manual_name: None,
-                format: None,
-                field_formats: [],
-                height_scaling_factor: None,
-            )),
         },
-        display_item_ref_counter: 70,
+        display_item_ref_counter: 71,
         viewports: [
             (
-                curr_left: (-0.07842018582384719),
-                curr_right: (0.651496017141117),
-                target_left: (0.8244905989391808),
-                target_right: (1.0044857521419894),
-                move_start_left: (0.8244905989391808),
-                move_start_right: (1.0044857521419894),
+                curr_left: (0.8118797220335575),
+                curr_right: (1.0404523697451307),
+                target_left: (0.0001307444082554399),
+                target_right: (0.22870356897532426),
+                move_start_left: (0.0001307444082554399),
+                move_start_right: (0.22870356897532426),
                 move_duration: None,
                 move_strategy: Instant,
             ),
         ],
         cursor: Some((1, [
-            11500,
+            50376,
         ])),
         markers: {},
-        focused_item: Some((0)),
+        focused_item: Some((15)),
         focused_transaction: (None, None),
         default_variable_name_type: Unique,
         scroll_offset: 0.06038952,
@@ -1751,7 +1777,7 @@
     drag_started: false,
     drag_source_idx: None,
     drag_target_idx: Some((
-        before: (7),
+        before: (58),
         level: 1,
     )),
     previous_waves: None,

@@ -7,8 +7,8 @@ module register_file (
     input [4:0] rd,
     input [31:0] write_data,
     input write_enable,
-    output reg [31:0] rs1_data,
-    output reg [31:0] rs2_data
+    output [31:0] rs1_data,
+    output [31:0] rs2_data
 );
     reg [31:0] registers[32];
 
@@ -16,8 +16,6 @@ module register_file (
         if (write_enable && rd != 0) registers[rd] = write_data;
     end
 
-    always @(*) begin
-        rs1_data <= rs1 == 0 ? 0 : registers[rs1];
-        rs2_data <= rs2 == 0 ? 0 : registers[rs2];
-    end
+    assign rs1_data = rs1 == 0 ? 0 : registers[rs1];
+    assign rs2_data = rs2 == 0 ? 0 : registers[rs2];
 endmodule

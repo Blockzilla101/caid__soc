@@ -8,23 +8,14 @@ function build_file() {
     local ELF_FILE=build/$TARGET_FILE_NAME.elf
     local BIN_FILE=build/$TARGET_FILE_NAME.bin
     local MEM_FILE=build/$TARGET_FILE_NAME.mem
-    local C_FILE=test_programs/$TARGET_FILE_NAME.c
+    local ASM_FILE=src/$TARGET_FILE_NAME.s
 
-    riscv64-elf-gcc \
-        -Os \
+    # riscv64-elf-as -march=rv32i -mabi=ilp32 $ASM_FILE -o $ELF_FILE
+    riscv64-elf-as \
         -march=rv32i \
         -mabi=ilp32 \
-        -nostdlib \
-        -nostartfiles \
-        -ffreestanding \
-        -fno-builtin \
-        -static \
-        -Wl,-N \
-        -Wl,--no-dynamic-linker \
-        -T libs/link.ld \
         -o $ELF_FILE \
-        libs/crt0.s \
-        $C_FILE
+        $ASM_FILE
 
 
     riscv64-elf-objcopy -O binary $ELF_FILE $BIN_FILE
@@ -34,6 +25,6 @@ function build_file() {
     rm $MEM_FILE.temp
 }
 
-for file in $(find test_programs -type f | xargs -I % basename % .c); do
+for file in $(find src -type f | xargs -I % basename % .s); do
     build_file $file
 done
