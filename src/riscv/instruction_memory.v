@@ -5,9 +5,15 @@ module instruction_memory (
     input [31:0] addr,
     output reg [31:0] read_data
 );
-    reg [31:0] memory[2048];
+    reg [7:0] memory[2048];
+
+`ifdef IMEM_LOAD_HEX
+    initial begin
+        $readmemh(`IMEM_HEX_PATH, memory, 0);
+    end
+`endif
 
     always @(posedge clk) begin
-        read_data <= memory[addr];
+        read_data <= {memory[addr+32'h3], memory[addr+32'h2], memory[addr+32'h1], memory[addr+32'h0]};
     end
 endmodule

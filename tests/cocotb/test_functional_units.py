@@ -313,17 +313,20 @@ async def test_inst_memory(dut):
 
     test_val = 0xABCD_DCBA
 
-    for i in range(0, 32):
-        dut.inst_mem.memory[i].value = test_val
+    for i in range(0, 32 * 4, 4):
+        dut.inst_mem.memory[i + 0].value = test_val & 0xFF
+        dut.inst_mem.memory[i + 1].value = (test_val >> 8) & 0xFF
+        dut.inst_mem.memory[i + 2].value = (test_val >> 16) & 0xFF
+        dut.inst_mem.memory[i + 3].value = (test_val >> 24) & 0xFF
         await dut.clk.rising_edge
 
-    for i in range(0, 32):
+    for i in range(0, 32 * 4, 4):
         dut.inst_addr.value = i
         await dut.clk.rising_edge
         await Timer(1, "step")
         assert (
             dut.inst_read_data.value == test_val
-        ), f"inst_mem[{hex(i)}] != {hex(test_val)}, is {dut.inst_read_data.value}"
+        ), f"inst_mem[{hex(i)}] != {hex(test_val)}, is {hex(int(str(dut.inst_read_data.value), 2))}"
 
 
 @cocotb.test()

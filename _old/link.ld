@@ -15,7 +15,7 @@ MEMORY
 SECTIONS
 {
     .text :
-    {
+    {   
         KEEP(*(.text.startup))
         *(.text*)
         *(.rodata*)

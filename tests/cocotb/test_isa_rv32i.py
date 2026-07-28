@@ -1,11 +1,9 @@
 import cocotb
 from cocotb.triggers import Timer
-from util import setup_clock, sign_extend
+from util import setup_clock, sign_extend, set_inst, inst_nop
 from riscv_assembler.convert import AssemblyConverter
 
 asm = AssemblyConverter(hex_mode=True)
-inst_nop = 0x00000013
-
 
 def asm_inst(inst: list[str]):
     assembled = asm(str.join("\n", inst))
@@ -38,8 +36,9 @@ async def load_and_exec_inst(dut, inst_strs: list[str], reset=False):
     dut.pc.counter.value = 4
 
     insts = asm_inst(inst_strs)
-    for i in range(0, len(insts) * 4, 4):
-        dut.inst_mem.memory[i + 4].value = insts[i // 4]
+    set_inst(dut, 0, inst_nop)
+    for i in range(4, len(insts) * 4, 4):
+        set_inst(dut, i, insts[0])
 
     await dut.clk.rising_edge  # instruction fetched
     await dut.clk.rising_edge  # instruction executed
@@ -48,8 +47,7 @@ async def load_and_exec_inst(dut, inst_strs: list[str], reset=False):
 
 async def exec_imm(dut, inst: str | int):
     insts = [inst] if isinstance(inst, int) else asm_inst([inst])
-    # insts = asm_inst([inst])
-    dut.inst_mem.memory[int(str(dut.pc.counter.value), 2)].value = insts[0]
+    set_inst(dut, int(str(dut.pc.counter.value), 2), insts[0])
     dut.instruction.value = insts[0]
 
     await dut.clk.rising_edge
