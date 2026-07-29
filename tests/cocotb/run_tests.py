@@ -3,7 +3,7 @@ import os.path as path
 import shutil
 import os
 
-src_path = "../../src"
+rtl_path = "../../rtl"
 sim_path = "./sim"
 gcc_build_path = "../gcc/build"
 asm_build_path = "../assembly/build"
@@ -13,7 +13,7 @@ runner = get_runner("icarus")
 
 def run_test_single(module: str):
     run_test(
-        sources=[f"../../src/riscv/{module}.v"],
+        sources=[f"{rtl_path}/riscv/{module}.v"],
         hdl_toplevel=module,
         test_module=f"test_{module}",
     )
@@ -32,7 +32,7 @@ def run_test(
     runner.build(
         sources=sources,
         hdl_toplevel=hdl_toplevel,
-        includes=["../../src/riscv/include"],
+        includes=[f"{rtl_path}/riscv/include"],
         clean=True,
         defines=defines,
     )
@@ -53,17 +53,17 @@ def run_test(
 
 def test_all_modules():
     riscv_sources = [
-        f"{src_path}/riscv/branch_unit.v",
-        f"{src_path}/riscv/control_unit.v",
-        f"{src_path}/riscv/alu_control.v",
-        f"{src_path}/riscv/alu.v",
-        f"{src_path}/riscv/imm_gen.v",
-        f"{src_path}/riscv/program_counter.v",
-        f"{src_path}/riscv/register_file.v",
-        f"{src_path}/riscv/instruction_memory.v",
-        f"{src_path}/riscv/data_memory.v",
-        f"{src_path}/riscv/riscv_top.v",
-        f"{src_path}/riscv/mux3.v",
+        f"{rtl_path}/riscv/branch_unit.v",
+        f"{rtl_path}/riscv/control_unit.v",
+        f"{rtl_path}/riscv/alu_control.v",
+        f"{rtl_path}/riscv/alu.v",
+        f"{rtl_path}/riscv/imm_gen.v",
+        f"{rtl_path}/riscv/program_counter.v",
+        f"{rtl_path}/riscv/register_file.v",
+        f"{rtl_path}/riscv/instruction_memory.v",
+        f"{rtl_path}/riscv/data_memory.v",
+        f"{rtl_path}/riscv/riscv_top.v",
+        f"{rtl_path}/riscv/mux3.v",
     ]
 
     run_test(

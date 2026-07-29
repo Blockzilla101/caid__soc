@@ -9,9 +9,6 @@ MEMORY
 
 SECTIONS
 {
-  /* ------------------------------------------------------------------------
-   * INSTRUCTION MEMORY (IMEM)
-   * ------------------------------------------------------------------------ */
   .text : ALIGN(4)
   {
     KEEP(*(.text.init))   /* Startup/Reset code */
@@ -21,22 +18,15 @@ SECTIONS
     _etext = .;
   } > IMEM
 
-  /* ------------------------------------------------------------------------
-   * DATA MEMORY (DMEM)
-   * ------------------------------------------------------------------------ */
-
-  /* Initialized static/global variables (.data) */
-  /* Placed in DMEM, but initial values (LMA) are stored in IMEM right after .text */
   .data : ALIGN(4)
   {
     _data_start = .;
     *(.data .data.*)
-    *(.sdata .sdata.*)   /* Small data section for gp-relative addressing */
+    *(.sdata .sdata.*) 
     . = ALIGN(4);
     _edata = .;
   } > DMEM AT > IMEM
 
-  /* Uninitialized static/global variables (.bss) initialized to zero */
   .bss : ALIGN(4)
   {
     _bss_start = .;
@@ -47,9 +37,6 @@ SECTIONS
     _bss_end = .;
   } > DMEM
 
-  /* Set Global Pointer (gp) for RISC-V relaxed addressing optimization */
   PROVIDE(__global_pointer$ = _data_start + 0x800);
-
-  /* Set Stack Pointer top (Stack grows DOWNWARDS from the end of 2KB DMEM) */
   _stack_top = ORIGIN(DMEM) + LENGTH(DMEM);
 }

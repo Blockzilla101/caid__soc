@@ -56,10 +56,6 @@ async def test_hex_file(dut):
         assert_reg(dut, 5, 144)
     elif hex_name == "gcc_mem_test":
         for i in range(0, 32 * 4, 4):
-            # log.debug(f"mem[{i+4}] = {dut.data_mem.memory[i+4].value}")
-            # log.debug(f"mem[{i+4+1}] = {dut.data_mem.memory[i+4+1].value}")
-            # log.debug(f"mem[{i+4+2}] = {dut.data_mem.memory[i+4+2].value}")
-            # log.debug(f"mem[{i+4+3}] = {dut.data_mem.memory[i+4+3].value}")
             assert_mem(dut, i + 4, i // 4)
     else:
         raise ValueError(f"No checks defined for hex file: {hex_name}")
