@@ -1,4 +1,4 @@
-`include "global_params.vh"
+`include "riscv_def.vh"
 
 module tb_functional_units (
     input clk,

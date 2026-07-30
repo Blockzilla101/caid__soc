@@ -1,4 +1,4 @@
-`include "global_params.vh"
+`include "riscv_def.vh"
 
 `timescale 1ns / 1ps
 

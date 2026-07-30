@@ -1,3 +1,5 @@
+`include "global_def.vh"
+
 `timescale 1ns / 1ps
 
 module instruction_memory (
@@ -5,7 +7,7 @@ module instruction_memory (
     input [31:0] addr,
     output [31:0] read_data
 );
-    reg [7:0] memory[2048];
+    reg [7:0] memory[`SIZE_INST_MEM];
 
 `ifdef IMEM_LOAD_HEX
     initial begin
