@@ -156,6 +156,7 @@ module riscv_top (
     assign wb_write_data = reg_rs2_data;
     assign wb_addr = alu_result;
     assign mem_read_data = wb_read_data;
+    assign wb_sel = {1'b0, instruction[`INST_FUNCT3]};
 
     always @(*) begin
         wb_stall = 0;
