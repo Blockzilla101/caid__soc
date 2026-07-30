@@ -32,7 +32,7 @@ def run_test(
     runner.build(
         sources=sources,
         hdl_toplevel=hdl_toplevel,
-        includes=[f"{rtl_path}/riscv/include"],
+        includes=[f"{rtl_path}/include"],
         clean=True,
         defines=defines,
     )
