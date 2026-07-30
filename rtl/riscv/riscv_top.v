@@ -5,23 +5,18 @@
 
 module riscv_top (
     input clk,
-
-`ifndef WISHBONE_ENABLE
     input rst
-`else
-    input rst,
-
-    output wb_transfer_enable,
-    output wb_write_bus,
-    output [31:0] wb_write_data,
-    output [`WB_ADDR_SIZE] wb_addr,
-    output [`WB_SEL_SIZE] wb_sel,
-    input [31:0] wb_read_data,
-    input wb_transfer_complete
-`endif
 );
 
 `ifdef WISHBONE_ENABLE
+    output wb_transfer_enable;
+    output wb_write_bus;
+    output [31:0] wb_write_data;
+    output [`WB_ADDR_SIZE] wb_addr;
+    output [`WB_SEL_SIZE] wb_sel;
+    input [31:0] wb_read_data;
+    input wb_transfer_complet;
+
     reg wb_stall;
 `endif
 

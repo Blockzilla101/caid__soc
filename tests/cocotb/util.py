@@ -3,6 +3,14 @@ from cocotb.clock import Clock
 inst_nop = 0x00000013
 
 
+async def setup_clock_sig(clk_sig, rst_sig):
+    Clock(clk_sig, 1, "ns").start(False)
+    rst_sig.value = 1
+
+    await clk_sig.rising_edge
+    rst_sig.value = 0
+
+
 async def setup_clock(dut):
     Clock(dut.clk, 1, "ns").start(False)
     dut.rst.value = 1

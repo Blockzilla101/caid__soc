@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
 
 // ============================================================
 //  riscv_core.v
@@ -6,8 +6,8 @@
 // ============================================================
 
 module riscv_core (
-    input         clk,
-    input         reset,
+    input clk,
+    input reset,
 
     // One shared Wishbone Master interface
     output        wb_cyc_o,
@@ -15,7 +15,7 @@ module riscv_core (
     output        wb_we_o,
     output [31:0] wb_adr_o,
     output [31:0] wb_dat_o,
-    output [3:0]  wb_sel_o,
+    output [ 3:0] wb_sel_o,
     input  [31:0] wb_dat_i,
     input         wb_ack_i
 );
@@ -24,13 +24,13 @@ module riscv_core (
     // FETCH/EXEC controller for shared instruction/data bus
     // -------------------------------------------------------------------------
     localparam ST_FETCH = 1'b0;
-    localparam ST_EXEC  = 1'b1;
+    localparam ST_EXEC = 1'b1;
 
     reg state;
     reg [31:0] instr_reg;
 
     wire fetch_phase = (state == ST_FETCH);
-    wire exec_phase  = (state == ST_EXEC);
+    wire exec_phase = (state == ST_EXEC);
 
     // FIXED: declare before using inside always block
     wire cpu_mem_req;
@@ -42,7 +42,7 @@ module riscv_core (
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             state     <= ST_FETCH;
-            instr_reg <= 32'h0000_0013;     // NOP = addi x0, x0, 0
+            instr_reg <= 32'h0000_0013;  // NOP = addi x0, x0, 0
         end else begin
             case (state)
                 ST_FETCH: begin
@@ -53,8 +53,7 @@ module riscv_core (
                 end
 
                 ST_EXEC: begin
-                    if ((cpu_mem_req == 1'b0) || wb_ack_i)
-                        state <= ST_FETCH;
+                    if ((cpu_mem_req == 1'b0) || wb_ack_i) state <= ST_FETCH;
                 end
             endcase
         end
@@ -81,26 +80,26 @@ module riscv_core (
     wire [31:0] Final_Target;
     wire [31:0] cpu_rdata;
 
-    wire ALUSrc;
-    wire MemtoReg;
-    wire RegWrite;
-    wire MemRead;
-    wire MemWrite;
-    wire Branch;
-    wire Jump;
+    wire        ALUSrc;
+    wire        MemtoReg;
+    wire        RegWrite;
+    wire        MemRead;
+    wire        MemWrite;
+    wire        Branch;
+    wire        Jump;
 
-    wire [1:0] ALUop;
-    wire [3:0] ALU_Ctrl;
-    wire [2:0] imm_sel;
+    wire [ 1:0] ALUop;
+    wire [ 3:0] ALU_Ctrl;
+    wire [ 2:0] imm_sel;
 
-    wire Zero;
-    wire Branch_Taken;
-    wire PC_Sel;
-    wire cpu_ack;
+    wire        Zero;
+    wire        Branch_Taken;
+    wire        PC_Sel;
+    wire        cpu_ack;
 
-    wire is_lui;
-    wire is_auipc;
-    wire is_jalr;
+    wire        is_lui;
+    wire        is_auipc;
+    wire        is_jalr;
 
     // LSU-generated Wishbone signals before shared-bus mux
     wire        lsu_wb_cyc;
@@ -108,11 +107,11 @@ module riscv_core (
     wire        lsu_wb_we;
     wire [31:0] lsu_wb_adr;
     wire [31:0] lsu_wb_dat;
-    wire [3:0]  lsu_wb_sel;
+    wire [ 3:0] lsu_wb_sel;
 
-    assign is_lui   = (instruction[6:0] == 7'b0110111);
+    assign is_lui = (instruction[6:0] == 7'b0110111);
     assign is_auipc = (instruction[6:0] == 7'b0010111);
-    assign is_jalr  = (instruction[6:0] == 7'b1100111);
+    assign is_jalr = (instruction[6:0] == 7'b1100111);
 
     // AUIPC: ALU input A = PC; all others use register rs1
     assign ALU_A_input = is_auipc ? PC_out : RD1;
@@ -131,7 +130,7 @@ module riscv_core (
     );
 
     PCplus4 PC_INC (
-        .fromPC(PC_out),
+        .fromPC (PC_out),
         .NextoPC(PCplus4)
     );
 
@@ -169,13 +168,11 @@ module riscv_core (
     // -------------------------------------------------------------------------
     // Immediate selection
     // -------------------------------------------------------------------------
-    assign imm_sel =
-        (instruction[6:0] == 7'b0100011) ? 3'b001 : // S-type
-        (instruction[6:0] == 7'b1100011) ? 3'b010 : // B-type
-        (instruction[6:0] == 7'b0110111 ||
-         instruction[6:0] == 7'b0010111) ? 3'b011 : // U-type
-        (instruction[6:0] == 7'b1101111) ? 3'b100 : // J-type
-        3'b000;                                      // I-type default
+    assign imm_sel = (instruction[6:0] == 7'b0100011) ? 3'b001 :  // S-type
+        (instruction[6:0] == 7'b1100011) ? 3'b010 :  // B-type
+        (instruction[6:0] == 7'b0110111 || instruction[6:0] == 7'b0010111) ? 3'b011 :  // U-type
+        (instruction[6:0] == 7'b1101111) ? 3'b100 :  // J-type
+        3'b000;  // I-type default
 
     immediate_generator IMM_GEN (
         .instruction(instruction),
@@ -261,11 +258,11 @@ module riscv_core (
     // FETCH drives program-memory address using PC.
     // EXEC drives data/LED address using LSU for load/store.
     // -------------------------------------------------------------------------
-    assign wb_cyc_o = fetch_phase ? 1'b1    : lsu_wb_cyc;
-    assign wb_stb_o = fetch_phase ? 1'b1    : lsu_wb_stb;
-    assign wb_we_o  = fetch_phase ? 1'b0    : lsu_wb_we;
-    assign wb_adr_o = fetch_phase ? PC_out  : lsu_wb_adr;
-    assign wb_dat_o = fetch_phase ? 32'b0   : lsu_wb_dat;
+    assign wb_cyc_o = fetch_phase ? 1'b1 : lsu_wb_cyc;
+    assign wb_stb_o = fetch_phase ? 1'b1 : lsu_wb_stb;
+    assign wb_we_o  = fetch_phase ? 1'b0 : lsu_wb_we;
+    assign wb_adr_o = fetch_phase ? PC_out : lsu_wb_adr;
+    assign wb_dat_o = fetch_phase ? 32'b0 : lsu_wb_dat;
     assign wb_sel_o = fetch_phase ? 4'b1111 : lsu_wb_sel;
 
     // -------------------------------------------------------------------------
