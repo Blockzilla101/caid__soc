@@ -50,15 +50,14 @@ module control_unit (
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
             end
 
-            // todo: deal with bytes, half words
             `OP_LOAD: begin  // x[rd] = sext(M[x[rs1] + sext(offset)][31:0])
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
                 control_word[`CW_REG_WRITE_SRC] <= `REG_WRITE_SRC_MEM;
                 control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;
                 control_word[`CW_REG_WRITE_EN] <= 1;
+                control_word[`CW_MEM_READ] <= 1;
             end
 
-            // todo: deal with bytes, half words
             `OP_STORE: begin  // M[x[rs1] + sext(offset)] = x[rs2][31:0]
                 control_word[`CW_ALU_CTRL] <= `ALU_CTRL_ADD;
                 control_word[`CW_ALU_SRC_OP2] <= `ALU_SRC_OP2_IMM;

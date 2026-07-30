@@ -1,11 +1,30 @@
 `include "riscv_def.vh"
+`include "wb_def.vh"
 
 `timescale 1ns / 1ps
 
 module riscv_top (
     input clk,
+
+`ifndef WISHBONE_ENABLE
     input rst
+`else
+    input rst,
+
+    output wb_transfer_enable,
+    output wb_write_bus,
+    output [31:0] wb_write_data,
+    output [`WB_ADDR_SIZE] wb_addr,
+    output [`WB_SEL_SIZE] wb_sel,
+    input [31:0] wb_read_data,
+    input wb_transfer_complete
+`endif
 );
+
+`ifdef WISHBONE_ENABLE
+    reg wb_stall;
+`endif
+
     wire [`CW_LEN] control_word;
 
     wire [31:0] pc_val;
@@ -37,7 +56,11 @@ module riscv_top (
         .rs2(instruction[`INST_RS2]),
         .rd(instruction[`INST_RD]),
         .write_data(reg_write_data),
+`ifdef WISHBONE_ENABLE
+        .write_enable(control_word[`CW_REG_WRITE_EN] && !wb_stall),
+`else
         .write_enable(control_word[`CW_REG_WRITE_EN]),
+`endif
         .rs1_data(reg_rs1_data),
         .rs2_data(reg_rs2_data)
     );
@@ -71,6 +94,7 @@ module riscv_top (
 
     wire [31:0] mem_read_data;  // to write-back mux
 
+`ifndef WISHBONE_ENABLE
     data_memory data_mem (
         .clk(clk),
         .addr(alu_result),
@@ -79,6 +103,7 @@ module riscv_top (
         .funct3(instruction[`INST_FUNCT3]),
         .read_data(mem_read_data)
     );
+`endif
 
     wire [31:0] imm_value;  // to op2 mux
 
@@ -117,5 +142,35 @@ module riscv_top (
     );
 
     assign pc_next_val = branch_taken ? alu_result & ~32'b1 : pc_plus_4;
+
+`ifdef WISHBONE_ENABLE
+    mux3 pc_next_val_mux (
+        .A  (pc_plus_4),
+        .B  (alu_result & ~32'b1),
+        .C  (pc_val),
+        .sel({wb_stall, wb_stall ? 1'b0 : branch_taken}),
+        .F  (pc_next_val)
+    );
+
+
+    assign wb_transfer_enable = control_word[`CW_MEM_WRITE] || control_word[`CW_MEM_READ];
+    assign wb_write_bus = control_word[`CW_MEM_WRITE];
+    assign wb_write_data = reg_rs2_data;
+    assign wb_addr = alu_result;
+    assign mem_read_data = wb_read_data;
+
+    always @(*) begin
+        wb_stall = 0;
+        if (wb_transfer_enable) begin
+            wb_stall = 1;
+
+            if (wb_transfer_complete) begin
+                wb_stall = 0;
+            end
+        end
+    end
+`else
+    assign pc_next_val = branch_taken ? alu_result & ~32'b1 : pc_plus_4;
+`endif
 
 endmodule
