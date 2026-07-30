@@ -8,10 +8,10 @@ module wb_master_riscv (
     input wb_CLK_I,
     input wb_RST_I,
 
-    input [31:0] wb_DAT_I,
-    output reg [31:0] wb_DAT_O,
+    input  [31:0] wb_DAT_I,
+    output [31:0] wb_DAT_O,
 
-    output reg [`WB_ADDR_SIZE] wb_ADR_O,
+    output [`WB_ADDR_SIZE] wb_ADR_O,
 
     input wb_ACK_I,
     output reg wb_CYC_O,
@@ -24,7 +24,7 @@ module wb_master_riscv (
     wire [31:0] cpu_write_data;
     wire [`WB_ADDR_SIZE] cpu_addr;
     wire [`WB_SEL_SIZE] cpu_sel;
-    reg [31:0] cpu_read_data;
+    wire [31:0] cpu_read_data;
     reg cpu_transfer_complete;
 
     riscv_top riscv (
@@ -40,29 +40,29 @@ module wb_master_riscv (
         .wb_transfer_complete(cpu_transfer_complete)
     );
 
+    assign wb_ADR_O = cpu_addr;
+    assign wb_DAT_O = cpu_write_bus ? cpu_write_data : 32'b0;
+    assign cpu_read_data = wb_DAT_I;
+
     reg [1:0] state;
 
     always @(*) begin
         if (wb_RST_I) begin
             state = `WB_STATE_INACTIVE;
             cpu_transfer_complete = 0;
-            cpu_read_data = 0;
             wb_WE_O = 0;
             wb_CYC_O = 0;
             wb_STB_O = 0;
-            wb_ADR_O = 0;
         end
 
         case (state)
             `WB_STATE_INACTIVE: begin
                 if (cpu_transfer_enable) begin
                     state = cpu_write_bus ? `WB_STATE_WRITE_SINGLE : `WB_STATE_READ_SINGLE;
-                    if (cpu_write_bus) wb_DAT_O = cpu_write_data;
                     wb_WE_O = cpu_write_bus;
                     wb_CYC_O = 1;
                     wb_STB_O = 1;
                     wb_SEL_O = cpu_sel;
-                    wb_ADR_O = cpu_addr;
                     cpu_transfer_complete = 0;
                 end
             end
@@ -70,8 +70,6 @@ module wb_master_riscv (
             `WB_STATE_READ_SINGLE: begin
                 if (wb_ACK_I) begin
                     state = `WB_STATE_INACTIVE;
-                    cpu_read_data = wb_DAT_I;
-                    cpu_read_data = 0;
                     wb_WE_O = 0;
                     wb_CYC_O = 0;
                     wb_STB_O = 0;
@@ -82,7 +80,6 @@ module wb_master_riscv (
             `WB_STATE_WRITE_SINGLE: begin
                 if (wb_ACK_I) begin
                     state = `WB_STATE_INACTIVE;
-                    cpu_read_data = 0;
                     wb_WE_O = 0;
                     wb_CYC_O = 0;
                     wb_STB_O = 0;

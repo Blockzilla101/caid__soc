@@ -17,11 +17,12 @@ module wb_slave_data_mem (
     input wb_STB_I,
     input wb_WE_I
 );
-    reg [`WB_STATE_SIZE] state;
-
     reg mem_write_enable;
-    reg [31:0] mem_write_data;
+    wire [31:0] mem_write_data;
     wire [31:0] mem_read_data;
+
+    assign mem_write_data = wb_DAT_I;
+    assign wb_DAT_O = mem_read_data;
 
     data_memory data_mem (
         .clk(wb_CLK_I),
@@ -34,17 +35,14 @@ module wb_slave_data_mem (
 
     always @(posedge wb_CLK_I or posedge wb_RST_I) begin
         if (wb_RST_I) begin
-            state <= `WB_STATE_INACTIVE;
             mem_write_enable <= 0;
             wb_ACK_O <= 0;
         end else if (wb_CYC_I && wb_STB_I) begin
             if (wb_WE_I) begin
-                mem_write_data <= wb_DAT_I;
                 mem_write_enable <= 1;
                 wb_ACK_O <= 1;
             end else begin
                 mem_write_enable <= 0;
-                wb_DAT_O <= mem_read_data;
                 wb_ACK_O <= 1;
             end
         end else begin
