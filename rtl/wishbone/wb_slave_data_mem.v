@@ -6,10 +6,10 @@ module wb_slave_data_mem (
     input wb_CLK_I,
     input wb_RST_I,
 
-    input  [31:0] wb_DAT_I,
-    output [31:0] wb_DAT_O,
+    input [31:0] wb_DAT_I,
+    output reg [31:0] wb_DAT_O,
 
-    output wb_ACK_O,
+    output reg wb_ACK_O,
 
     input [`WB_ADDR_SIZE] wb_ADR_I,
     input wb_CYC_I,
@@ -19,9 +19,9 @@ module wb_slave_data_mem (
 );
     reg [`WB_STATE_SIZE] state;
 
-    wire mem_write_enable;
+    reg mem_write_enable;
+    reg [31:0] mem_write_data;
     wire [31:0] mem_read_data;
-    wire [31:0] mem_write_data;
 
     data_memory data_mem (
         .clk(wb_CLK_I),
@@ -35,16 +35,15 @@ module wb_slave_data_mem (
     always @(posedge wb_CLK_I or posedge wb_RST_I) begin
         if (wb_RST_I) begin
             state <= `WB_STATE_INACTIVE;
-            cpu_read_data <= 0;
-            wb_WE_O <= 0;
-            wb_CYC_O <= 0;
-            wb_STB_O <= 0;
+            mem_write_enable <= 0;
+            wb_ACK_O <= 0;
         end else if (wb_CYC_I && wb_STB_I) begin
             if (wb_WE_I) begin
                 mem_write_data <= wb_DAT_I;
                 mem_write_enable <= 1;
                 wb_ACK_O <= 1;
             end else begin
+                mem_write_enable <= 0;
                 wb_DAT_O <= mem_read_data;
                 wb_ACK_O <= 1;
             end

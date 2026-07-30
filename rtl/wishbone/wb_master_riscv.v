@@ -8,10 +8,10 @@ module wb_master_riscv (
     input wb_CLK_I,
     input wb_RST_I,
 
-    input  [31:0] wb_DAT_I,
-    output [31:0] wb_DAT_O,
+    input [31:0] wb_DAT_I,
+    output reg [31:0] wb_DAT_O,
 
-    input [`WB_ADDR_SIZE] wb_ADR_O,
+    output reg [`WB_ADDR_SIZE] wb_ADR_O,
 
     input wb_ACK_I,
     output reg wb_CYC_O,
@@ -24,7 +24,7 @@ module wb_master_riscv (
     wire [31:0] cpu_write_data;
     wire [`WB_ADDR_SIZE] cpu_addr;
     wire [`WB_SEL_SIZE] cpu_sel;
-    wire [31:0] cpu_read_data;
+    reg [31:0] cpu_read_data;
     wire cpu_transfer_complete;
 
     riscv_top riscv (
@@ -57,6 +57,7 @@ module wb_master_riscv (
                         state <= cpu_write_bus ? `WB_STATE_WRITE_SINGLE : `WB_STATE_READ_SINGLE;
                         wb_WE_O <= cpu_write_bus;
                         wb_CYC_O <= 1;
+                        wb_STB_O <= 1;
                         wb_SEL_O <= cpu_sel;
                         wb_ADR_O <= cpu_addr;
                         if (cpu_write_bus) wb_DAT_O <= cpu_write_data;

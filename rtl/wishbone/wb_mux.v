@@ -9,8 +9,8 @@ module wb_mux (
     // input CLK_I,
     // input RST_I,
 
-    output [31:0] m_DAT_I,
-    input  [31:0] m_DAT_O,
+    output reg [31:0] m_DAT_I,
+    input [31:0] m_DAT_O,
 
     // master
 
@@ -20,30 +20,30 @@ module wb_mux (
     input m_STB_O,
     input m_WE_O,
 
-    output m_ACK_I,
+    output reg m_ACK_I,
 
     // slave 0
 
-    output slv0_DAT_I,
-    input  slv0_DAT_O,
+    output reg [31:0] slv0_DAT_I,
+    input [31:0] slv0_DAT_O,
 
     input slv0_ACK_O,
     output [`WB_ADDR_SIZE] slv0_ADR_I,
     output slv0_CYC_I,
     output [`WB_SEL_SIZE] slv0_SEL_I,
-    output slv0_STB_I,
+    output reg slv0_STB_I,
     output slv0_WE_I,
 
     // slave 1
 
-    output slv1_DAT_I,
-    input  slv1_DAT_O,
+    output reg [31:0] slv1_DAT_I,
+    input [31:0] slv1_DAT_O,
 
     input slv1_ACK_O,
     output [`WB_ADDR_SIZE] slv1_ADR_I,
     output slv1_CYC_I,
     output [`WB_SEL_SIZE] slv1_SEL_I,
-    output slv1_STB_I,
+    output reg slv1_STB_I,
     output slv1_WE_I
 );
 
@@ -60,7 +60,7 @@ module wb_mux (
     assign slv1_WE_I  = m_WE_O;
 
     always @(*) begin
-        case (SLV_SEL)
+        case (wb_SLV_SEL)
             0: begin
                 m_DAT_I = slv0_DAT_O;
                 m_ACK_I = slv0_ACK_O;

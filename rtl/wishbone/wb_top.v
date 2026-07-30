@@ -2,7 +2,6 @@ module wb_top (
     input clk,
     input rst
 );
-
     input wb_CLK_I;
     input wb_RST_I;
 
@@ -30,7 +29,7 @@ module wb_top (
         .wb_CYC_O(m_CYC_O),
         .wb_SEL_O(m_SEL_O),
         .wb_STB_O(m_STB_O),
-        .wb_WE_O (m_WE_O),
+        .wb_WE_O (m_WE_O)
     );
 
 
@@ -46,19 +45,19 @@ module wb_top (
     wire slv0_WE_I;
 
     wb_slave_data_mem data_mem (
-        wb_CLK_I(clk),
-        wb_RST_I(rst),
+        .wb_CLK_I(clk),
+        .wb_RST_I(rst),
 
-        wb_DAT_I(slv0_DAT_I),
-        wb_DAT_O(slv0_DAT_O),
+        .wb_DAT_I(slv0_DAT_I),
+        .wb_DAT_O(slv0_DAT_O),
 
-        wb_ACK_O(slv0_ACK_O),
+        .wb_ACK_O(slv0_ACK_O),
 
-        wb_ADR_I(slv0_ADR_I),
-        wb_CYC_I(slv0_CYC_I),
-        wb_SEL_I(slv0_SEL_I),
-        wb_STB_I(slv0_STB_I),
-        wb_WE_I(slv0_WE_I)
+        .wb_ADR_I(slv0_ADR_I),
+        .wb_CYC_I(slv0_CYC_I),
+        .wb_SEL_I(slv0_SEL_I),
+        .wb_STB_I(slv0_STB_I),
+        .wb_WE_I (slv0_WE_I)
     );
 
     wire SLV_SEL;

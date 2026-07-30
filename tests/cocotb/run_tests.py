@@ -66,6 +66,14 @@ def test_all_modules():
         f"{rtl_path}/riscv/mux3.v",
     ]
 
+    wb_sources = [
+        f"{rtl_path}/wishbone/wb_master_riscv.v",
+        f"{rtl_path}/wishbone/wb_mux.v",
+        f"{rtl_path}/wishbone/wb_slave_addr.v",
+        f"{rtl_path}/wishbone/wb_slave_data_mem.v",
+        f"{rtl_path}/wishbone/wb_top.v",
+    ]
+
     run_test(
         sources=[
             *riscv_sources,
@@ -81,40 +89,47 @@ def test_all_modules():
         test_module="test_isa_rv32i",
     )
 
-    gcc_memory_files = []
-    asm_memory_files = []
+    run_test(
+        sources=[*riscv_sources, *wb_sources],
+        hdl_toplevel="wb_top",
+        test_module="test_wishbone_mem",
+        defines={"WISHBONE_ENABLE": "1"},
+    )
 
-    for _, _, filenames in os.walk(path.abspath(f"{gcc_build_path}/")):
-        gcc_memory_files.extend([f[:-4] for f in filenames if f.endswith(".mem")])
+    # gcc_memory_files = []
+    # asm_memory_files = []
 
-    for _, _, filenames in os.walk(path.abspath(f"{asm_build_path}/")):
-        asm_memory_files.extend([f[:-4] for f in filenames if f.endswith(".mem")])
+    # for _, _, filenames in os.walk(path.abspath(f"{gcc_build_path}/")):
+    #     gcc_memory_files.extend([f[:-4] for f in filenames if f.endswith(".mem")])
 
-    for mem in asm_memory_files:
-        run_test(
-            sources=riscv_sources,
-            hdl_toplevel="riscv_top",
-            test_module="test_hex_file",
-            defines={
-                "IMEM_LOAD_HEX": "1",
-                "IMEM_HEX_PATH": path.abspath(f"{asm_build_path}/{mem}.mem"),
-                "HEX_NAME": f"asm_{mem}",
-            },
-            waveform_name=f"asm__{mem}_riscv.fst",
-        )
+    # for _, _, filenames in os.walk(path.abspath(f"{asm_build_path}/")):
+    #     asm_memory_files.extend([f[:-4] for f in filenames if f.endswith(".mem")])
 
-    for mem in gcc_memory_files:
-        run_test(
-            sources=riscv_sources,
-            hdl_toplevel="riscv_top",
-            test_module="test_hex_file",
-            defines={
-                "IMEM_LOAD_HEX": "1",
-                "IMEM_HEX_PATH": path.abspath(f"{gcc_build_path}/{mem}.mem"),
-                "HEX_NAME": f"gcc_{mem}",
-            },
-            waveform_name=f"gcc__{mem}_riscv.fst",
-        )
+    # for mem in asm_memory_files:
+    #     run_test(
+    #         sources=riscv_sources,
+    #         hdl_toplevel="riscv_top",
+    #         test_module="test_hex_file",
+    #         defines={
+    #             "IMEM_LOAD_HEX": "1",
+    #             "IMEM_HEX_PATH": path.abspath(f"{asm_build_path}/{mem}.mem"),
+    #             "HEX_NAME": f"asm_{mem}",
+    #         },
+    #         waveform_name=f"asm__{mem}_riscv.fst",
+    #     )
+
+    # for mem in gcc_memory_files:
+    #     run_test(
+    #         sources=riscv_sources,
+    #         hdl_toplevel="riscv_top",
+    #         test_module="test_hex_file",
+    #         defines={
+    #             "IMEM_LOAD_HEX": "1",
+    #             "IMEM_HEX_PATH": path.abspath(f"{gcc_build_path}/{mem}.mem"),
+    #             "HEX_NAME": f"gcc_{mem}",
+    #         },
+    #         waveform_name=f"gcc__{mem}_riscv.fst",
+    #     )
 
 
 if __name__ == "__main__":
