@@ -5,13 +5,6 @@
 // supports only single tranfers, no block transfers
 
 module wb_master_riscv (
-    input cpu_transfer_enable,
-    input cpu_write_bus,
-    input [31:0] cpu_write_data,
-    input [`WB_SEL_SIZE] cpu_sel,
-    output [31:0] cpu_read_data,
-    output cpu_transfer_complete,
-
     input wb_CLK_I,
     input wb_RST_I,
 
@@ -26,6 +19,27 @@ module wb_master_riscv (
     output reg wb_STB_O,
     output reg wb_WE_O
 );
+    wire cpu_transfer_enable;
+    wire cpu_write_bus;
+    wire [31:0] cpu_write_data;
+    wire [`WB_ADDR_SIZE] cpu_addr;
+    wire [`WB_SEL_SIZE] cpu_sel;
+    wire [31:0] cpu_read_data;
+    wire cpu_transfer_complete;
+
+    riscv_top riscv (
+        .clk(CLK_I),
+        .rst(RST_I),
+
+        .wb_transfer_enable(cpu_transfer_enable),
+        .wb_write_bus(cpu_write_bus),
+        .wb_write_data(cpu_write_data),
+        .wb_addr(cpu_addr),
+        .wb_sel(cpu_sel),
+        .wb_read_data(cpu_read_data),
+        .wb_transfer_complete(cpu_transfer_complete)
+    );
+
     reg [1:0] state;
 
     always @(posedge wb_CLK_I or posedge wb_RST_I) begin
@@ -35,6 +49,7 @@ module wb_master_riscv (
             wb_WE_O <= 0;
             wb_CYC_O <= 0;
             wb_STB_O <= 0;
+            wb_ADR_O <= 0;
         end else begin
             case (state)
                 `WB_STATE_INACTIVE: begin
@@ -43,6 +58,7 @@ module wb_master_riscv (
                         wb_WE_O <= cpu_write_bus;
                         wb_CYC_O <= 1;
                         wb_SEL_O <= cpu_sel;
+                        wb_ADR_O <= cpu_addr;
                         if (cpu_write_bus) wb_DAT_O <= cpu_write_data;
                     end
                 end

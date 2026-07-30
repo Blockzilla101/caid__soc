@@ -46,8 +46,6 @@ module wb_mux (
     output slv1_STB_I,
     output slv1_WE_I
 );
-    assign slv0_ACK_O = m_ACK_I;
-    assign slv1_ACK_O = m_ACK_I;
 
     assign slv0_ADR_I = m_ADR_O;
     assign slv1_ADR_I = m_ADR_O;
@@ -65,15 +63,16 @@ module wb_mux (
         case (SLV_SEL)
             0: begin
                 m_DAT_I = slv0_DAT_O;
+                m_ACK_I = slv0_ACK_O;
                 slv0_DAT_I = m_DAT_O;
                 slv0_STB_I = m_STB_O;
             end
 
             1: begin
                 m_DAT_I = slv1_DAT_O;
+                m_ACK_I = slv1_ACK_O;
                 slv1_DAT_I = m_DAT_O;
                 slv1_STB_I = m_STB_O;
-
             end
         endcase
     end
