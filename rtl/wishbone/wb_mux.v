@@ -4,7 +4,7 @@
 
 
 module wb_mux (
-    input SLV_SEL,
+    input wb_SLV_SEL,
 
     // input CLK_I,
     // input RST_I,
