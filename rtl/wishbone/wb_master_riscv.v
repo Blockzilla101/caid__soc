@@ -42,53 +42,53 @@ module wb_master_riscv (
 
     reg [1:0] state;
 
-    always @(posedge wb_CLK_I or posedge wb_RST_I) begin
+    always @(*) begin
         if (wb_RST_I) begin
-            state <= `WB_STATE_INACTIVE;
-            cpu_transfer_complete <= 0;
-            cpu_read_data <= 0;
-            wb_WE_O <= 0;
-            wb_CYC_O <= 0;
-            wb_STB_O <= 0;
-            wb_ADR_O <= 0;
-        end else begin
-            case (state)
-                `WB_STATE_INACTIVE: begin
-                    if (cpu_transfer_enable) begin
-                        state <= cpu_write_bus ? `WB_STATE_WRITE_SINGLE : `WB_STATE_READ_SINGLE;
-                        wb_WE_O <= cpu_write_bus;
-                        wb_CYC_O <= 1;
-                        wb_STB_O <= 1;
-                        wb_SEL_O <= cpu_sel;
-                        wb_ADR_O <= cpu_addr;
-                        if (cpu_write_bus) wb_DAT_O <= cpu_write_data;
-                        cpu_transfer_complete <= 0;
-                    end
-                end
-
-                `WB_STATE_READ_SINGLE: begin
-                    if (wb_ACK_I) begin
-                        state <= `WB_STATE_INACTIVE;
-                        cpu_read_data <= wb_DAT_I;
-                        cpu_read_data <= 0;
-                        wb_WE_O <= 0;
-                        wb_CYC_O <= 0;
-                        wb_STB_O <= 0;
-                        cpu_transfer_complete <= 1;
-                    end
-                end
-
-                `WB_STATE_WRITE_SINGLE: begin
-                    if (wb_ACK_I) begin
-                        state <= `WB_STATE_INACTIVE;
-                        cpu_read_data <= 0;
-                        wb_WE_O <= 0;
-                        wb_CYC_O <= 0;
-                        wb_STB_O <= 0;
-                        cpu_transfer_complete <= 1;
-                    end
-                end
-            endcase
+            state = `WB_STATE_INACTIVE;
+            cpu_transfer_complete = 0;
+            cpu_read_data = 0;
+            wb_WE_O = 0;
+            wb_CYC_O = 0;
+            wb_STB_O = 0;
+            wb_ADR_O = 0;
         end
+
+        case (state)
+            `WB_STATE_INACTIVE: begin
+                if (cpu_transfer_enable) begin
+                    state = cpu_write_bus ? `WB_STATE_WRITE_SINGLE : `WB_STATE_READ_SINGLE;
+                    if (cpu_write_bus) wb_DAT_O = cpu_write_data;
+                    wb_WE_O = cpu_write_bus;
+                    wb_CYC_O = 1;
+                    wb_STB_O = 1;
+                    wb_SEL_O = cpu_sel;
+                    wb_ADR_O = cpu_addr;
+                    cpu_transfer_complete = 0;
+                end
+            end
+
+            `WB_STATE_READ_SINGLE: begin
+                if (wb_ACK_I) begin
+                    state = `WB_STATE_INACTIVE;
+                    cpu_read_data = wb_DAT_I;
+                    cpu_read_data = 0;
+                    wb_WE_O = 0;
+                    wb_CYC_O = 0;
+                    wb_STB_O = 0;
+                    cpu_transfer_complete = 1;
+                end
+            end
+
+            `WB_STATE_WRITE_SINGLE: begin
+                if (wb_ACK_I) begin
+                    state = `WB_STATE_INACTIVE;
+                    cpu_read_data = 0;
+                    wb_WE_O = 0;
+                    wb_CYC_O = 0;
+                    wb_STB_O = 0;
+                    cpu_transfer_complete = 1;
+                end
+            end
+        endcase
     end
 endmodule
