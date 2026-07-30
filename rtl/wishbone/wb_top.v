@@ -2,9 +2,6 @@ module wb_top (
     input clk,
     input rst
 );
-    input wb_CLK_I;
-    input wb_RST_I;
-
     wire [31:0] m_DAT_I;
     wire [31:0] m_DAT_O;
 
@@ -17,7 +14,7 @@ module wb_top (
     wire m_WE_O;
 
 
-    wb_master_riscv riscv (
+    wb_master_riscv wb_riscv (
         .wb_CLK_I(clk),
         .wb_RST_I(rst),
 
@@ -44,7 +41,7 @@ module wb_top (
     wire slv0_STB_I;
     wire slv0_WE_I;
 
-    wb_slave_data_mem data_mem (
+    wb_slave_data_mem wb_data_mem (
         .wb_CLK_I(clk),
         .wb_RST_I(rst),
 
@@ -62,12 +59,12 @@ module wb_top (
 
     wire SLV_SEL;
 
-    wb_slave_addr addr (
+    wb_slave_addr wb_addr_decoder (
         .wb_ADR_I  (m_ADR_O),
         .wb_SLV_SEL(SLV_SEL)
     );
 
-    wb_mux mux (
+    wb_mux wb_mux (
         .wb_SLV_SEL(SLV_SEL),
 
         .m_DAT_I(m_DAT_I),

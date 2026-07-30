@@ -25,11 +25,11 @@ module wb_master_riscv (
     wire [`WB_ADDR_SIZE] cpu_addr;
     wire [`WB_SEL_SIZE] cpu_sel;
     reg [31:0] cpu_read_data;
-    wire cpu_transfer_complete;
+    reg cpu_transfer_complete;
 
     riscv_top riscv (
-        .clk(CLK_I),
-        .rst(RST_I),
+        .clk(wb_CLK_I),
+        .rst(wb_RST_I),
 
         .wb_transfer_enable(cpu_transfer_enable),
         .wb_write_bus(cpu_write_bus),
@@ -45,6 +45,7 @@ module wb_master_riscv (
     always @(posedge wb_CLK_I or posedge wb_RST_I) begin
         if (wb_RST_I) begin
             state <= `WB_STATE_INACTIVE;
+            cpu_transfer_complete <= 0;
             cpu_read_data <= 0;
             wb_WE_O <= 0;
             wb_CYC_O <= 0;
@@ -61,33 +62,33 @@ module wb_master_riscv (
                         wb_SEL_O <= cpu_sel;
                         wb_ADR_O <= cpu_addr;
                         if (cpu_write_bus) wb_DAT_O <= cpu_write_data;
+                        cpu_transfer_complete <= 0;
                     end
                 end
 
                 `WB_STATE_READ_SINGLE: begin
                     if (wb_ACK_I) begin
-                        state <= `WB_STATE_TRANSFER_COMPLETE;
+                        state <= `WB_STATE_INACTIVE;
                         cpu_read_data <= wb_DAT_I;
+                        cpu_read_data <= 0;
+                        wb_WE_O <= 0;
+                        wb_CYC_O <= 0;
+                        wb_STB_O <= 0;
+                        cpu_transfer_complete <= 1;
                     end
                 end
 
                 `WB_STATE_WRITE_SINGLE: begin
                     if (wb_ACK_I) begin
-                        state <= `WB_STATE_TRANSFER_COMPLETE;
+                        state <= `WB_STATE_INACTIVE;
+                        cpu_read_data <= 0;
+                        wb_WE_O <= 0;
+                        wb_CYC_O <= 0;
+                        wb_STB_O <= 0;
+                        cpu_transfer_complete <= 1;
                     end
-                end
-
-                `WB_STATE_TRANSFER_COMPLETE: begin  // potentially makes this module unusable for one cycle
-                    state <= `WB_STATE_INACTIVE;
-                    cpu_read_data <= 0;
-                    wb_WE_O <= 0;
-                    wb_CYC_O <= 0;
-                    wb_STB_O <= 0;
                 end
             endcase
         end
     end
-
-    assign cpu_transfer_complete = state == `WB_STATE_TRANSFER_COMPLETE;
-
 endmodule

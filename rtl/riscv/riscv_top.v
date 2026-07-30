@@ -141,8 +141,6 @@ module riscv_top (
         .F  (reg_write_data)
     );
 
-    assign pc_next_val = branch_taken ? alu_result & ~32'b1 : pc_plus_4;
-
 `ifdef WISHBONE_ENABLE
     mux3 pc_next_val_mux (
         .A  (pc_plus_4),

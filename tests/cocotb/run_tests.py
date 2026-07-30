@@ -95,7 +95,11 @@ def test_all_modules():
             sources=[*riscv_sources, *wb_sources],
             hdl_toplevel="wb_top",
             test_module="test_wishbone_mem",
-            defines={"WISHBONE_ENABLE": "1"},
+            defines={
+                "WISHBONE_ENABLE": "1",
+                "IMEM_LOAD_HEX": "1",
+                "IMEM_HEX_PATH": path.abspath(f"{asm_build_path}/wb_mem_test.mem"),
+            },
         )
 
     gcc_memory_files = []
