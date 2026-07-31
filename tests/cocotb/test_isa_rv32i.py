@@ -1,5 +1,5 @@
 import cocotb
-from cocotb.triggers import Timer
+from cocotb.triggers import Timer, ReadWrite
 from util import setup_clock, sign_extend, set_inst, inst_nop, assert_mem, assert_reg
 from riscv_assembler.convert import AssemblyConverter
 
@@ -47,21 +47,28 @@ async def load_and_exec_inst(dut, inst_strs: list[str], reset=False):
 
 
 async def exec_imm(dut, inst: str | int):
+    await dut.clk.falling_edge
+
     insts = [inst] if isinstance(inst, int) else asm_inst([inst])
-    set_inst(dut, int(str(dut.pc.counter.value), 2), insts[0])
+    # set_inst(dut, int(str(dut.pc.counter.value), 2), insts[0])
     dut.instruction.value = insts[0]
 
-    await dut.clk.rising_edge
+    await dut.clk.falling_edge
     await Timer(1, "step")
 
 
 async def assert_branch(dut, branch_inst, branch_taken):
-    pc_val = int(str(dut.pc.counter.value), 2)
+    await exec_imm(dut, inst_nop)
+    pc_val = int(str(dut.pc.counter.value), 2) + 4
     await exec_imm(dut, branch_inst)
     if branch_taken:
-        assert dut.pc.counter.value == pc_val + 8
+        assert (
+            dut.pc.counter.value.to_unsigned() == pc_val + 8
+        ), "branch_taken is true, but pc counter isn't set properly"
     else:
-        assert dut.pc.counter.value == pc_val + 4
+        assert (
+            dut.pc.counter.value.to_unsigned() == pc_val + 4
+        ), "branch_taken is false, but pc counter isn't next value"
 
 
 @cocotb.test()
@@ -75,7 +82,7 @@ async def test_imm_inst(dut):
     assert_reg(dut, 4, 50 << 12)
 
     await exec_imm(dut, 0x00032217)  # auipc x5, 50
-    assert_reg(dut, 4, int(str(dut.pc.counter.value), 2) - 4 + (50 << 12))
+    assert_reg(dut, 4, (int(str(dut.pc.counter.value), 2) - 4) + (50 << 12))
 
 
 @cocotb.test()
@@ -243,17 +250,18 @@ async def test_jump_inst(dut):
     await exec_imm(dut, inst_nop)
     await exec_imm(dut, inst_nop)
 
-    pc_val = int(str(dut.pc.counter.value), 2)
+    pc_val = int(str(dut.pc.counter.value), 2) + 4
     await exec_imm(dut, 0x00A0016F)  # "jal x2, 10")
     assert_reg(dut, 2, pc_val + 4)
 
-    assert dut.pc.counter.value == pc_val + 10
+    assert dut.pc_val.value == pc_val + 10
 
     x4 = 4
     await exec_imm(dut, f"addi x4, x0, {x4}")
     pc_val = int(str(dut.pc.counter.value), 2)
+
     await exec_imm(dut, 0x00820167)  # jalr x2, 8(x4)
-    assert_reg(dut, 2, pc_val + 4)
+    assert_reg(dut, 2, pc_val + 8)
 
     assert dut.pc.counter.value == 8 + x4
 

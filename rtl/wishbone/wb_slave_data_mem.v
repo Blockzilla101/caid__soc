@@ -45,22 +45,23 @@ module wb_slave_data_mem (
             case (state)
                 IDLE: begin
                     wb_DAT_O <= 0;
+                    wb_ACK_O <= 0;
                     if (wb_STB_I) begin
                         state <= PROCESS;
-                        if (wb_WE_I) m_write_data <= wb_DAT_I;
                         m_write_enable <= wb_WE_I;
                         m_write_sel <= wb_SEL_I;
                         m_addr <= wb_ADR_I;
+                        m_write_data <= wb_WE_I ? wb_DAT_I : 32'b0;
                     end
                 end
                 PROCESS: begin
+                    wb_DAT_O <= 0;
                     if (m_write_enable) begin
                         if (m_write_sel[0]) memory[m_addr+0] <= m_write_data[7:0];
                         if (m_write_sel[1]) memory[m_addr+1] <= m_write_data[15:8];
                         if (m_write_sel[2]) memory[m_addr+2] <= m_write_data[23:16];
                         if (m_write_sel[3]) memory[m_addr+3] <= m_write_data[31:24];
                     end else begin
-                        wb_DAT_O <= 0;
                         if (m_write_sel[0]) wb_DAT_O[7:0] <= memory[m_addr+0];
                         if (m_write_sel[1]) wb_DAT_O[15:8] <= memory[m_addr+1];
                         if (m_write_sel[2]) wb_DAT_O[23:16] <= memory[m_addr+2];

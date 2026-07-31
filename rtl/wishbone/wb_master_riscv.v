@@ -2,6 +2,8 @@
 
 `timescale 1ns / 1ps
 
+`define WISHBONE_ENABLE
+
 // supports only single tranfers, no block transfers
 
 module wb_master_riscv (
@@ -14,78 +16,41 @@ module wb_master_riscv (
     output [`WB_ADDR_SIZE] wb_ADR_O,
 
     input wb_ACK_I,
-    output reg wb_CYC_O,
-    output reg [`WB_SEL_SIZE] wb_SEL_O,
-    output reg wb_STB_O,
-    output reg wb_WE_O
+    output wb_CYC_O,
+    output [`WB_SEL_SIZE] wb_SEL_O,
+    output wb_STB_O,
+    output wb_WE_O
 );
-    wire cpu_transfer_enable;
-    wire cpu_write_bus;
-    wire [31:0] cpu_write_data;
-    wire [`WB_ADDR_SIZE] cpu_addr;
-    wire [`WB_SEL_SIZE] cpu_sel;
-    wire [31:0] cpu_read_data;
-    reg cpu_transfer_complete;
+    wire cpu_wb_access;
+    wire cpu_wb_we;
+    wire [31:0] cpu_wb_dat_o;
+    wire [`WB_ADDR_SIZE] cpu_wb_addr;
+    wire [`WB_SEL_SIZE] cpu_wb_sel;
+    wire [31:0] cpu_wb_dat_i;
+    wire cpu_wb_ack;
+
+    assign cpu_wb_dat_i = wb_DAT_I;
+    assign wb_WE_O = cpu_wb_we;
+    assign wb_CYC_O = cpu_wb_access;
+    assign wb_STB_O = cpu_wb_access;
+    assign wb_SEL_O = cpu_wb_sel;
+    assign cpu_wb_ack = wb_ACK_I;
+    assign wb_DAT_O = cpu_wb_dat_o;
+    assign wb_ADR_O = cpu_wb_addr;
 
     riscv_top riscv (
         .clk(wb_CLK_I),
         .rst(wb_RST_I),
 
-        .wb_transfer_enable(cpu_transfer_enable),
-        .wb_write_bus(cpu_write_bus),
-        .wb_write_data(cpu_write_data),
-        .wb_addr(cpu_addr),
-        .wb_sel(cpu_sel),
-        .wb_read_data(cpu_read_data),
-        .wb_transfer_complete(cpu_transfer_complete)
+        .wb_access(cpu_wb_access),
+        .wb_we(cpu_wb_we),
+        .wb_dat_o(cpu_wb_dat_o),
+        .wb_addr(cpu_wb_addr),
+        .wb_sel(cpu_wb_sel),
+        .wb_dat_i(cpu_wb_dat_i),
+        .wb_ack(cpu_wb_ack)
     );
 
-    assign wb_ADR_O = cpu_addr;
-    assign wb_DAT_O = cpu_write_bus ? cpu_write_data : 32'b0;
-    assign cpu_read_data = wb_DAT_I;
 
-    reg [1:0] state;
 
-    always @(*) begin
-        if (wb_RST_I) begin
-            state = `WB_STATE_INACTIVE;
-            cpu_transfer_complete = 0;
-            wb_WE_O = 0;
-            wb_CYC_O = 0;
-            wb_STB_O = 0;
-        end
-
-        case (state)
-            `WB_STATE_INACTIVE: begin
-                if (cpu_transfer_enable) begin
-                    state = cpu_write_bus ? `WB_STATE_WRITE_SINGLE : `WB_STATE_READ_SINGLE;
-                    wb_WE_O = cpu_write_bus;
-                    wb_CYC_O = 1;
-                    wb_STB_O = 1;
-                    wb_SEL_O = cpu_sel;
-                    cpu_transfer_complete = 0;
-                end
-            end
-
-            `WB_STATE_READ_SINGLE: begin
-                if (wb_ACK_I) begin
-                    state = `WB_STATE_INACTIVE;
-                    wb_WE_O = 0;
-                    wb_CYC_O = 0;
-                    wb_STB_O = 0;
-                    cpu_transfer_complete = 1;
-                end
-            end
-
-            `WB_STATE_WRITE_SINGLE: begin
-                if (wb_ACK_I) begin
-                    state = `WB_STATE_INACTIVE;
-                    wb_WE_O = 0;
-                    wb_CYC_O = 0;
-                    wb_STB_O = 0;
-                    cpu_transfer_complete = 1;
-                end
-            end
-        endcase
-    end
 endmodule

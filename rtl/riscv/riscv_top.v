@@ -1,23 +1,32 @@
 `include "riscv_def.vh"
 `include "wb_def.vh"
 
+// `define WISHBONE_ENABLE
+
 `timescale 1ns / 1ps
 
 module riscv_top (
     input clk,
+`ifdef WISHBONE_ENABLE
+    output wb_access,
+    output wb_we,
+    output [31:0] wb_dat_o,
+    output [`WB_ADDR_SIZE] wb_addr,
+    output [`WB_SEL_SIZE] wb_sel,
+    input [31:0] wb_dat_i,
+    input wb_ack,
+`endif
     input rst
 );
 
 `ifdef WISHBONE_ENABLE
-    output wb_transfer_enable;
-    output wb_write_bus;
-    output [31:0] wb_write_data;
-    output [`WB_ADDR_SIZE] wb_addr;
-    output [`WB_SEL_SIZE] wb_sel;
-    input [31:0] wb_read_data;
-    input wb_transfer_complet;
+    reg [1:0] wb_state;
+    reg wb_access_ack;
 
-    reg wb_stall;
+    localparam WB_IDLE = 2'b00;
+    localparam WB_WAIT_ACK = 2'b01;
+
+    assign wb_stall = wb_state == WB_WAIT_ACK && !wb_ack;
 `endif
 
     wire [`CW_LEN] control_word;
@@ -51,11 +60,7 @@ module riscv_top (
         .rs2(instruction[`INST_RS2]),
         .rd(instruction[`INST_RD]),
         .write_data(reg_write_data),
-`ifdef WISHBONE_ENABLE
-        .write_enable(control_word[`CW_REG_WRITE_EN] && !wb_stall),
-`else
         .write_enable(control_word[`CW_REG_WRITE_EN]),
-`endif
         .rs1_data(reg_rs1_data),
         .rs2_data(reg_rs2_data)
     );
@@ -87,9 +92,9 @@ module riscv_top (
         .result(alu_result)
     );
 
+`ifndef WISHBONE_ENABLE
     wire [31:0] mem_read_data;  // to write-back mux
 
-`ifndef WISHBONE_ENABLE
     data_memory data_mem (
         .clk(clk),
         .addr(alu_result),
@@ -98,6 +103,8 @@ module riscv_top (
         .funct3(instruction[`INST_FUNCT3]),
         .read_data(mem_read_data)
     );
+`else
+    reg [31:0] mem_read_data;
 `endif
 
     wire [31:0] imm_value;  // to op2 mux
@@ -146,21 +153,36 @@ module riscv_top (
     );
 
 
-    assign wb_transfer_enable = control_word[`CW_MEM_WRITE] || control_word[`CW_MEM_READ];
-    assign wb_write_bus = control_word[`CW_MEM_WRITE];
-    assign wb_write_data = reg_rs2_data;
-    assign wb_addr = alu_result;
-    assign mem_read_data = wb_read_data;
-    assign wb_sel = {1'b0, instruction[`INST_FUNCT3]};
+    assign wb_access = (control_word[`CW_MEM_WRITE] || control_word[`CW_MEM_READ]);
+    assign wb_we = wb_access ? control_word[`CW_MEM_WRITE] : 1'b0;
+    assign wb_dat_o = wb_access ? reg_rs2_data : 32'b0;
+    assign wb_addr = wb_access ? alu_result : 32'b0;
 
-    always @(*) begin
-        wb_stall = 0;
-        if (wb_transfer_enable) begin
-            wb_stall = 1;
+    // fixme
+    assign wb_sel = wb_access ? {1'b0, instruction[`INST_FUNCT3]} : 4'b0;
 
-            if (wb_transfer_complete) begin
-                wb_stall = 0;
-            end
+    // assign wb_state = wb_access & !wb_ack ? WB_WAIT_ACK : WB_IDLE;
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            wb_state <= WB_IDLE;
+            mem_read_data <= 32'b0;
+        end else begin
+            case (wb_state)
+                WB_IDLE: begin
+                    if (wb_access) begin
+                        wb_state <= WB_WAIT_ACK;
+                        mem_read_data <= 32'b0;
+                    end
+                end
+                WB_WAIT_ACK: begin
+                    if (wb_ack) begin
+                        mem_read_data <= wb_dat_i;
+                        wb_state <= WB_IDLE;
+                    end
+                end
+                default: wb_state <= WB_IDLE;
+            endcase
         end
     end
 `else

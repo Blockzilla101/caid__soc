@@ -3,6 +3,14 @@ from cocotb.clock import Clock
 inst_nop = 0x00000013
 
 
+async def setup_debug():
+    import debugpy
+
+    debugpy.listen(5678)
+    print("Waiting for debugger attach...")
+    debugpy.wait_for_client()
+
+
 async def setup_clock_sig(clk_sig, rst_sig):
     Clock(clk_sig, 1, "ns").start(False)
     rst_sig.value = 1

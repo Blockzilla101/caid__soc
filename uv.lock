@@ -43,6 +43,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "cocotb" },
     { name = "cocotb-test" },
+    { name = "debugpy" },
     { name = "pytest" },
     { name = "riscv-assembler" },
     { name = "tinyrv" },
@@ -52,6 +53,7 @@ dependencies = [
 requires-dist = [
     { name = "cocotb", specifier = ">=2.0.1" },
     { name = "cocotb-test", specifier = ">=0.2.6" },
+    { name = "debugpy", specifier = ">=1.8.21" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "riscv-assembler", specifier = ">=1.2.1" },
     { name = "tinyrv", specifier = ">=0.1.0" },
@@ -101,6 +103,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/ba/04/9ee69793964845a3e70cfabe5de5ea4c96db64159a9915ddf2c55d982656/dataclasses_struct-1.4.0.tar.gz", hash = "sha256:4f727f5251b5e12bb97a9eef3b162c76d862b341a0c2c7fc0036995ea72e63c3", size = 106728, upload-time = "2025-06-21T02:09:45.299Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a4/e4/9e6e67efa2e4e2bb3adbbaff65792d16fd8cba62a49c0b977c7332191125/dataclasses_struct-1.4.0-py3-none-any.whl", hash = "sha256:963f6ce708914de94e6c7faf39410b9bbb29b3d77e2555da5414a8b22d1b4058", size = 14338, upload-time = "2025-06-21T02:09:43.69Z" },
+]
+
+[[package]]
+name = "debugpy"
+version = "1.8.21"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f2/aa/12037145b7a56eaa5b29b41872f7a21b538e807e13f32c4d3c46e59be084/debugpy-1.8.21.tar.gz", hash = "sha256:a3c53278e84c94e11bd87c53970ec391d1a67396c8b22609fcac576520e611a6", size = 1697577, upload-time = "2026-06-01T19:30:35.156Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/77/6b/d817e1f8cc77aa055d37fba092e0febfdff40fe652d8d53d4cd7a86ad98d/debugpy-1.8.21-cp313-cp313-macosx_15_0_universal2.whl", hash = "sha256:13678151fc401e2d68c9880b91e28714f797d40422994572b24560ef80910a88", size = 2477398, upload-time = "2026-06-01T19:30:57.644Z" },
+    { url = "https://files.pythonhosted.org/packages/48/57/412421516afc3055fa577516f00beec3d663f9b0ab330639547ae6c57720/debugpy-1.8.21-cp313-cp313-manylinux_2_34_x86_64.whl", hash = "sha256:ecbd158386c31ffe71d46f72d44d56e66331ab9b16cad649156d514368f23ab2", size = 3962096, upload-time = "2026-06-01T19:30:59.235Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/62/2c616337cf6ba7b07ebbc97f02c6c945a8e2f76b365e33ee809c32ee36d1/debugpy-1.8.21-cp313-cp313-win32.whl", hash = "sha256:2c2ae706dec41d99a9ca1f7ebc987a83e65578363be6f6b3ac9067504917fae1", size = 5336288, upload-time = "2026-06-01T19:31:00.79Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/99/9175103392f84c4b1bf7622888cdc68da07f0ff7d9e581266428f6776033/debugpy-1.8.21-cp313-cp313-win_amd64.whl", hash = "sha256:aa648733047443eb1d07682c4ef287d36a54507b643ffdf38b09a3ef002c72a0", size = 5376567, upload-time = "2026-06-01T19:31:02.56Z" },
+    { url = "https://files.pythonhosted.org/packages/95/51/67e7cf11a53e40694f720457d5b3a1cdaaa3d5a9a633e482f225456b93ff/debugpy-1.8.21-py2.py3-none-any.whl", hash = "sha256:b1e37d333663c8851516a47364ef473da127f9caebe4417e6df6f5825a7e9a92", size = 5352888, upload-time = "2026-06-01T19:31:25.186Z" },
 ]
 
 [[package]]

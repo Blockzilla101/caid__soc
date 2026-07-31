@@ -17,7 +17,7 @@ def reset_bus(dut):
 async def test_wb_mem(dut):
     """Test wishbone memory"""
 
-    while get_sim_time("ns") < 100:
+    while get_sim_time("ns") < 150:
         await Timer(1, "ns")
 
     assert dut.wb_data_mem.memory[3].value == 0xA0
