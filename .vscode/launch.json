@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Remote Attach",
+            "name": "debug test",
             "type": "debugpy",
             "request": "attach",
             "connect": {
@@ -19,16 +19,5 @@
                 }
             ],
         },
-        {
-            "name": "debug tests",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/tests/cocotb/run_tests.py",
-            "cwd": "${workspaceFolder}/tests/cocotb",
-            "console": "integratedTerminal",
-            "env": {
-                "WAVES": "1"
-            }
-        }
     ]
 }

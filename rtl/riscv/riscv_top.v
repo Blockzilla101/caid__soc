@@ -1,7 +1,7 @@
 `include "riscv_def.vh"
 `include "wb_def.vh"
 
-// `define WISHBONE_ENABLE
+`define WISHBONE_ENABLE
 
 `timescale 1ns / 1ps
 
@@ -20,13 +20,9 @@ module riscv_top (
 );
 
 `ifdef WISHBONE_ENABLE
-    reg [1:0] wb_state;
     reg wb_access_ack;
 
-    localparam WB_IDLE = 2'b00;
-    localparam WB_WAIT_ACK = 2'b01;
-
-    assign wb_stall = wb_state == WB_WAIT_ACK && !wb_ack;
+    assign wb_stall = wb_access == 1 && !wb_ack;
 `endif
 
     wire [`CW_LEN] control_word;
@@ -56,6 +52,7 @@ module riscv_top (
 
     register_file reg_file (
         .clk(clk),
+        .rst(rst),
         .rs1(instruction[`INST_RS1]),
         .rs2(instruction[`INST_RS2]),
         .rd(instruction[`INST_RD]),
@@ -92,9 +89,9 @@ module riscv_top (
         .result(alu_result)
     );
 
-`ifndef WISHBONE_ENABLE
     wire [31:0] mem_read_data;  // to write-back mux
 
+`ifndef WISHBONE_ENABLE
     data_memory data_mem (
         .clk(clk),
         .addr(alu_result),
@@ -103,8 +100,6 @@ module riscv_top (
         .funct3(instruction[`INST_FUNCT3]),
         .read_data(mem_read_data)
     );
-`else
-    reg [31:0] mem_read_data;
 `endif
 
     wire [31:0] imm_value;  // to op2 mux
@@ -152,39 +147,15 @@ module riscv_top (
         .F  (pc_next_val)
     );
 
-
     assign wb_access = (control_word[`CW_MEM_WRITE] || control_word[`CW_MEM_READ]);
     assign wb_we = wb_access ? control_word[`CW_MEM_WRITE] : 1'b0;
     assign wb_dat_o = wb_access ? reg_rs2_data : 32'b0;
     assign wb_addr = wb_access ? alu_result : 32'b0;
 
-    // fixme
-    assign wb_sel = wb_access ? {1'b0, instruction[`INST_FUNCT3]} : 4'b0;
+    assign mem_read_data = (wb_ack && !wb_we) ? wb_dat_i : 32'b0;
 
-    // assign wb_state = wb_access & !wb_ack ? WB_WAIT_ACK : WB_IDLE;
+    assign wb_sel = wb_access ? 4'b1111 : 4'b0;
 
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            wb_state <= WB_IDLE;
-            mem_read_data <= 32'b0;
-        end else begin
-            case (wb_state)
-                WB_IDLE: begin
-                    if (wb_access) begin
-                        wb_state <= WB_WAIT_ACK;
-                        mem_read_data <= 32'b0;
-                    end
-                end
-                WB_WAIT_ACK: begin
-                    if (wb_ack) begin
-                        mem_read_data <= wb_dat_i;
-                        wb_state <= WB_IDLE;
-                    end
-                end
-                default: wb_state <= WB_IDLE;
-            endcase
-        end
-    end
 `else
     assign pc_next_val = branch_taken ? alu_result & ~32'b1 : pc_plus_4;
 `endif

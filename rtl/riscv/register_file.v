@@ -2,6 +2,7 @@
 
 module register_file (
     input clk,
+    input rst,
     input [4:0] rs1,
     input [4:0] rs2,
     input [4:0] rd,
@@ -12,8 +13,16 @@ module register_file (
 );
     reg [31:0] registers[32];
 
-    always @(posedge clk) begin
-        if (write_enable && rd != 0) registers[rd] = write_data;
+    integer i;
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            for (i = 0; i < 32; i = i + 1) begin
+                registers[i] <= 32'b0;
+            end
+        end else begin
+            if (write_enable && rd != 0) registers[rd] = write_data;
+        end
     end
 
     assign rs1_data = rs1 == 0 ? 0 : registers[rs1];

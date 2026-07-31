@@ -17,64 +17,32 @@ module wb_slave_data_mem (
     input wb_STB_I,
     input wb_WE_I
 );
-    reg [1:0] state;
-
     reg [7:0] memory[`SIZE_DATA_MEM];
-
-    reg [`WB_ADDR_SIZE] m_addr;
-    reg [31:0] m_write_data;
-    reg m_write_enable;
-    reg [`WB_SEL_SIZE] m_write_sel;
-
-    localparam IDLE = 2'b00;
-    localparam PROCESS = 2'b01;
-    localparam WAIT_CYCLE = 2'b10;
 
     always @(posedge wb_CLK_I or posedge wb_RST_I) begin
         if (wb_RST_I) begin
-            state <= IDLE;
             wb_ACK_O <= 0;
             wb_DAT_O <= 0;
-            m_write_data <= 0;
-            m_write_enable <= 0;
         end else begin
-            if (!wb_CYC_I || !wb_STB_I) begin
-                wb_ACK_O <= 0;
+            wb_ACK_O <= 0;
+
+            if (wb_STB_I && wb_CYC_I && !wb_ACK_O) begin
+
+                wb_DAT_O <= 0;
+                if (wb_WE_I) begin
+                    if (wb_SEL_I[0]) memory[wb_ADR_I+0] <= wb_DAT_I[7:0];
+                    if (wb_SEL_I[1]) memory[wb_ADR_I+1] <= wb_DAT_I[15:8];
+                    if (wb_SEL_I[2]) memory[wb_ADR_I+2] <= wb_DAT_I[23:16];
+                    if (wb_SEL_I[3]) memory[wb_ADR_I+3] <= wb_DAT_I[31:24];
+                end else begin
+                    if (wb_SEL_I[0]) wb_DAT_O[7:0] <= memory[wb_ADR_I];
+                    if (wb_SEL_I[1]) wb_DAT_O[15:8] <= memory[wb_ADR_I+1];
+                    if (wb_SEL_I[2]) wb_DAT_O[23:16] <= memory[wb_ADR_I+2];
+                    if (wb_SEL_I[3]) wb_DAT_O[31:24] <= memory[wb_ADR_I+3];
+                end
+
+                wb_ACK_O <= 1;
             end
-
-            case (state)
-                IDLE: begin
-                    wb_DAT_O <= 0;
-                    wb_ACK_O <= 0;
-                    if (wb_STB_I) begin
-                        state <= PROCESS;
-                        m_write_enable <= wb_WE_I;
-                        m_write_sel <= wb_SEL_I;
-                        m_addr <= wb_ADR_I;
-                        m_write_data <= wb_WE_I ? wb_DAT_I : 32'b0;
-                    end
-                end
-                PROCESS: begin
-                    wb_DAT_O <= 0;
-                    if (m_write_enable) begin
-                        if (m_write_sel[0]) memory[m_addr+0] <= m_write_data[7:0];
-                        if (m_write_sel[1]) memory[m_addr+1] <= m_write_data[15:8];
-                        if (m_write_sel[2]) memory[m_addr+2] <= m_write_data[23:16];
-                        if (m_write_sel[3]) memory[m_addr+3] <= m_write_data[31:24];
-                    end else begin
-                        if (m_write_sel[0]) wb_DAT_O[7:0] <= memory[m_addr+0];
-                        if (m_write_sel[1]) wb_DAT_O[15:8] <= memory[m_addr+1];
-                        if (m_write_sel[2]) wb_DAT_O[23:16] <= memory[m_addr+2];
-                        if (m_write_sel[3]) wb_DAT_O[31:24] <= memory[m_addr+3];
-                    end
-
-                    wb_ACK_O <= 1;
-                    m_write_enable <= 0;
-                    m_write_sel <= 0;
-                    m_write_data <= 0;
-                    state <= IDLE;
-                end
-            endcase
         end
 
     end

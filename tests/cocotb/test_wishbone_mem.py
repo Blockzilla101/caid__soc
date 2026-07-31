@@ -13,5 +13,5 @@ async def test_wishbone(dut):
     # for _ in range(max_cylces):
     # await NextTimeStep()
 
-    while get_sim_time("ns") < 100:
+    while get_sim_time("ns") < 1000:
         await Timer(1, "ns")

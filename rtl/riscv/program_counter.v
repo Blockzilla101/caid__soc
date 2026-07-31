@@ -10,7 +10,7 @@ module program_counter (
 );
     reg [31:0] counter;
 
-    always @(negedge clk or posedge rst) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) counter <= 0;
         else counter <= next_val;
     end
