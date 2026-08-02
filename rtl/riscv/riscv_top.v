@@ -1,7 +1,7 @@
 `include "riscv_def.vh"
 `include "wb_def.vh"
 
-`define WISHBONE_ENABLE
+// `define WISHBONE_ENABLE
 
 `timescale 1ns / 1ps
 
