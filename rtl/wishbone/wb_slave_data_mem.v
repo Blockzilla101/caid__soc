@@ -15,7 +15,9 @@ module wb_slave_data_mem (
     input wb_CYC_I,
     input [`WB_SEL_SIZE] wb_SEL_I,
     input wb_STB_I,
-    input wb_WE_I
+    input wb_WE_I,
+
+    input wb_TGD_I
 );
     reg [7:0] memory[`SIZE_DATA_MEM];
 
@@ -35,16 +37,17 @@ module wb_slave_data_mem (
                     if (wb_SEL_I[2]) memory[wb_ADR_I+2] <= wb_DAT_I[23:16];
                     if (wb_SEL_I[3]) memory[wb_ADR_I+3] <= wb_DAT_I[31:24];
                 end else begin
-                    if (wb_SEL_I[0]) wb_DAT_O[7:0] <= memory[wb_ADR_I];
-                    if (wb_SEL_I[1]) wb_DAT_O[15:8] <= memory[wb_ADR_I+1];
-                    if (wb_SEL_I[2]) wb_DAT_O[23:16] <= memory[wb_ADR_I+2];
-                    if (wb_SEL_I[3]) wb_DAT_O[31:24] <= memory[wb_ADR_I+3];
+                    case (wb_SEL_I)
+                        4'b0001: wb_DAT_O <= {wb_TGD_I ? 24'h0 : {24{memory[wb_ADR_I][7]}}, memory[wb_ADR_I]};
+                        4'b0011: wb_DAT_O <= {wb_TGD_I ? 16'h0 : {16{memory[wb_ADR_I+32'h1][7]}}, memory[wb_ADR_I+32'h1], memory[wb_ADR_I]};
+                        4'b1111: wb_DAT_O <= {memory[wb_ADR_I+32'h3], memory[wb_ADR_I+32'h2], memory[wb_ADR_I+32'h1], memory[wb_ADR_I]};
+                        default: wb_DAT_O <= 32'b0;
+                    endcase
                 end
 
                 wb_ACK_O <= 1;
             end
         end
-
     end
 
 endmodule

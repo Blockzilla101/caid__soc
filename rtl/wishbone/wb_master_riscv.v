@@ -19,7 +19,9 @@ module wb_master_riscv (
     output wb_CYC_O,
     output [`WB_SEL_SIZE] wb_SEL_O,
     output wb_STB_O,
-    output wb_WE_O
+    output wb_WE_O,
+
+    output wb_TGD_O
 );
     wire cpu_wb_access;
     wire cpu_wb_we;
@@ -28,6 +30,7 @@ module wb_master_riscv (
     wire [`WB_SEL_SIZE] cpu_wb_sel;
     wire [31:0] cpu_wb_dat_i;
     wire cpu_wb_ack;
+    wire cpu_wb_tgd_o;
 
     assign cpu_wb_dat_i = wb_DAT_I;
     assign wb_WE_O = cpu_wb_we;
@@ -37,18 +40,22 @@ module wb_master_riscv (
     assign cpu_wb_ack = wb_ACK_I;
     assign wb_DAT_O = cpu_wb_dat_o;
     assign wb_ADR_O = cpu_wb_addr;
+    assign wb_TGD_O = cpu_wb_tgd_o;
 
     riscv_top riscv (
         .clk(wb_CLK_I),
         .rst(wb_RST_I),
 
+        .wb_addr (cpu_wb_addr),
+        .wb_dat_o(cpu_wb_dat_o),
+        .wb_dat_i(cpu_wb_dat_i),
+
         .wb_access(cpu_wb_access),
         .wb_we(cpu_wb_we),
-        .wb_dat_o(cpu_wb_dat_o),
-        .wb_addr(cpu_wb_addr),
         .wb_sel(cpu_wb_sel),
-        .wb_dat_i(cpu_wb_dat_i),
-        .wb_ack(cpu_wb_ack)
+        .wb_ack(cpu_wb_ack),
+
+        .wb_tgd_o(cpu_wb_tgd_o)
     );
 
 

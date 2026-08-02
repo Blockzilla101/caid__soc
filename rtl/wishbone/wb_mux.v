@@ -20,6 +20,8 @@ module wb_mux (
     input m_STB_O,
     input m_WE_O,
 
+    input m_TGD_O,
+
     output reg m_ACK_I,
 
     // slave 0
@@ -33,6 +35,8 @@ module wb_mux (
     output [`WB_SEL_SIZE] slv0_SEL_I,
     output reg slv0_STB_I,
     output slv0_WE_I,
+
+    output slv0_TGD_I,
 
     // slave 1
 
@@ -58,6 +62,8 @@ module wb_mux (
 
     assign slv0_WE_I  = m_WE_O;
     assign slv1_WE_I  = m_WE_O;
+
+    assign slv0_TGD_I = m_TGD_O;
 
     always @(*) begin
         case (wb_SLV_SEL)

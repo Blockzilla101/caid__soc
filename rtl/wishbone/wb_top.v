@@ -12,6 +12,7 @@ module wb_top (
     wire [`WB_SEL_SIZE] m_SEL_O;
     wire m_STB_O;
     wire m_WE_O;
+    wire m_TGD_O;
 
 
     wb_master_riscv wb_riscv (
@@ -26,7 +27,9 @@ module wb_top (
         .wb_CYC_O(m_CYC_O),
         .wb_SEL_O(m_SEL_O),
         .wb_STB_O(m_STB_O),
-        .wb_WE_O (m_WE_O)
+        .wb_WE_O (m_WE_O),
+
+        .wb_TGD_O(m_TGD_O)
     );
 
 
@@ -41,12 +44,16 @@ module wb_top (
     wire slv0_STB_I;
     wire slv0_WE_I;
 
+    wire slv0_TGD_I;
+
     wb_slave_data_mem wb_data_mem (
         .wb_CLK_I(clk),
         .wb_RST_I(rst),
 
         .wb_DAT_I(slv0_DAT_I),
         .wb_DAT_O(slv0_DAT_O),
+
+        .wb_TGD_I(slv0_TGD_I),
 
         .wb_ACK_O(slv0_ACK_O),
 
@@ -80,6 +87,8 @@ module wb_top (
 
         .m_ACK_I(m_ACK_I),
 
+        .m_TGD_O(m_TGD_O),
+
         // slave 0
 
         .slv0_DAT_I(slv0_DAT_I),
@@ -90,6 +99,8 @@ module wb_top (
         .slv0_CYC_I(slv0_CYC_I),
         .slv0_SEL_I(slv0_SEL_I),
         .slv0_STB_I(slv0_STB_I),
-        .slv0_WE_I (slv0_WE_I)
+        .slv0_WE_I (slv0_WE_I),
+
+        .slv0_TGD_I(slv0_TGD_I)
     );
 endmodule

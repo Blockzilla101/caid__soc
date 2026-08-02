@@ -19,6 +19,11 @@
 
     bne x2, x6, halt
 
+    sb  x2, 0(x0)
+    lbu x6, 0(x0)
+
+    beq x2, x6, halt
+
     nop
     nop
 
