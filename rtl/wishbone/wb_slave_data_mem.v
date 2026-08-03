@@ -27,6 +27,7 @@ module wb_slave_data_mem (
             wb_DAT_O <= 0;
         end else begin
             wb_ACK_O <= 0;
+            wb_DAT_O <= 0;
 
             if (wb_STB_I && wb_CYC_I && !wb_ACK_O) begin
 

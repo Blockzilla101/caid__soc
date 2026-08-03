@@ -2,7 +2,6 @@
 `define WB_SEL_ADDR_SIZE 31:12
 `define WB_SEL_SIZE 3:0
 
-
 `define WB_STATE_SIZE 1:0
 `define WB_STATE_INACTIVE 2'b00
 `define WB_STATE_READ_SINGLE 2'b01

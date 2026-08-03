@@ -21,6 +21,8 @@ module wb_slave_gpio (
         if (wb_RST_I) begin
             wb_ACK_O <= 0;
             wb_DAT_O <= 0;
+
+            gpio_reg <= 0;
         end else begin
             wb_ACK_O <= 0;
 

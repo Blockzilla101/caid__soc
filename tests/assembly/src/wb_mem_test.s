@@ -1,8 +1,8 @@
+    # slave 0 - memory tests
     li  x1, 0x000000ff
     li  x2, 0x0000ffcc
     li  x3, 0x00ffcccc
     li  x4, 0xffcccccc
-
 
     sw  x1, 0(x0)
     nop
@@ -26,6 +26,19 @@
 
     nop
     nop
+
+    # slave 1 - gpio tests
+
+    li  t0, 0x00001000
+    li  t1, 0xc
+
+    sw  t1, 0(t0)
+
+    lw  t2, 0(t0)
+
+    j   halt
+
+    # slave 0 - memory tests | fibbonacci sequence
 
     li  t0, 0
     sw  t0, 4(zero)

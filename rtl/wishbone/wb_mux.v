@@ -68,6 +68,11 @@ module wb_mux (
     assign m_ACK_I = slv0_ACK_O | slv1_ACK_O;
 
     always @(*) begin
+        slv0_DAT_I = 0;
+        slv0_STB_I = 0;
+        slv1_DAT_I = 0;
+        slv1_STB_I = 0;
+
         case (wb_SLV_SEL)
             0: begin
                 m_DAT_I = slv0_DAT_O;
