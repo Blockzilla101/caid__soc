@@ -2,6 +2,8 @@ module wb_top (
     input clk,
     input rst
 );
+    wire SLV_SEL;
+
     wire [31:0] m_DAT_I;
     wire [31:0] m_DAT_O;
 
@@ -14,10 +16,11 @@ module wb_top (
     wire m_WE_O;
     wire m_TGD_O;
 
-
     wb_master_riscv wb_riscv (
         .wb_CLK_I(clk),
         .wb_RST_I(rst),
+
+        .wb_SLV_SEL(SLV_SEL),
 
         .wb_DAT_I(m_DAT_I),
         .wb_DAT_O(m_DAT_O),
@@ -31,7 +34,6 @@ module wb_top (
 
         .wb_TGD_O(m_TGD_O)
     );
-
 
     wire [31:0] slv0_DAT_I;
     wire [31:0] slv0_DAT_O;
@@ -95,9 +97,6 @@ module wb_top (
         .wb_WE_I (slv1_WE_I)
     );
 
-
-    wire SLV_SEL;
-
     wb_slave_addr wb_addr_decoder (
         .wb_ADR_I  (m_ADR_O),
         .wb_SLV_SEL(SLV_SEL)
@@ -133,6 +132,20 @@ module wb_top (
         .slv0_STB_I(slv0_STB_I),
         .slv0_WE_I (slv0_WE_I),
 
-        .slv0_TGD_I(slv0_TGD_I)
+        .slv0_TGD_I(slv0_TGD_I),
+
+        // slave 1
+
+        .slv1_DAT_I(slv1_DAT_I),
+        .slv1_DAT_O(slv1_DAT_O),
+
+        .slv1_ACK_O(slv1_ACK_O),
+        .slv1_ADR_I(slv1_ADR_I),
+        .slv1_CYC_I(slv1_CYC_I),
+        .slv1_SEL_I(slv1_SEL_I),
+        .slv1_STB_I(slv1_STB_I),
+        .slv1_WE_I (slv1_WE_I),
+
+        .slv1_TGD_I(slv1_TGD_I)
     );
 endmodule

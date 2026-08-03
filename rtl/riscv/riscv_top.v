@@ -7,27 +7,17 @@
 
 module riscv_top (
     input clk,
-`ifdef WISHBONE_ENABLE
-    output wb_access,
-    output wb_we,
-    output [31:0] wb_dat_o,
-    output wb_tgd_o,
-    output [`WB_ADDR_SIZE] wb_addr,
-    output reg [`WB_SEL_SIZE] wb_sel,
-    input [31:0] wb_dat_i,
-    input wb_ack,
-`endif
-    input rst
+    input rst,
+
+    output [`CW_LEN] control_word,
+    output [31:0] instruction,
+
+    output [31:0] cpu_write_data,
+    input  [31:0] cpu_read_data,
+    output [31:0] cpu_addr,
+
+    input cpu_stall
 );
-
-`ifdef WISHBONE_ENABLE
-    reg wb_access_ack;
-
-    assign wb_stall = wb_access == 1 && !wb_ack;
-`endif
-
-    wire [`CW_LEN] control_word;
-
     wire [31:0] pc_val;
     wire [31:0] pc_plus_4 = pc_val + 4;
     wire [31:0] pc_next_val;
@@ -38,8 +28,6 @@ module riscv_top (
         .next_val(pc_next_val),
         .pc_val(pc_val)
     );
-
-    wire [31:0] instruction;
 
     instruction_memory inst_mem (
         .clk(clk),
@@ -144,34 +132,13 @@ module riscv_top (
         .A  (pc_plus_4),
         .B  (alu_result & ~32'b1),
         .C  (pc_val),
-        .sel({wb_stall, wb_stall ? 1'b0 : branch_taken}),
+        .sel({cpu_stall, cpu_stall ? 1'b0 : branch_taken}),
         .F  (pc_next_val)
     );
 
-    assign wb_access = (control_word[`CW_MEM_WRITE] || control_word[`CW_MEM_READ]);
-    assign wb_we = wb_access ? control_word[`CW_MEM_WRITE] : 1'b0;
-    assign wb_dat_o = wb_access ? reg_rs2_data : 32'b0;
-    assign wb_addr = wb_access ? alu_result : 32'b0;
-
-    assign mem_read_data = (wb_ack && !wb_we) ? wb_dat_i : 32'b0;
-
-    // wire mem_read_type = ;
-    // wire mem_read_width = instruction[`INST_FUNCT3][1:0];
-
-    assign wb_tgd_o = wb_access ? instruction[14] : 0;
-
-    always @(*) begin
-        if (wb_access) begin
-            case (instruction[13:12])
-                `MEM_WIDTH_BYTE: wb_sel = 4'b0001;
-                `MEM_WIDTH_HALF: wb_sel = 4'b0011;
-                default: wb_sel = 4'b1111;
-            endcase
-        end else begin
-            wb_sel = 0;
-        end
-    end
-
+    assign cpu_write_data = reg_rs2_data;
+    assign cpu_addr = alu_result;
+    assign mem_read_data = cpu_read_data;
 `else
     assign pc_next_val = branch_taken ? alu_result & ~32'b1 : pc_plus_4;
 `endif

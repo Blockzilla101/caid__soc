@@ -10,6 +10,8 @@ module wb_master_riscv (
     input wb_CLK_I,
     input wb_RST_I,
 
+    input wb_SLV_SEL,
+
     input  [31:0] wb_DAT_I,
     output [31:0] wb_DAT_O,
 
@@ -23,39 +25,53 @@ module wb_master_riscv (
 
     output wb_TGD_O
 );
-    wire cpu_wb_access;
-    wire cpu_wb_we;
-    wire [31:0] cpu_wb_dat_o;
-    wire [`WB_ADDR_SIZE] cpu_wb_addr;
-    wire [`WB_SEL_SIZE] cpu_wb_sel;
-    wire [31:0] cpu_wb_dat_i;
-    wire cpu_wb_ack;
-    wire cpu_wb_tgd_o;
-
-    assign cpu_wb_dat_i = wb_DAT_I;
-    assign wb_WE_O = cpu_wb_we;
-    assign wb_CYC_O = cpu_wb_access;
-    assign wb_STB_O = cpu_wb_access;
-    assign wb_SEL_O = cpu_wb_sel;
-    assign cpu_wb_ack = wb_ACK_I;
-    assign wb_DAT_O = cpu_wb_dat_o;
-    assign wb_ADR_O = cpu_wb_addr;
-    assign wb_TGD_O = cpu_wb_tgd_o;
+    wire [31:0] instruction;
+    wire [`CW_LEN] control_word;
+    wire [31:0] cpu_write_data;
+    wire [31:0] cpu_read_data;
+    wire [31:0] cpu_addr;
+    wire cpu_stall;
 
     riscv_top riscv (
         .clk(wb_CLK_I),
         .rst(wb_RST_I),
 
-        .wb_addr (cpu_wb_addr),
-        .wb_dat_o(cpu_wb_dat_o),
-        .wb_dat_i(cpu_wb_dat_i),
+        .instruction (instruction),
+        .control_word(control_word),
 
-        .wb_access(cpu_wb_access),
-        .wb_we(cpu_wb_we),
-        .wb_sel(cpu_wb_sel),
-        .wb_ack(cpu_wb_ack),
+        .cpu_write_data(cpu_write_data),
+        .cpu_read_data(cpu_read_data),
+        .cpu_addr(cpu_addr),
 
-        .wb_tgd_o(cpu_wb_tgd_o)
+        .cpu_stall(cpu_stall)
+    );
+
+    wb_controller bus_controller (
+        // cpu
+        .instruction (instruction),
+        .control_word(control_word),
+
+        .cpu_write_data(cpu_write_data),
+        .cpu_read_data(cpu_read_data),
+        .cpu_addr(cpu_addr),
+
+        .cpu_stall(cpu_stall),
+
+        // wishbone
+        .wb_SLV_SEL(wb_SLV_SEL),
+
+        .wb_DAT_I(wb_DAT_I),
+        .wb_DAT_O(wb_DAT_O),
+
+        .wb_ADR_O(wb_ADR_O),
+
+        .wb_ACK_I(wb_ACK_I),
+        .wb_CYC_O(wb_CYC_O),
+        .wb_SEL_O(wb_SEL_O),
+        .wb_STB_O(wb_STB_O),
+        .wb_WE_O (wb_WE_O),
+
+        .wb_TGD_O(wb_TGD_O)
     );
 
 

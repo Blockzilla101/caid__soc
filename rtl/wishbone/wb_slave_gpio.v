@@ -30,7 +30,7 @@ module wb_slave_gpio (
                 if (wb_WE_I) begin
                     if (wb_SEL_I[0]) gpio_reg <= wb_DAT_I[7:0];
                 end else begin
-                    wb_DAT_O <= {24'b0, gpio_reg};
+                    wb_DAT_O <= wb_SEL_I[0] ? {24'b0, gpio_reg} : 32'b0;
                 end
 
                 wb_ACK_O <= 1;

@@ -74,6 +74,7 @@ def test_all_modules():
         f"{rtl_path}/wishbone/wb_slave_data_mem.v",
         f"{rtl_path}/wishbone/wb_slave_gpio.v",
         f"{rtl_path}/wishbone/wb_top.v",
+        f"{rtl_path}/wishbone/wb_controller.v",
     ]
 
     run_test(
