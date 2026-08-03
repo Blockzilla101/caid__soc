@@ -18,7 +18,7 @@ module instruction_memory (
             memory[i+3] = 8'h00;
         end
 `ifdef IMEM_LOAD_HEX
-        $readmemh(`IMEM_HEX_PATH, memory);
+        $readmemh(`IMEM_HEX_PATH, memory, 0);
 `endif
     end
 

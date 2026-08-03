@@ -9,6 +9,30 @@ sim_path = "./sim"
 gcc_build_path = "../gcc/build"
 asm_build_path = "../assembly/build"
 
+riscv_sources = [
+    f"{rtl_path}/riscv/branch_unit.v",
+    f"{rtl_path}/riscv/control_unit.v",
+    f"{rtl_path}/riscv/alu_control.v",
+    f"{rtl_path}/riscv/alu.v",
+    f"{rtl_path}/riscv/imm_gen.v",
+    f"{rtl_path}/riscv/program_counter.v",
+    f"{rtl_path}/riscv/register_file.v",
+    f"{rtl_path}/riscv/instruction_memory.v",
+    f"{rtl_path}/riscv/data_memory.v",
+    f"{rtl_path}/riscv/riscv_top.v",
+    f"{rtl_path}/riscv/mux3.v",
+]
+
+wb_sources = [
+    f"{rtl_path}/wishbone/wb_master_riscv.v",
+    f"{rtl_path}/wishbone/wb_mux.v",
+    f"{rtl_path}/wishbone/wb_slave_addr.v",
+    f"{rtl_path}/wishbone/wb_slave_data_mem.v",
+    f"{rtl_path}/wishbone/wb_slave_gpio.v",
+    f"{rtl_path}/wishbone/wb_top.v",
+    f"{rtl_path}/wishbone/wb_controller.v",
+]
+
 runner = get_runner("icarus")
 
 
@@ -17,6 +41,32 @@ def run_test_single(module: str):
         sources=[f"{rtl_path}/riscv/{module}.v"],
         hdl_toplevel=module,
         test_module=f"test_{module}",
+    )
+
+
+def run_hex_test(hex_type, mem_file: str):
+    is_wishbone = mem_file.startswith("wb_")
+    hdl_toplevel = "wb_top" if is_wishbone else "riscv_top"
+    test_module = "test_wb_hex_file" if is_wishbone else "test_hex_file"
+    sources = [*riscv_sources, *wb_sources] if is_wishbone else riscv_sources
+
+    defines = {
+        "IMEM_LOAD_HEX": "1",
+        "IMEM_HEX_PATH": path.abspath(
+            f"{asm_build_path if hex_type == 'asm' else gcc_build_path}/{mem_file}.mem"
+        ),
+        "HEX_NAME": f"{hex_type}_{mem_file}",
+    }
+
+    if is_wishbone:
+        defines["WISHBONE_ENABLE"] = "1"
+
+    run_test(
+        sources=sources,
+        hdl_toplevel=hdl_toplevel,
+        test_module=test_module,
+        defines=defines,
+        waveform_name=f"{hex_type}__{mem_file}_riscv.fst",
     )
 
 
@@ -53,30 +103,6 @@ def run_test(
 
 
 def test_all_modules():
-    riscv_sources = [
-        f"{rtl_path}/riscv/branch_unit.v",
-        f"{rtl_path}/riscv/control_unit.v",
-        f"{rtl_path}/riscv/alu_control.v",
-        f"{rtl_path}/riscv/alu.v",
-        f"{rtl_path}/riscv/imm_gen.v",
-        f"{rtl_path}/riscv/program_counter.v",
-        f"{rtl_path}/riscv/register_file.v",
-        f"{rtl_path}/riscv/instruction_memory.v",
-        f"{rtl_path}/riscv/data_memory.v",
-        f"{rtl_path}/riscv/riscv_top.v",
-        f"{rtl_path}/riscv/mux3.v",
-    ]
-
-    wb_sources = [
-        f"{rtl_path}/wishbone/wb_master_riscv.v",
-        f"{rtl_path}/wishbone/wb_mux.v",
-        f"{rtl_path}/wishbone/wb_slave_addr.v",
-        f"{rtl_path}/wishbone/wb_slave_data_mem.v",
-        f"{rtl_path}/wishbone/wb_slave_gpio.v",
-        f"{rtl_path}/wishbone/wb_top.v",
-        f"{rtl_path}/wishbone/wb_controller.v",
-    ]
-
     run_test(
         sources=[
             *riscv_sources,
@@ -125,31 +151,11 @@ def test_all_modules():
 
     if environ.get("ASM_TEST"):
         for mem in asm_memory_files:
-            run_test(
-                sources=riscv_sources,
-                hdl_toplevel="riscv_top",
-                test_module="test_hex_file",
-                defines={
-                    "IMEM_LOAD_HEX": "1",
-                    "IMEM_HEX_PATH": path.abspath(f"{asm_build_path}/{mem}.mem"),
-                    "HEX_NAME": f"asm_{mem}",
-                },
-                waveform_name=f"asm__{mem}_riscv.fst",
-            )
+            run_hex_test("asm", mem)
 
     if environ.get("GCC_TEST"):
         for mem in gcc_memory_files:
-            run_test(
-                sources=riscv_sources,
-                hdl_toplevel="riscv_top",
-                test_module="test_hex_file",
-                defines={
-                    "IMEM_LOAD_HEX": "1",
-                    "IMEM_HEX_PATH": path.abspath(f"{gcc_build_path}/{mem}.mem"),
-                    "HEX_NAME": f"gcc_{mem}",
-                },
-                waveform_name=f"gcc__{mem}_riscv.fst",
-            )
+            run_hex_test("gcc", mem)
 
 
 if __name__ == "__main__":

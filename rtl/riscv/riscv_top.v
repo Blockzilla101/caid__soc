@@ -10,13 +10,15 @@ module riscv_top (
     input rst,
 
     output [`CW_LEN] control_word,
-    output [31:0] instruction,
+    output [31:0] instruction
 
-    output [31:0] cpu_write_data,
+`ifdef WISHBONE_ENABLE
+   , output [31:0] cpu_write_data,
     input  [31:0] cpu_read_data,
     output [31:0] cpu_addr,
 
     input cpu_stall
+`endif
 );
     wire [31:0] pc_val;
     wire [31:0] pc_plus_4 = pc_val + 4;
