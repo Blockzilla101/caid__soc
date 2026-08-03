@@ -1,5 +1,5 @@
-`include "riscv_def.vh"
-`include "wb_def.vh"
+`include "../include/riscv_def.vh"
+`include "../include/wb_def.vh"
 
 module wb_controller (
     // cpu

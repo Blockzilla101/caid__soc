@@ -1,0 +1,48 @@
+verilog_defaults -push
+verilog_defaults -add -I rtl/include -D WISHBONE_ENABLE
+read_verilog -sv rtl/riscv/alu.v
+read_verilog -sv rtl/riscv/alu_control.v
+read_verilog -sv rtl/riscv/branch_unit.v
+read_verilog -sv rtl/riscv/control_unit.v
+read_verilog -sv rtl/riscv/data_memory.v
+read_verilog -sv rtl/riscv/imm_gen.v
+read_verilog -sv rtl/riscv/instruction_memory.v
+read_verilog -sv rtl/riscv/mux3.v
+read_verilog -sv rtl/riscv/program_counter.v
+read_verilog -sv rtl/riscv/register_file.v
+read_verilog -sv rtl/riscv/riscv_top.v
+
+read_verilog rtl/wishbone/wb_controller.v
+read_verilog rtl/wishbone/wb_master_riscv.v
+read_verilog rtl/wishbone/wb_mux.v
+read_verilog rtl/wishbone/wb_slave_addr.v
+read_verilog rtl/wishbone/wb_slave_data_mem.v
+read_verilog rtl/wishbone/wb_slave_gpio.v
+read_verilog rtl/wishbone/wb_top.v
+
+
+# 1. Elaborate hierarchy without flattening submodules
+hierarchy -top wb_top
+
+# 2. Lower procedural code into coarse blocks (registers/muxes)
+proc
+
+# 3. Clean up internal unused nets without mapping to gates
+#opt_clean
+
+# 4. Show block diagram with clean routing options
+#show -colors 2 -width -stretch -format svg -prefix wb_top wb_top
+
+
+#hierarchy -top riscv_top
+#proc
+
+#opt
+#techmap
+
+#flatten
+
+#show -format svg -prefix schematic_graphviz riscv_top
+
+#write_json -compat-int schematic.json
+write_json schematic.json

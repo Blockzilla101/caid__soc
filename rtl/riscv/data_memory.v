@@ -1,5 +1,5 @@
-`include "global_def.vh"
-`include "riscv_def.vh"
+`include "../include/riscv_def.vh"
+`include "../include/global_def.vh"
 
 `timescale 1ns / 1ps
 

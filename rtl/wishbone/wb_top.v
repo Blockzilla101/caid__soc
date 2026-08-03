@@ -1,3 +1,5 @@
+`include "../include/wb_def.vh"
+
 module wb_top (
     input clk,
     input rst
@@ -7,7 +9,7 @@ module wb_top (
     wire [31:0] m_DAT_I;
     wire [31:0] m_DAT_O;
 
-    input [`WB_ADDR_SIZE] m_ADR_O;
+    wire [`WB_ADDR_SIZE] m_ADR_O;
 
     wire m_ACK_I;
     wire m_CYC_O;

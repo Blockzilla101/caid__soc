@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-`include "riscv_def.vh"
+`include "../include/riscv_def.vh"
 
 module alu_control (
     input [`INST_OPCODE] opcode,

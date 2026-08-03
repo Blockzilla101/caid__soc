@@ -1,4 +1,4 @@
-`include "wb_def.vh"
+`include "../include/wb_def.vh"
 
 module wb_slave_addr (
     input [`WB_ADDR_SIZE] wb_ADR_I,
@@ -8,6 +8,7 @@ module wb_slave_addr (
         case (wb_ADR_I[`WB_SEL_ADDR_SIZE])
             0: wb_SLV_SEL <= 0;
             1: wb_SLV_SEL <= 1;
+            default: wb_SLV_SEL <= 0;
         endcase
     end
 endmodule

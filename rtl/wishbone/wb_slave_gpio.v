@@ -1,3 +1,5 @@
+`include "../include/wb_def.vh"
+
 module wb_slave_gpio (
     input wb_CLK_I,
     input wb_RST_I,

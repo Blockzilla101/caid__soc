@@ -1,5 +1,5 @@
 #include <stdint.h>
-#define DMEM_BASE ((volatile uint32_t *)0x4)
+#define DMEM_BASE ((volatile uint32_t *)0x0004)
 #define GPIO_BASE ((volatile uint32_t *)0x1000)
 
 int main()

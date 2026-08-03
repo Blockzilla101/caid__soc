@@ -21,7 +21,7 @@ module register_file (
                 registers[i] <= 32'b0;
             end
         end else begin
-            if (write_enable && rd != 0) registers[rd] = write_data;
+            if (write_enable) registers[rd] <= write_data;
         end
     end
 
