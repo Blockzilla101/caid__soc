@@ -11,7 +11,7 @@ module register_file (
     output [31:0] rs1_data,
     output [31:0] rs2_data
 );
-    reg [31:0] registers[32];
+    reg [31:0] registers[31:1];
 
     integer i;
 
@@ -21,10 +21,10 @@ module register_file (
                 registers[i] <= 32'b0;
             end
         end else begin
-            if (write_enable) registers[rd] <= write_data;
+            if (write_enable & |rd) registers[rd] = write_data;
         end
     end
 
-    assign rs1_data = rs1 == 0 ? 0 : registers[rs1];
-    assign rs2_data = rs2 == 0 ? 0 : registers[rs2];
+    assign rs1_data = ~|rs1 ? 0 : registers[rs1];
+    assign rs2_data = ~|rs2 ? 0 : registers[rs2];
 endmodule

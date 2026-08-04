@@ -4,3 +4,4 @@ tests/*/sim_build
 __pycache__
 .pytest_cache
 tests/**/build
+a.out
