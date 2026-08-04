@@ -2,7 +2,9 @@
 
 module wb_top (
     input clk,
-    input rst
+    input rst,
+
+    inout [7:0] gpio_data
 );
     wire SLV_SEL;
 
@@ -96,7 +98,9 @@ module wb_top (
         .wb_CYC_I(slv1_CYC_I),
         .wb_SEL_I(slv1_SEL_I),
         .wb_STB_I(slv1_STB_I),
-        .wb_WE_I (slv1_WE_I)
+        .wb_WE_I (slv1_WE_I),
+
+        .gpio_data(gpio_data)
     );
 
     wb_slave_addr wb_addr_decoder (
