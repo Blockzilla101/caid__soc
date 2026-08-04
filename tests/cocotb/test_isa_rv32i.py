@@ -15,7 +15,7 @@ def asm_inst(inst: list[str]):
 
 async def reset_state(dut):
     dut.pc.counter.value = 4
-    for i in range(0, 32):
+    for i in range(1, 32):
         dut.reg_file.registers[i].value = 0
 
     for i in range(0, 1024):

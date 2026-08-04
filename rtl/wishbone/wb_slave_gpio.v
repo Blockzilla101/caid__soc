@@ -15,7 +15,9 @@ module wb_slave_gpio (
     input wb_STB_I,
     input wb_WE_I,
 
-    input wb_TGD_I
+    input wb_TGD_I,
+
+    inout gpio_data
 );
     reg [7:0] gpio_reg;
 
@@ -41,5 +43,7 @@ module wb_slave_gpio (
             end
         end
     end
+
+    assign gpio_data = gpio_reg;
 
 endmodule
