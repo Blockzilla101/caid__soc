@@ -53,7 +53,7 @@ module tb_wb_slaves ();
         wb_DAT_I = 32'hA0B0C0D0;
         wb_ADR_I = 0;
         wb_CYC_I = 1;
-        wb_SEL_I = 4'b1001;
+        wb_SEL_I = 4'b0011;
         wb_STB_I = 1;
         wb_WE_I  = 1;
 
@@ -70,7 +70,7 @@ module tb_wb_slaves ();
 
         wb_ADR_I = 0;
         wb_CYC_I = 1;
-        wb_SEL_I = 4'b1001;
+        wb_SEL_I = 4'b1111;
         wb_STB_I = 1;
         wb_WE_I  = 0;
 

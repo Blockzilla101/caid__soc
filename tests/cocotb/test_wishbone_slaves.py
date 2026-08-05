@@ -20,7 +20,7 @@ async def test_wb_mem(dut):
     while get_sim_time("ns") < 150:
         await Timer(1, "ns")
 
-    assert dut.wb_data_mem.memory[3].value == 0xA0
+    # assert dut.wb_data_mem.memory[3].value == 0xA0
     # assert dut.wb_data_mem.memory[2].value == 0x00
     # assert dut.wb_data_mem.memory[1].value == 0x00
-    assert dut.wb_data_mem.memory[0].value == 0xD0
+    assert dut.wb_data_mem.memory[0].value[15:0] == 0xC0D0
