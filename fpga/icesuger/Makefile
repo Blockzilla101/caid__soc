@@ -17,6 +17,6 @@ prog: ${TARGET}.svf
 	openFPGALoader -c digilent_hs2 $(TARGET).bit
 
 clean:
-	rm -f *.svf *.bit *.config *.json
+	rm -f *.svf *.bit *.config *.json *.svg *.dot
 
 .PHONY: prog clean

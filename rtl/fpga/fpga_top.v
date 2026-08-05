@@ -6,7 +6,12 @@ module fpga_top (
     input  clk_i,
     output rgb_led_r,
     output rgb_led_g,
-    output rgb_led_b
+    output rgb_led_b,
+
+    output ext_io_1,
+    output ext_io_2,
+    output ext_io_3,
+    output ext_io_4
 );
     wire rst_s;
 
@@ -15,6 +20,11 @@ module fpga_top (
     assign rgb_led_r = gpio_data[0];
     assign rgb_led_g = gpio_data[1];
     assign rgb_led_b = gpio_data[2];
+
+    assign ext_io_1  = gpio_data[3];
+    assign ext_io_2  = gpio_data[4];
+    assign ext_io_3  = gpio_data[5];
+    assign ext_io_4  = gpio_data[6];
 
     rst_gen rst_inst (
         .clk_i(clk_i),

@@ -26,5 +26,5 @@ read_verilog -sv ../../rtl/fpga/fpga_top.v
 read_verilog -sv ../../rtl/fpga/rst_gen.v
 
 synth_ecp5 -json soc.json -top fpga_top
-show -format svg -prefix schematic_graphviz fpga_top
+show -format dot -prefix soc fpga_top 
 stat
