@@ -8,21 +8,19 @@ module instruction_memory (
     input [31:0] addr,
     output [31:0] read_data
 );
-    reg [7:0] memory[`SIZE_INST_MEM];
+    localparam integer WORDS = `SIZE_INST_MEM / 4;
+    reg [31:0] memory[0:WORDS-1];
 
     initial begin
         integer i;
-        for (i = 0; i < `SIZE_INST_MEM; i = i + 4) begin
-            memory[i+0] = 8'h13;
-            memory[i+1] = 8'h00;
-            memory[i+2] = 8'h00;
-            memory[i+3] = 8'h00;
+        for (i = 0; i < WORDS; i = i + 1) begin
+            memory[i] = 32'h0000_0013;
         end
 `ifdef IMEM_LOAD_HEX
         $readmemh(`IMEM_HEX_PATH, memory, 0);
 `endif
     end
 
-    assign read_data = {memory[addr+32'h3], memory[addr+32'h2], memory[addr+32'h1], memory[addr+32'h0]};
+    assign read_data = {memory[addr[31:2]]};
 
 endmodule

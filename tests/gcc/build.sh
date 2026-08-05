@@ -29,8 +29,10 @@ function build_file() {
 
     riscv64-elf-objcopy -O binary $ELF_FILE $BIN_FILE
     riscv64-elf-objdump -d $ELF_FILE > $ELF_FILE.dump
-    hexdump -v -e '1/1 "%02x\n"' $BIN_FILE > $MEM_FILE.temp
-    cat <(echo -e "13\n00\n00\n00") $MEM_FILE.temp > $MEM_FILE
+    # hexdump -v -e '1/1 "%02x\n"' $BIN_FILE > $MEM_FILE.temp
+    hexdump -v -e '1/4 "%08x\n"' $BIN_FILE > $MEM_FILE.temp
+    # cat <(echo -e "13\n00\n00\n00") $MEM_FILE.temp > $MEM_FILE
+    cat <(echo -e "13000000") $MEM_FILE.temp > $MEM_FILE
     rm $MEM_FILE.temp
 }
 

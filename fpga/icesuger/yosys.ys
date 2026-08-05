@@ -1,5 +1,5 @@
 verilog_defaults -push
-verilog_defaults -add -D IMEM_LOAD_HEX
+verilog_defaults -add -D IMEM_LOAD_HEX=1
 verilog_defaults -add -D IMEM_HEX_PATH="/home/blockzilla/ic-design/projects/caid__soc/tests/gcc/build/wb_fpga_test.mem"
 verilog_defaults -add -I ../../rtl/include -D WISHBONE_ENABLE
 read_verilog -sv ../../rtl/riscv/alu.v
@@ -14,21 +14,17 @@ read_verilog -sv ../../rtl/riscv/program_counter.v
 read_verilog -sv ../../rtl/riscv/register_file.v
 read_verilog -sv ../../rtl/riscv/riscv_top.v
 
-read_verilog ../../rtl/wishbone/wb_controller.v
-read_verilog ../../rtl/wishbone/wb_master_riscv.v
-read_verilog ../../rtl/wishbone/wb_mux.v
-read_verilog ../../rtl/wishbone/wb_slave_addr.v
-read_verilog ../../rtl/wishbone/wb_slave_data_mem.v
-read_verilog ../../rtl/wishbone/wb_slave_gpio.v
-read_verilog ../../rtl/wishbone/wb_top.v
+read_verilog -sv ../../rtl/wishbone/wb_controller.v
+read_verilog -sv ../../rtl/wishbone/wb_master_riscv.v
+read_verilog -sv ../../rtl/wishbone/wb_mux.v
+read_verilog -sv ../../rtl/wishbone/wb_slave_addr.v
+read_verilog -sv ../../rtl/wishbone/wb_slave_data_mem.v
+read_verilog -sv ../../rtl/wishbone/wb_slave_gpio.v
+read_verilog -sv ../../rtl/wishbone/wb_top.v
 
-read_verilog ../../rtl/fpga/fpga_top.v
-read_verilog ../../rtl/fpga/rst_gen.v
+read_verilog -sv ../../rtl/fpga/fpga_top.v
+read_verilog -sv ../../rtl/fpga/rst_gen.v
 
-proc
-flatten
-opt
-clean
-
-show -format svg -prefix schematic_graphviz fpga_top
 synth_ecp5 -json soc.json -top fpga_top
+show -format svg -prefix schematic_graphviz fpga_top
+stat

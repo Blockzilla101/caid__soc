@@ -43,7 +43,6 @@ module riscv_top (
 
     register_file reg_file (
         .clk(clk),
-        .rst(rst),
         .rs1(instruction[`INST_RS1]),
         .rs2(instruction[`INST_RS2]),
         .rd(instruction[`INST_RD]),

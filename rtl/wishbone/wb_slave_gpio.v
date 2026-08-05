@@ -17,10 +17,10 @@ module wb_slave_gpio (
 
     input wb_TGD_I,
 
-    inout gpio_data
+    output [7:0] gpio_data
 );
     reg [7:0] gpio_reg;
-    reg [7:0] gpio_dir;
+    // reg [7:0] gpio_dir;
 
     always @(posedge wb_CLK_I or posedge wb_RST_I) begin
         if (wb_RST_I) begin
@@ -28,21 +28,21 @@ module wb_slave_gpio (
             wb_DAT_O <= 0;
 
             gpio_reg <= 0;
-            gpio_dir <= 0;
+            // gpio_dir <= 0;
         end else begin
             wb_ACK_O <= 0;
 
-            gpio_reg <= gpio_reg | (gpio_data & gpio_dir);
+            // gpio_reg <= gpio_reg | (gpio_data & gpio_dir);
 
             if (wb_STB_I && wb_CYC_I && !wb_ACK_O) begin
 
                 wb_DAT_O <= 0;
                 if (wb_WE_I) begin
                     if (wb_SEL_I[0]) gpio_reg <= wb_DAT_I[7:0];
-                    if (wb_SEL_I[1]) gpio_dir <= wb_DAT_I[15:8];
+                    // if (wb_SEL_I[1]) gpio_dir <= wb_DAT_I[15:8];
                 end else begin
-                    wb_DAT_O[7:0]  <= wb_SEL_I[0] ? gpio_reg : 8'b0;
-                    wb_DAT_O[15:8] <= wb_SEL_I[1] ? gpio_dir : 8'b0;
+                    wb_DAT_O[7:0] <= wb_SEL_I[0] ? gpio_reg : 8'b0;
+                    // wb_DAT_O[15:8] <= wb_SEL_I[1] ? gpio_dir : 8'b0;
                 end
 
                 wb_ACK_O <= 1;

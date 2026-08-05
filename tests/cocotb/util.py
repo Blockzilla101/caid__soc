@@ -33,10 +33,7 @@ def sign_extend(value, bits):
 
 
 def set_inst(dut, addr, inst):
-    dut.inst_mem.memory[addr + 0].value = inst & 0xFF
-    dut.inst_mem.memory[addr + 1].value = (inst >> 8) & 0xFF
-    dut.inst_mem.memory[addr + 2].value = (inst >> 16) & 0xFF
-    dut.inst_mem.memory[addr + 3].value = (inst >> 24) & 0xFF
+    dut.inst_mem.memory[addr].value = inst
 
 
 def assert_reg(dut, reg_num, val, msg=None):

@@ -1,8 +1,12 @@
+`define IMEM_LOAD_HEX
+`define IMEM_HEX_PATH "/home/blockzilla/ic-design/projects/caid__soc/tests/gcc/build/wb_fpga_test.mem"
+`define WISHBONE_ENABLE
+
 module fpga_top (
-    input      clk_i,
-    output reg rgb_led_r,
-    output reg rgb_led_g,
-    output reg rgb_led_b
+    input  clk_i,
+    output rgb_led_r,
+    output rgb_led_g,
+    output rgb_led_b
 );
     wire rst_s;
 

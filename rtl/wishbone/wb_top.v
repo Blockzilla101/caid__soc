@@ -4,7 +4,7 @@ module wb_top (
     input clk,
     input rst,
 
-    inout [7:0] gpio_data
+    output [7:0] gpio_data
 );
     wire SLV_SEL;
 

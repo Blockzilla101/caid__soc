@@ -57,7 +57,8 @@ async def test_hex_file(dut):
 
     hex_name = os.environ.get("HEX_NAME")
     if hex_name == "asm_wb_mem_test":
-        pass
+        for i in range(0, 32):
+            print(i, dut.wb_data_mem.memory[i].value)
     elif hex_name == "gcc_wb_gcc_test":
         pass
     else:

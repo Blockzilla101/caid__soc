@@ -21,7 +21,7 @@ async def reset_state(dut):
     for i in range(0, 1024):
         dut.data_mem.memory[i].value = 0
 
-    for i in range(0, 2048, 4):
+    for i in range(0, 2048 // 4, 1):
         set_inst(dut, i, inst_nop)
 
     dut.rst.value = 1
