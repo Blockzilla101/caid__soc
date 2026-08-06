@@ -5,3 +5,8 @@ __pycache__
 .pytest_cache
 tests/**/build
 a.out
+fpga/**/*.config
+fpga/**/*.bit
+fpga/**/*.dot
+fpga/**/*.svf
+fpga/**/*.json

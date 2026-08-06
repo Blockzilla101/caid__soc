@@ -33,6 +33,11 @@ wb_sources = [
     f"{rtl_path}/wishbone/wb_controller.v",
 ]
 
+fpga_sources = [
+    f"{rtl_path}/fpga/fpga_top.v",
+    f"{rtl_path}/fpga/rst_gen.v",
+]
+
 runner = get_runner("icarus")
 
 
@@ -49,6 +54,10 @@ def run_hex_test(hex_type, mem_file: str):
     hdl_toplevel = "wb_top" if is_wishbone else "riscv_top"
     test_module = "test_wb_hex_file" if is_wishbone else "test_hex_file"
     sources = [*riscv_sources, *wb_sources] if is_wishbone else riscv_sources
+
+    if "_fpga_" in mem_file:
+        sources = [*riscv_sources, *wb_sources, *fpga_sources]
+        hdl_toplevel = "fpga_top"
 
     defines = {
         "IMEM_LOAD_HEX": "1",

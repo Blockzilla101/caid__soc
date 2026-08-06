@@ -11,12 +11,14 @@ async def setup_debug():
     debugpy.wait_for_client()
 
 
-async def setup_clock_sig(clk_sig, rst_sig):
+async def setup_clock_sig(clk_sig, rst_sig=None):
     Clock(clk_sig, 1, "ns").start(False)
-    rst_sig.value = 1
+    if rst_sig:
+        rst_sig.value = 1
 
     await clk_sig.rising_edge
-    rst_sig.value = 0
+    if rst_sig:
+        rst_sig.value = 0
 
 
 async def setup_clock(dut):

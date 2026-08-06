@@ -1,7 +1,7 @@
 import cocotb
 from cocotb import log
 from cocotb.triggers import Timer
-from util import setup_clock, assert_reg, assert_mem
+from util import setup_clock_sig, setup_clock, assert_reg, assert_mem
 import tinyrv
 import os
 
@@ -17,22 +17,32 @@ async def test_hex_file(dut):
 
     log.info(f"running hex file '{hex_name}'")
 
-    riscv_core = dut.wb_riscv.riscv
+    riscv_core = (
+        dut.wb.wb_riscv if not hasattr(dut, "wb_riscv") else dut.wb_riscv
+    ).riscv
 
-    await setup_clock(dut)
+    # riscv_core = dut.wb_riscv.riscv
+
+    clk = None
+    if hasattr(dut, "wb_riscv"):
+        await setup_clock(dut)
+        clk = dut.clk
+    else:
+        await setup_clock_sig(dut.clk_i)
+        clk = dut.clk_i
     await reset_state(riscv_core)
 
     cycles = 0
 
     while True:
-        if cycles > 20000:
+        if cycles > 50000:
             # assert False, "Ran for more than 20k cycles"
             break
 
         inst = str(riscv_core.instruction.value)
         if "X" in inst:
-            await dut.clk.rising_edge
-            await dut.clk.rising_edge
+            await clk.rising_edge
+            await clk.rising_edge
             inst = str(riscv_core.instruction.value)
             # assert ("X" not in inst) and (
             # cycles < 10
@@ -43,7 +53,7 @@ async def test_hex_file(dut):
         last_pc_val = str(riscv_core.pc_val.value)
         stalled = bool(riscv_core.cpu_stall.value)
         inst = int(inst, 2)
-        await dut.clk.rising_edge
+        await clk.rising_edge
         await Timer(1, "ns")
         pc_val = str(riscv_core.pc_val.value)
 
@@ -52,7 +62,7 @@ async def test_hex_file(dut):
 
         cycles = cycles + 1
 
-    await dut.clk.rising_edge
+    await clk.rising_edge
 
     print("cycles", cycles)
 
