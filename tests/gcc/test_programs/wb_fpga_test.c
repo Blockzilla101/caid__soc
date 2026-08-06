@@ -25,7 +25,7 @@ int main()
         {
             value = reverse ? value >> 1 : value << 1;
         }
-        *GPIO_BASE = value;
+        *GPIO_BASE = ~value;
         sleep(2500000);
     }
 }

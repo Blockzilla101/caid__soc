@@ -7,6 +7,7 @@ tests/**/build
 a.out
 fpga/**/*.config
 fpga/**/*.bit
+fpga/**/*.fs
 fpga/**/*.dot
 fpga/**/*.svf
 fpga/**/*.json
