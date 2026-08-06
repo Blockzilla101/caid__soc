@@ -13,7 +13,7 @@ TARGET ?= SRAM
 
 $(info PROJ = $(PROJ))           # Print variables for debugging
 
-all: $(PROJ).bit                  # final bitstream file
+all: $(PROJ).fs                  # final bitstream file
 
 $(PROJ)-yosys.json: $(SOURCE)    # synthesizes Verilog-source to JSON using Yosys
 	yosys yosys.ys

@@ -26,7 +26,7 @@ module wb_slave_data_mem (
     wire [31:0] word_addr = wb_ADR_I[31:2];
     wire [1:0] byte_off = wb_ADR_I[1:0];
 
-    wire [31:0] read_word = memory[word_addr];
+    reg [31:0] read_word;  //= memory[word_addr];
 
     reg [31:0] write_word;
 
@@ -80,6 +80,8 @@ module wb_slave_data_mem (
 
                 wb_ACK_O <= 1;
             end
+
+            read_word <= memory[word_addr];
         end
     end
 
