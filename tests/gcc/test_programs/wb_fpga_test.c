@@ -18,14 +18,14 @@ int main()
     {
         if (value == 0b0 || value == 0b1000000)
         {
-            // reverse = !reverse;
+            reverse = !reverse;
             value = reverse ? 0b100000 : 0x1;
         }
         else
         {
             value = reverse ? value >> 1 : value << 1;
         }
-        *GPIO_BASE = ~value;
+        *GPIO_BASE = value;
         sleep(2500000);
     }
 }

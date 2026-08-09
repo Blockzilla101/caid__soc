@@ -5,7 +5,11 @@
 module fpga_top (
     input clk_i,
 
+`ifdef TANGNANO9k
     output [5:0] gpio
+`else
+    output [6:0] gpio
+`endif
 );
     wire rst_s;
 

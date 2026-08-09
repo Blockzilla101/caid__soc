@@ -1,5 +1,7 @@
 verilog_defaults -push
 verilog_defaults -add -D IMEM_LOAD_HEX=1
+verilog_defaults -add -D TANGNANO9k=1
+verilog_defaults -add -D SYNTHESIS=1
 verilog_defaults -add -D IMEM_HEX_PATH="/home/blockzilla/ic-design/projects/caid__soc/tests/gcc/build/wb_fpga_test.mem"
 verilog_defaults -add -I ../../rtl/include -D WISHBONE_ENABLE
 
