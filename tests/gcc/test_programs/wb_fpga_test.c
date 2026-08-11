@@ -12,20 +12,20 @@ void sleep(int cycles)
 
 int main()
 {
-    int value = 0b1;
-    int reverse = 0;
+    uint8_t value = 0b1;
+    uint8_t reverse = 0;
     while (1)
     {
-        if (value == 0b0 || value == 0b1000000)
+        if (value == 0b0 || value == 0b100000 || value == 0b1)
         {
             reverse = !reverse;
-            value = reverse ? 0b100000 : 0x1;
+            value = reverse ? 0b010000 : 0b10;
         }
         else
         {
             value = reverse ? value >> 1 : value << 1;
         }
-        *GPIO_BASE = value;
+        *GPIO_BASE = ~value;
         sleep(2500000);
     }
 }
