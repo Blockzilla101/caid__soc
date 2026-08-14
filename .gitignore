@@ -11,3 +11,5 @@ fpga/**/*.fs
 fpga/**/*.dot
 fpga/**/*.svf
 fpga/**/*.json
+runs
+macros/**/build

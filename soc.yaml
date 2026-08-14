@@ -1,0 +1,7 @@
+DESIGN_NAME: fpga_top
+VERILOG_INCLUDE_DIRS: "dir::rtl/include"
+VERILOG_FILES: "dir::rtl/*/**.v"
+CLOCK_PERIOD: 20
+CLOCK_PORT: clk
+FP_SIZING: "absolute"
+DIE_AREA: [0, 0, 200, 200]
