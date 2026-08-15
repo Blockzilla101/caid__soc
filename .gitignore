@@ -12,4 +12,4 @@ fpga/**/*.dot
 fpga/**/*.svf
 fpga/**/*.json
 runs
-macros/**/build
+macro-gen/**/build
