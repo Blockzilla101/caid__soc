@@ -19,13 +19,13 @@ FP_MACRO_VERTICAL_HALO: 10
 MACROS:
   sram_1rw1r_32x1024:
     instances:
-      fpga_top.wb.wb_data_mem.wb_slave_sram:
+      wb.wb_data_mem.wb_slave_sram:
         location: [0, 0]
         orientation: "N"
     gds: ["dir::macros/gds/sram_1rw1r_32x1024.gds"]
     lef: ["dir::macros/lef/sram_1rw1r_32x1024.lef"]
     # nl:  ["dir::macros/verilog/sram_1rw1r_32x1024.v"]
-    vh:  ["dir::macros/verilog/sram_1rw1r_32x1024.v"]
+    vh:  ["dir::macros/verilog/sram_1rw1r_32x1024_bb.vh"]
     lib: 
       "*":
         - "dir::macros/lib/sram_1rw1r_32x1024_TT_1p8V_25C.lib"
