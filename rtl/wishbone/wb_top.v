@@ -52,7 +52,11 @@ module wb_top (
 
     wire slv0_TGD_I;
 
-    wb_slave_data_mem wb_data_mem (
+    // `ifdef ASIC
+    wb_slave_data_mem_asic wb_data_mem (
+        // `else
+        // wb_slave_data_mem wb_data_mem (
+        // `endif
         .wb_CLK_I(clk),
         .wb_RST_I(rst),
 

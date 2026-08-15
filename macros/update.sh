@@ -14,7 +14,8 @@ function copy_openram_macro() {
 
     cp -v $OUT_PATH/$name.gds  gds/$name.gds
     cp -v $OUT_PATH/$name.lef  lef/$name.lef
-    cp -v $OUT_PATH/$name.v  nl/$name.v
+    # cp -v $OUT_PATH/$name.nl.v  verilog/$name.nl.v
+    cp -v $OUT_PATH/$name.v  verilog/$name.v
     cp -v $OUT_PATH/$name_*.lib  lib/
 }
 
