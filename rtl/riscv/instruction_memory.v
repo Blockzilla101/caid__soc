@@ -12,10 +12,6 @@ module instruction_memory (
     reg [31:0] memory[0:WORDS-1];
 
     initial begin
-        // integer i;
-        // for (i = 0; i < WORDS; i = i + 1) begin
-        // memory[i] = 32'h0000_0013;
-        // end
 `ifdef IMEM_LOAD_HEX
         $readmemh(`IMEM_HEX_PATH, memory);
 `endif

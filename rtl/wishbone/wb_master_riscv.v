@@ -8,6 +8,11 @@
 // supports only single tranfers, no block transfers
 
 module wb_master_riscv (
+`ifdef USE_POWER_PINS
+    inout vccd1,
+    inout vssd1,
+`endif
+
     input wb_CLK_I,
     input wb_RST_I,
 
@@ -74,7 +79,4 @@ module wb_master_riscv (
 
         .wb_TGD_O(wb_TGD_O)
     );
-
-
-
 endmodule

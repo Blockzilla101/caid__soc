@@ -57,13 +57,13 @@ module riscv_top (
         .control_word(control_word)
     );
 
-    wire [3:0] alu_op;
+    wire [3:0] alu_op; 
 
-    alu_control alu_ctrl (
+    alu_control alu_ctrl ( 
         .opcode  (instruction[`INST_OPCODE]),
         .alu_ctrl(control_word[`CW_ALU_CTRL]),
         .funct3  (instruction[`INST_FUNCT3]),
-        .funct7  (instruction[`INST_FUNCT7]),
+        .funct7  (instruction[`INST_FUNCT7]), 
         .alu_op  (alu_op)
     );
 

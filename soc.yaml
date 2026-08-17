@@ -1,10 +1,10 @@
 DESIGN_NAME: asic_top
 VERILOG_INCLUDE_DIRS: "dir::rtl/include"
 VERILOG_FILES: "dir::rtl/*/**.v"
-CLOCK_PERIOD: 20
+CLOCK_PERIOD: 100
 CLOCK_PORT: clk
 FP_SIZING: "absolute"
-DIE_AREA: [0, 0, 800, 800]
+DIE_AREA: [0, 0, 800, 900]
 PDK: sky130A
 
 VERILOG_DEFINES:
@@ -13,25 +13,27 @@ VERILOG_DEFINES:
   - IMEM_LOAD_HEX
   # - IMEM_HEX_PATH "/home/blockzilla/ic-design/projects/caid__soc/tests/gcc/build/wb_fpga_test.mem"
 
-FP_MACRO_HORIZONTAL_HALO: 10
-FP_MACRO_VERTICAL_HALO: 10
+FP_MACRO_HORIZONTAL_HALO: 5
+FP_MACRO_VERTICAL_HALO: 5
 
 VDD_NETS: ["vccd1"]
 GND_NETS: ["vssd1"]
 
-FP_PDN_MACRO_HOOKS:
-  - "wb_slave_sram vccd1 vssd1 vccd1 vssd1"
+PDN_MACRO_CONNECTIONS:
+  - "wb/wb_data_mem/wb_slave_sram vccd1 vssd1 vccd1 vssd1"
+
+# RUN_DRC: false
 
 MACROS:
-  sram_1rw1r_32x1024:
+  sky130_sram_4kbyte_1rw1r_32x1024_8:
     instances:
-      wb_slave_sram:
-        location: [50, 50]
+      wb/wb_data_mem/wb_slave_sram:
+        location: [50, 150]
         orientation: "N"
-    gds: ["dir::macros/gds/sram_1rw1r_32x1024.gds"]
-    lef: ["dir::macros/lef/sram_1rw1r_32x1024.lef"]
-    # nl:  ["dir::macros/verilog/sram_1rw1r_32x1024.v"]
-    vh:  ["dir::macros/verilog/sram_1rw1r_32x1024_bb.vh"]
+    gds: ["dir::macros/gds/sky130_sram_4kbyte_1rw1r_32x1024_8.gds"]
+    lef: ["dir::macros/lef/sky130_sram_4kbyte_1rw1r_32x1024_8.lef"]
+    # nl:  ["dir::macros/verilog/sky130_sram_4kbyte_1rw1r_32x1024_8.v"]
+    vh:  ["dir::macros/verilog/sky130_sram_4kbyte_1rw1r_32x1024_8_bb.vh"]
     lib: 
       "*":
-        - "dir::macros/lib/sram_1rw1r_32x1024_TT_1p8V_25C.lib"
+        - "dir::macros/lib/sky130_sram_4kbyte_1rw1r_32x1024_8_TT_1p8V_25C.lib"

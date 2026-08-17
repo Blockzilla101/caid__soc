@@ -1,6 +1,11 @@
 `include "../include/wb_def.vh"
 
+(* keep_hierarchy = "yes" *)
 module wb_top (
+`ifdef USE_POWER_PINS
+    inout vccd1,
+    inout vssd1,
+`endif
     input clk,
     input rst,
 
@@ -53,10 +58,16 @@ module wb_top (
     wire slv0_TGD_I;
 
     // `ifdef ASIC
+    (* keep_hierarchy = "yes" *)
     wb_slave_data_mem_asic wb_data_mem (
         // `else
         // wb_slave_data_mem wb_data_mem (
         // `endif
+
+`ifdef USE_POWER_PINS
+        .vccd1(vccd1),
+        .vssd1(vssd1),
+`endif
         .wb_CLK_I(clk),
         .wb_RST_I(rst),
 

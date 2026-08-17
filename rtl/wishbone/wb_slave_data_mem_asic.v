@@ -2,8 +2,11 @@
 `include "../include/wb_def.vh"
 `include "../include/global_def.vh"
 
-(* keep_hierarchy = "yes" *)
 module wb_slave_data_mem_asic (
+`ifdef USE_POWER_PINS
+    inout vccd1,
+    inout vssd1,
+`endif
     input wb_CLK_I,
     input wb_RST_I,
 
@@ -24,7 +27,11 @@ module wb_slave_data_mem_asic (
     wire [ 1:0] byte_off = wb_ADR_I[1:0];
 
     (* keep_hierarchy = "yes" *)
-    sram_1rw1r_32x1024 wb_slave_sram (
+    sky130_sram_4kbyte_1rw1r_32x1024_8 wb_slave_sram (
+`ifdef USE_POWER_PINS
+        .vccd1 (vccd1),
+        .vssd1 (vssd1),
+`endif
         .clk0  (wb_CLK_I),
         .csb0  (1'b0),
         .web0  (~wb_WE_I & wb_ACK_O),
