@@ -27,24 +27,19 @@ module wb_slave_data_mem_asic (
     wire [ 1:0] byte_off = wb_ADR_I[1:0];
 
     (* keep_hierarchy = "yes" *)
-    sky130_sram_4kbyte_1rw1r_32x1024_8 wb_slave_sram (
+    sram22_1024x32m8w8 wb_slave_sram (
 `ifdef USE_POWER_PINS
-        .vccd1 (vccd1),
-        .vssd1 (vssd1),
+        .vdd(vccd1),
+        .vss(vssd1),
 `endif
-        .clk0  (wb_CLK_I),
-        .csb0  (1'b0),
-        .web0  (~wb_WE_I & wb_ACK_O),
-        .wmask0({word_addr, 2'b0}),
-        .addr0 (wb_ADR_I),
-        .din0  (write_word),
-        .dout0 (read_word),
-
-        .clk1 (wb_CLK_I),
-        .csb1 (1'b1),
-        .addr1(10'b0),
-        .dout1()
-
+        .clk(wb_CLK_I),
+        .rstb(1'b1),
+        .ce(1'b1),
+        .we(~wb_WE_I & wb_ACK_O),
+        .wmask(4'b1111),
+        .addr({word_addr, 2'b0}),
+        .din(write_word),
+        .dout(read_word)
     );
 
     wire [31:0] read_word;

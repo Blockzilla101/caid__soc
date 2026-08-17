@@ -13,37 +13,17 @@ module fpga_top (
 );
     wire rst_s;
 
-    // rst_gen rst_inst (
-    //     .clk_i(clk_i),
-    //     .rst_i(1'b0),
-    //     .rst_o(rst_s)
-    // );
+    rst_gen rst_inst (
+        .clk_i(clk_i),
+        .rst_i(1'b0),
+        .rst_o(rst_s)
+    );
 
-    // wb_top wb (
-    //     .clk(clk_i),
-    //     .rst(rst_s),
+    wb_top wb (
+        .clk(clk_i),
+        .rst(rst_s),
 
-    //     .gpio_data(gpio)
-    // );
-
-    sram_1rw1r_32x1024 wb_slave_sram (
-`ifdef USE_POWER_PINS
-        .vccd1 (),
-        .vssd1 (),
-`endif
-        .clk0  (clk_i),
-        .csb0  (1'b0),
-        .web0  (1),
-        .wmask0(0),
-        .addr0 (32'b0),
-        .din0  (32'b0),
-        .dout0 (gpio),
-
-        .clk1 (clk_i),
-        .csb1 (1'b1),
-        .addr1(10'b0),
-        .dout1()
-
+        .gpio_data(gpio)
     );
 
 endmodule
