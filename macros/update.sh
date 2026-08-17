@@ -20,4 +20,5 @@ function copy_openram_macro() {
 }
 
 
-copy_openram_macro sram_1rw1r_32x1024
+copy_openram_macro sky130_sram_4kbyte_1rw1r_32x1024_8
+copy_openram_macro sky130_rom_1kbyte

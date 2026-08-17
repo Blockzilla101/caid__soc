@@ -1,8 +1,8 @@
+`timescale 1ns / 1ps
 `include "../include/wb_def.vh"
 `include "../include/global_def.vh"
 
-`timescale 1ns / 1ps
-
+(* keep_hierarchy = "yes" *)
 module wb_slave_data_mem_asic (
     input wb_CLK_I,
     input wb_RST_I,
@@ -23,6 +23,7 @@ module wb_slave_data_mem_asic (
     wire [31:0] word_addr = wb_ADR_I[31:2];
     wire [ 1:0] byte_off = wb_ADR_I[1:0];
 
+    (* keep_hierarchy = "yes" *)
     sram_1rw1r_32x1024 wb_slave_sram (
         .clk0  (wb_CLK_I),
         .csb0  (1'b0),

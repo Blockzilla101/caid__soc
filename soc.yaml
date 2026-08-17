@@ -1,4 +1,4 @@
-DESIGN_NAME: fpga_top
+DESIGN_NAME: asic_top
 VERILOG_INCLUDE_DIRS: "dir::rtl/include"
 VERILOG_FILES: "dir::rtl/*/**.v"
 CLOCK_PERIOD: 20
@@ -16,11 +16,17 @@ VERILOG_DEFINES:
 FP_MACRO_HORIZONTAL_HALO: 10
 FP_MACRO_VERTICAL_HALO: 10
 
+VDD_NETS: ["vccd1"]
+GND_NETS: ["vssd1"]
+
+FP_PDN_MACRO_HOOKS:
+  - "wb_slave_sram vccd1 vssd1 vccd1 vssd1"
+
 MACROS:
   sram_1rw1r_32x1024:
     instances:
-      wb.wb_data_mem.wb_slave_sram:
-        location: [0, 0]
+      wb_slave_sram:
+        location: [50, 50]
         orientation: "N"
     gds: ["dir::macros/gds/sram_1rw1r_32x1024.gds"]
     lef: ["dir::macros/lef/sram_1rw1r_32x1024.lef"]

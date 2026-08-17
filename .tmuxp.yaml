@@ -1,0 +1,13 @@
+session_name: soc
+windows:
+  - window_name: openram
+    panes:
+      - shell_command:
+        - cd $HOME/ic-design/tools/OpenRAM
+        - activate-openram
+  - window_name: librelane
+    focus: true
+    panes:
+      - shell_command:
+        - cd ~/ic-design/projects/caid__soc
+        - activate-librelane
