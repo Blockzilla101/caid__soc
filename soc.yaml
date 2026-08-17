@@ -18,14 +18,16 @@ FP_MACRO_VERTICAL_HALO: 5
 
 # ERROR_ON_PDN_VIOLATIONS: false
 
-VDD_NETS: ["vdd"]
-GND_NETS: ["vss"]
+VDD_NETS: ["vdd", "vccd1"]
+GND_NETS: ["vss", "vssd1"]
+
+PDN_VOFFSET: 94.84
 
 PL_TARGET_DENSITY_PCT: 0.5
 
 PDN_CONNECT_MACROS_TO_GRID: true
 PDN_MACRO_CONNECTIONS:
-  - "wb/wb_data_mem/wb_slave_sram vdd vssd1 vdd vss"
+  - "wb/wb_data_mem/wb_slave_sram vccd1 vssd1 vdd vss"
 
 # RUN_DRC: false
 
