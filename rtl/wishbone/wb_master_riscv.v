@@ -9,8 +9,8 @@
 
 module wb_master_riscv (
 `ifdef USE_POWER_PINS
-    inout vccd1,
-    inout vssd1,
+    inout vdd,
+    inout vss,
 `endif
 
     input wb_CLK_I,

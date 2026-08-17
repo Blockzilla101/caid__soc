@@ -3,8 +3,8 @@
 (* keep_hierarchy = "yes" *)
 module wb_top (
 `ifdef USE_POWER_PINS
-    inout vccd1,
-    inout vssd1,
+    inout vdd,
+    inout vss,
 `endif
     input clk,
     input rst,
@@ -65,8 +65,8 @@ module wb_top (
         // `endif
 
 `ifdef USE_POWER_PINS
-        .vccd1(vccd1),
-        .vssd1(vssd1),
+        .vdd(vdd),
+        .vss(vss),
 `endif
         .wb_CLK_I(clk),
         .wb_RST_I(rst),

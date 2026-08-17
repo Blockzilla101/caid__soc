@@ -4,8 +4,8 @@
 
 module wb_slave_data_mem_asic (
 `ifdef USE_POWER_PINS
-    inout vccd1,
-    inout vssd1,
+    inout vdd,
+    inout vss,
 `endif
     input wb_CLK_I,
     input wb_RST_I,
@@ -29,8 +29,8 @@ module wb_slave_data_mem_asic (
     (* keep_hierarchy = "yes" *)
     sram22_1024x32m8w8 wb_slave_sram (
 `ifdef USE_POWER_PINS
-        .vdd(vccd1),
-        .vss(vssd1),
+        .vdd(vdd),
+        .vss(vss),
 `endif
         .clk(wb_CLK_I),
         .rstb(1'b1),

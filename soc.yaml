@@ -4,7 +4,7 @@ VERILOG_FILES: "dir::rtl/*/**.v"
 CLOCK_PERIOD: 100
 CLOCK_PORT: clk
 FP_SIZING: "absolute"
-DIE_AREA: [0, 0, 800, 900]
+DIE_AREA: [0, 0, 720.92, 789.76]
 PDK: sky130A
 
 VERILOG_DEFINES:
@@ -16,24 +16,31 @@ VERILOG_DEFINES:
 FP_MACRO_HORIZONTAL_HALO: 5
 FP_MACRO_VERTICAL_HALO: 5
 
-VDD_NETS: ["vccd1"]
-GND_NETS: ["vssd1"]
+# ERROR_ON_PDN_VIOLATIONS: false
 
+VDD_NETS: ["vdd"]
+GND_NETS: ["vss"]
+
+PL_TARGET_DENSITY_PCT: 0.5
+
+PDN_CONNECT_MACROS_TO_GRID: true
 PDN_MACRO_CONNECTIONS:
-  - "wb/wb_data_mem/wb_slave_sram vccd1 vssd1 vccd1 vssd1"
+  - "wb/wb_data_mem/wb_slave_sram vdd vssd1 vdd vss"
 
 # RUN_DRC: false
 
 MACROS:
-  sky130_sram_4kbyte_1rw1r_32x1024_8:
+  sram22_1024x32m8w8:
     instances:
       wb/wb_data_mem/wb_slave_sram:
-        location: [50, 150]
-        orientation: "N"
-    gds: ["dir::macros/gds/sky130_sram_4kbyte_1rw1r_32x1024_8.gds"]
-    lef: ["dir::macros/lef/sky130_sram_4kbyte_1rw1r_32x1024_8.lef"]
-    # nl:  ["dir::macros/verilog/sky130_sram_4kbyte_1rw1r_32x1024_8.v"]
-    vh:  ["dir::macros/verilog/sky130_sram_4kbyte_1rw1r_32x1024_8_bb.vh"]
+        location: [253,  10.64]
+        orientation: "E"
+    gds: ["dir::macros/gds/sram22_1024x32m8w8.gds"]
+    lef: ["dir::macros/lef/sram22_1024x32m8w8.lef"]
+    # nl:  ["dir::macros/verilog/sram22_1024x32m8w8.v"]
+    vh:  ["dir::macros/verilog/sram22_1024x32m8w8_bb.vh"]
     lib: 
       "*":
-        - "dir::macros/lib/sky130_sram_4kbyte_1rw1r_32x1024_8_TT_1p8V_25C.lib"
+        - "dir::macros/lib/sram22_1024x32m8w8_ff_n40C_1v95.lib"
+        - "dir::macros/lib/sram22_1024x32m8w8_ss_100C_1v60.lib"
+        - "dir::macros/lib/sram22_1024x32m8w8_tt_025C_1v80.lib"

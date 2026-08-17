@@ -3,8 +3,8 @@
 
 module asic_top (
 `ifdef USE_POWER_PINS
-    inout vccd1,
-    inout vssd1,
+    inout vdd,
+    inout vss,
 `endif
     input clk,
     input rst,
@@ -14,19 +14,19 @@ module asic_top (
     (* keep_hierarchy = "yes" *)
     wb_top wb (
 `ifdef USE_POWER_PINS
-        .vccd1(vccd1),
-        .vssd1(vssd1),
+        .vdd(vdd),
+        .vss(vss),
 `endif
-        .clk  (clk),
-        .rst  (rst),
+        .clk(clk),
+        .rst(rst),
 
         .gpio_data(gpio)
     );
 
     //     sky130_sram_4kbyte_1rw1r_32x1024_8 wb_slave_sram (
     // `ifdef USE_POWER_PINS
-    //         .vccd1 (vccd1),
-    //         .vssd1 (vssd1),
+    //         .vdd (vdd),
+    //         .vss (vss),
     // `endif
     //         .clk0  (clk),
     //         .csb0  (1'b0),
