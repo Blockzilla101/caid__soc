@@ -3,10 +3,6 @@
 `include "../include/global_def.vh"
 
 module wb_slave_data_mem_asic (
-`ifdef USE_POWER_PINS
-    inout vccd1,
-    inout vssd1,
-`endif
     input wb_CLK_I,
     input wb_RST_I,
 
@@ -26,20 +22,26 @@ module wb_slave_data_mem_asic (
     wire [31:0] word_addr = wb_ADR_I[31:2];
     wire [ 1:0] byte_off = wb_ADR_I[1:0];
 
-    (* keep_hierarchy = "yes" *)
-    sram22_1024x32m8w8 wb_slave_sram (
-`ifdef USE_POWER_PINS
-        .vdd(vccd1),
-        .vss(vssd1),
-`endif
-        .clk(wb_CLK_I),
-        .rstb(1'b1),
-        .ce(1'b1),
-        .we(~wb_WE_I & wb_ACK_O),
-        .wmask(4'b1111),
-        .addr({word_addr, 2'b0}),
-        .din(write_word),
-        .dout(read_word)
+    RM_IHPSG13_1P_1024x32_c2_bm_bist wb_slave_sram (
+        .A_CLK  (wb_CLK_I),
+        .A_MEN  (1'b1),
+        .A_WEN  (~wb_WE_I & wb_ACK_O),
+        .A_REN  (1'b1),
+        .A_ADDR ({word_addr, 2'b0}),
+        .A_DIN  (write_word),
+        .A_DLY  (1'b1), // tie high!
+        .A_DOUT (read_word),
+        .A_BM   ('0),
+
+        // Built-in self test port
+        .A_BIST_CLK ('0),
+        .A_BIST_EN  ('0),
+        .A_BIST_MEN ('0),
+        .A_BIST_WEN ('0),
+        .A_BIST_REN ('0),
+        .A_BIST_ADDR('0),
+        .A_BIST_DIN ('0),
+        .A_BIST_BM  ('0)
     );
 
     wire [31:0] read_word;

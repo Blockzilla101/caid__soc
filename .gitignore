@@ -13,3 +13,4 @@ fpga/**/*.svf
 fpga/**/*.json
 runs
 macro-gen/**/build
+final
