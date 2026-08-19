@@ -1,16 +1,18 @@
 # MAKEFILE_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
+ONE_OFF_TAG = dev
+
 RUN_TAG = $(shell ls librelane/runs/ | tail -n 1)
 TOP = asic_top
 
 PDK ?= ihp-sg13g2
 PDK_COMMIT ?= 3b5a704ba6738aa686b08706187830e6284d2a10
-PDK_ROOT = ~/.ciel
+PDK_ROOT ?= ~/.ciel
 
 .DEFAULT_GOAL := help
 
 $(PDK_ROOT)/$(PDK):
-	ciel enable $(PDK_COMMIT) --pdk-family $(PDK)
+	ciel enable $(PDK_COMMIT) --pdk-family $(PDK) --pdk-root $(PDK_ROOT)
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -48,6 +50,22 @@ librelane-openroad: $(PDK_ROOT)/$(PDK) ## Open the last LibreLane run in OpenROA
 librelane-klayout: $(PDK_ROOT)/$(PDK) ## Open the last LibreLane run in KLayout
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInKLayout
 .PHONY: librelane-klayout
+
+librelane-to-pdn: $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.GeneratePDN --overwrite --run-tag $(ONE_OFF_TAG)
+.PHONY: librelane-to-pdn
+
+librelane-to-staprepnr: $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.STAPrePNR --overwrite --run-tag $(ONE_OFF_TAG)
+.PHONY: librelane-to-staprepnr
+
+librelane-to-stapostpnr: $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.STAPostPNR --overwrite --run-tag $(ONE_OFF_TAG)
+.PHONY: librelane-to-stapostpnr
+
+librelane-open-pdn: $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+	openroad -gui -db librelane/runs/$(ONE_OFF_TAG)/22-openroad-generatepdn/$(TOP).odb
+.PHONY: librelane-open-pdn
 
 # sim: ## Run RTL simulation with cocotb
 # 	cd cocotb; PDK_ROOT=${PDK_ROOT} PDK=${PDK} python3 chip_top_tb.py

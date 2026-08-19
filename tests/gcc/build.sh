@@ -3,6 +3,16 @@
 mkdir -p build
 rm build/*
 
+GCC=$([ -e "$(which riscv64-elf-gcc 2> /dev/null)" ] && echo -n "riscv64-elf-gcc" || echo -n "riscv64-unknown-elf-gcc")
+OBJCOPY=$([ -e "$(which riscv64-elf-objcopy 2> /dev/null)" ] && echo -n "riscv64-elf-objcopy" || echo -n "riscv64-unknown-elf-objcopy")
+OBJDUMP=$([ -e "$(which riscv64-elf-objdump 2> /dev/null)" ] && echo -n "riscv64-elf-objdump" || echo -n "riscv64-unknown-elf-objdump")
+
+if [ -e "$GCC" ]; then
+    GCC= 
+else 
+    echo "File does not exist"
+fi 
+
 function build_file() {
     local TARGET_FILE_NAME=$1
     local ELF_FILE=build/$TARGET_FILE_NAME.elf
@@ -10,7 +20,7 @@ function build_file() {
     local MEM_FILE=build/$TARGET_FILE_NAME.mem
     local C_FILE=test_programs/$TARGET_FILE_NAME.c
 
-    riscv64-elf-gcc \
+    $GCC \
         -Os \
         -march=rv32i \
         -mabi=ilp32 \
@@ -27,8 +37,8 @@ function build_file() {
         $C_FILE
 
 
-    riscv64-elf-objcopy -O binary $ELF_FILE $BIN_FILE
-    riscv64-elf-objdump -d $ELF_FILE > $ELF_FILE.dump
+    $OBJCOPY -O binary $ELF_FILE $BIN_FILE
+    $OBJDUMP -d $ELF_FILE > $ELF_FILE.dump
     # hexdump -v -e '1/1 "%02x\n"' $BIN_FILE > $MEM_FILE.temp
     hexdump -v -e '1/4 "%08x\n"' $BIN_FILE > $MEM_FILE.temp
     # cat <(echo -e "13\n00\n00\n00") $MEM_FILE.temp > $MEM_FILE
