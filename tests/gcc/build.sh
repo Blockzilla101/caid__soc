@@ -7,12 +7,6 @@ GCC=$([ -e "$(which riscv64-elf-gcc 2> /dev/null)" ] && echo -n "riscv64-elf-gcc
 OBJCOPY=$([ -e "$(which riscv64-elf-objcopy 2> /dev/null)" ] && echo -n "riscv64-elf-objcopy" || echo -n "riscv64-unknown-elf-objcopy")
 OBJDUMP=$([ -e "$(which riscv64-elf-objdump 2> /dev/null)" ] && echo -n "riscv64-elf-objdump" || echo -n "riscv64-unknown-elf-objdump")
 
-if [ -e "$GCC" ]; then
-    GCC= 
-else 
-    echo "File does not exist"
-fi 
-
 function build_file() {
     local TARGET_FILE_NAME=$1
     local ELF_FILE=build/$TARGET_FILE_NAME.elf

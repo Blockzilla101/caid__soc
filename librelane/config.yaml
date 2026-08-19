@@ -44,7 +44,7 @@ VERILOG_DEFINES:
   - ASIC
   - WISHBONE_ENABLE
   - IMEM_LOAD_HEX
-  # - IMEM_HEX_PATH "/home/blockzilla/ic-design/projects/caid__soc/tests/gcc/build/wb_fpga_test.mem"
+  - "IMEM_HEX_PATH=\"./tests/gcc/build/wb_fpga_test.mem\""
 
 VERILOG_INCLUDE_DIRS: "dir::../rtl/include"
 

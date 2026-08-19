@@ -27,45 +27,60 @@ clone-pdk: $(PDK_ROOT)/$(PDK) ## Clone the IHP-Open-PDK repository
 all: librelane ## Build the project (runs LibreLane)
 .PHONY: all
 
-librelane: $(PDK_ROOT)/$(PDK) ## Run LibreLane
+copy-rom: build-gcc
+	cp tests/gcc/build/wb_fpga_test.mem rom.mem
+.PHONY: copy-rom
+
+build-gcc:
+	(cd tests/gcc ; bash build.sh)
+.PHONY: build-gcc
+
+librelane: rom.mem $(PDK_ROOT)/$(PDK) ## Run LibreLane
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --save-views-to final/
 .PHONY: librelane
 
-librelane-nodrc: $(PDK_ROOT)/$(PDK) ## Run LibreLane without DRC checks
+librelane-nodrc: rom.mem $(PDK_ROOT)/$(PDK) ## Run LibreLane without DRC checks
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --save-views-to final/ --skip KLayout.DRC --skip Magic.DRC --skip KLayout.Antenna --skip KLayout.Density
 .PHONY: librelane-nodrc
 
-librelane-magicdrc: $(PDK_ROOT)/$(PDK) ## Run LibreLane with only Magic DRC checks
+librelane-magicdrc: rom.mem $(PDK_ROOT)/$(PDK) ## Run LibreLane with only Magic DRC checks
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --save-views-to final/ --skip KLayout.DRC
 .PHONY: librelane-magicdrc
 
-librelane-klayoutdrc: $(PDK_ROOT)/$(PDK) ## Run LibreLane with only KLayout DRC checks
+librelane-klayoutdrc: rom.mem $(PDK_ROOT)/$(PDK) ## Run LibreLane with only KLayout DRC checks
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --save-views-to final/ --skip Magic.DRC
 .PHONY: librelane-nodrc
 
-librelane-openroad: $(PDK_ROOT)/$(PDK) ## Open the last LibreLane run in OpenROAD GUI
+librelane-openroad: rom.mem $(PDK_ROOT)/$(PDK) ## Open the last LibreLane run in OpenROAD GUI
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInOpenROAD
 .PHONY: librelane-openroad
 
-librelane-klayout: $(PDK_ROOT)/$(PDK) ## Open the last LibreLane run in KLayout
+librelane-klayout: rom.mem $(PDK_ROOT)/$(PDK) ## Open the last LibreLane run in KLayout
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInKLayout
 .PHONY: librelane-klayout
 
-librelane-to-pdn: $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+librelane-to-pdn: rom.mem $(PDK_ROOT)/$(PDK) ## Run till floorplan 
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.GeneratePDN --overwrite --run-tag $(ONE_OFF_TAG)
 .PHONY: librelane-to-pdn
 
-librelane-to-staprepnr: $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+librelane-to-staprepnr: rom.mem $(PDK_ROOT)/$(PDK) ## Run till floorplan 
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.STAPrePNR --overwrite --run-tag $(ONE_OFF_TAG)
 .PHONY: librelane-to-staprepnr
 
-librelane-to-stapostpnr: $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+librelane-to-stapostpnr: rom.mem $(PDK_ROOT)/$(PDK) ## Run till STA Post PNR
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.STAPostPNR --overwrite --run-tag $(ONE_OFF_TAG)
 .PHONY: librelane-to-stapostpnr
 
-librelane-open-pdn: $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+librelane-open-pdn: rom.mem $(PDK_ROOT)/$(PDK) ## Open pdn in openroad
 	openroad -gui -db librelane/runs/$(ONE_OFF_TAG)/22-openroad-generatepdn/$(TOP).odb
 .PHONY: librelane-open-pdn
+
+clean:
+	rm -rf librelane/runs
+	rm -rf final
+	rm -rf tests/gcc/build
+	rm rom.mem
+.PHONY: clean
 
 # sim: ## Run RTL simulation with cocotb
 # 	cd cocotb; PDK_ROOT=${PDK_ROOT} PDK=${PDK} python3 chip_top_tb.py

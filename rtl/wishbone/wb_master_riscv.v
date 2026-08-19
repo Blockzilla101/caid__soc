@@ -3,8 +3,6 @@
 
 `timescale 1ns / 1ps
 
-`define WISHBONE_ENABLE
-
 // supports only single tranfers, no block transfers
 
 module wb_master_riscv (

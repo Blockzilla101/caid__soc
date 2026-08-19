@@ -14,3 +14,4 @@ fpga/**/*.json
 runs
 macro-gen/**/build
 final
+*.mem
