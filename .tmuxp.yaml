@@ -1,16 +1,18 @@
 session_name: soc
+options:
+  mouse: "on"
 windows:
-  - window_name: 0 librelane
+  - window_name: git-pdk
+    panes:
+      - shell_command:
+        - cd ~/ic-design/projects/caid__soc
+        - activate-librelane-ihp
+  - window_name: ciel-pdk
     panes:
       - shell_command:
         - cd ~/ic-design/projects/caid__soc
         - activate-librelane
-  - window_name: 1 librelane
-    panes:
-      - shell_command:
-        - cd ~/ic-design/projects/caid__soc
-        - activate-librelane
-  - window_name: 2 librelane
+  - window_name: viewiers
     panes:
       - shell_command:
         - cd ~/ic-design/projects/caid__soc
