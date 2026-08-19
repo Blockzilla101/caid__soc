@@ -11,6 +11,8 @@ PDK_ROOT ?= ~/.ciel
 
 .DEFAULT_GOAL := help
 
+# FPGA := $(shell find fpga/ -mindepth 1 -maxdepth 2 -type d -printf '%f\n')
+
 $(PDK_ROOT)/$(PDK):
 	ciel enable $(PDK_COMMIT) --pdk-family $(PDK) --pdk-root $(PDK_ROOT)
 
@@ -27,13 +29,20 @@ clone-pdk: $(PDK_ROOT)/$(PDK) ## Clone the IHP-Open-PDK repository
 all: librelane ## Build the project (runs LibreLane)
 .PHONY: all
 
-copy-rom: build-gcc
+rom.mem: build-gcc
 	cp tests/gcc/build/wb_fpga_test.mem rom.mem
-.PHONY: copy-rom
 
 build-gcc:
 	(cd tests/gcc ; bash build.sh)
 .PHONY: build-gcc
+
+build-asm:
+	(cd tests/assembly ; bash build.sh)
+.PHONY: build-asm
+
+fpga-%:
+	cd fpga/$* && $(MAKE) clean && $(MAKE)
+.PHONY: fpga-%
 
 librelane: rom.mem $(PDK_ROOT)/$(PDK) ## Run LibreLane
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --save-views-to final/
