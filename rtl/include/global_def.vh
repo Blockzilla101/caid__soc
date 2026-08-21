@@ -1,2 +1,5 @@
-`define SIZE_DATA_MEM 32
-`define SIZE_INST_MEM 64
+`define SIZE_DATA_MEM 2048
+`define SIZE_INST_MEM 2048
+
+`define SIZE_INST_MEM_ASIC 64
+

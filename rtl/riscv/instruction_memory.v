@@ -8,7 +8,11 @@ module instruction_memory (
     input [31:0] addr,
     output [31:0] read_data
 );
+`ifdef ASIC
+    localparam integer WORDS = `SIZE_INST_MEM_ASIC / 4;
+`else
     localparam integer WORDS = `SIZE_INST_MEM / 4;
+`endif
     reg [31:0] memory[0:WORDS-1];
 
     initial begin
