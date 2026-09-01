@@ -6,7 +6,7 @@ RUN_TAG = $(shell ls librelane/runs/ | tail -n 1)
 TOP = asic_top
 
 PDK ?= ihp-sg13g2
-PDK_COMMIT ?= 3b5a704ba6738aa686b08706187830e6284d2a10
+PDK_COMMIT ?= 22f2a25f1734796de3debbbf29cf697cbbc54081
 PDK_ROOT ?= ~/.ciel
 
 .DEFAULT_GOAL := help
@@ -31,6 +31,7 @@ all: librelane ## Build the project (runs LibreLane)
 
 rom.mem: build-gcc
 	cp tests/gcc/build/wb_fpga_test.mem rom.mem
+.PHONY: rom.mem
 
 build-gcc:
 	(cd tests/gcc ; bash build.sh)
@@ -68,11 +69,15 @@ librelane-klayout: rom.mem $(PDK_ROOT)/$(PDK) ## Open the last LibreLane run in 
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInKLayout
 .PHONY: librelane-klayout
 
-librelane-to-pdn: rom.mem $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+librelane-to-pdn: rom.mem $(PDK_ROOT)/$(PDK) ## Run till PDN 
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.GeneratePDN --overwrite --run-tag $(ONE_OFF_TAG)
 .PHONY: librelane-to-pdn
 
-librelane-to-staprepnr: rom.mem $(PDK_ROOT)/$(PDK) ## Run till floorplan 
+librelane-to-detailed-routing: rom.mem $(PDK_ROOT)/$(PDK) ## Run till detailed routing
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.DetailedRouting --overwrite --run-tag $(ONE_OFF_TAG)
+.PHONY: librelane-to-pdn
+
+librelane-to-staprepnr: rom.mem $(PDK_ROOT)/$(PDK) ## Run till STA Pre PNR 
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --to OpenROAD.STAPrePNR --overwrite --run-tag $(ONE_OFF_TAG)
 .PHONY: librelane-to-staprepnr
 
@@ -82,6 +87,10 @@ librelane-to-stapostpnr: rom.mem $(PDK_ROOT)/$(PDK) ## Run till STA Post PNR
 
 librelane-open-pdn: rom.mem $(PDK_ROOT)/$(PDK) ## Open pdn in openroad
 	openroad -gui -db librelane/runs/$(ONE_OFF_TAG)/22-openroad-generatepdn/$(TOP).odb
+.PHONY: librelane-open-pdn
+
+librelane-open-detailed-routing: rom.mem $(PDK_ROOT)/$(PDK) ## Open detailed routing result in openroad
+	openroad -gui -db librelane/runs/$(ONE_OFF_TAG)/final/odb/$(TOP).odb
 .PHONY: librelane-open-pdn
 
 clean:

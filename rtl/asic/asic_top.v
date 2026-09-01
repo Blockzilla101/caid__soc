@@ -113,7 +113,7 @@ module asic_top #(
 
     generate
         for (genvar i = 0; i < NUM_INPUT_PADS; i++) begin : inputs
-            (* keep *)
+            (* keep, keep_hierarchy = "yes" *)
             sg13g2_IOPadIn input_pad (
 `ifdef USE_POWER_PINS
                 .iovdd(IOVDD),
@@ -129,6 +129,7 @@ module asic_top #(
 
     generate
         for (genvar i = 0; i < NUM_OUTPUT_PADS; i++) begin : outputs
+            (* keep, keep_hierarchy = "yes" *)
             sg13g2_IOPadOut30mA output_pad (
 `ifdef USE_POWER_PINS
                 .iovdd(IOVDD),
@@ -144,6 +145,7 @@ module asic_top #(
 
     generate
         for (genvar i = 0; i < NUM_BIDIR_PADS; i++) begin : bidirs
+            (* keep, keep_hierarchy = "yes" *)
             sg13g2_IOPadInOut30mA bidir_pad (
 `ifdef USE_POWER_PINS
                 .iovdd (IOVDD),
@@ -161,7 +163,7 @@ module asic_top #(
 
     generate
         for (genvar i = 0; i < NUM_ANALOG_PADS; i++) begin : analogs
-            (* keep *)
+            (* keep *) (* keep_hierarchy = "yes" *)
             sg13g2_IOPadAnalog analog_pad (
 `ifdef USE_POWER_PINS
                 .iovdd (IOVDD),
@@ -181,7 +183,7 @@ module asic_top #(
     assign bidir_CORE2PAD = 0;
     assign bidir_CORE2PAD_OE = 0;
 
-    (* keep *) (* keep_hierarchy = "yes" *)
+    (* keep, keep_hierarchy = "yes" *)
     wb_top wb (
         .clk(clk_PAD2CORE),
         .rst(rst_n_PAD2CORE),

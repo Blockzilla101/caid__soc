@@ -7,20 +7,20 @@ meta:
     Checker.IllegalOverlap: null
 
     # Disable KLayout DRC
-    #KLayout.DRC: null
-    #Checker.KLayoutDRC: null
+    # KLayout.DRC: null
+    # Checker.KLayoutDRC: null
 
     # Disable magic DRC
-    #Magic.DRC: null
-    #Checker.MagicDRC: null
+    # Magic.DRC: null
+    # Checker.MagicDRC: null
 
     # Disable KLayout antenna check
-    KLayout.Antenna: null
-    Checker.KLayoutAntenna: null
+    # KLayout.Antenna: null
+    # Checker.KLayoutAntenna: null
 
     # Disable KLayout density check
-    KLayout.Density: null
-    Checker.KLayoutDensity: null
+    # KLayout.Density: null
+    # Checker.KLayoutDensity: null
     
     # Save time
     OpenROAD.IRDropReport: null
@@ -31,7 +31,7 @@ meta:
     # Use Magic.Filler instead of KLayout.Filler
     # This can help in some cases where the target
     # density cannot be met using KLayout.
-    KLayout.Filler: Magic.Filler
+    # KLayout.Filler: Magic.Filler
 
 DESIGN_NAME: asic_top
 VERILOG_FILES:
@@ -54,64 +54,10 @@ DEFAULT_CORNER: nom_slow_1p08V_125C
 # USE_SLANG: True
 # SLANG_ARGUMENTS: ['--keep-hierarchy']
 
+# SYNTH_HIERARCHY_MODE: 'keep'
+
 # Slightly smaller file sizes
 PRIMARY_GDSII_STREAMOUT_TOOL: klayout
-
-# Specify the pad instances for the padring
-PAD_SOUTH: [
-    clk_pad,
-    rst_n_pad,
-
-    "bidirs\\[0\\].bidir_pad",
-    "bidirs\\[1\\].bidir_pad",
-    "bidirs\\[2\\].bidir_pad",
-    "bidirs\\[3\\].bidir_pad",
-    "bidirs\\[4\\].bidir_pad",
-    "bidirs\\[5\\].bidir_pad",
-    "bidirs\\[6\\].bidir_pad",
-    "bidirs\\[7\\].bidir_pad"
-]
-
-PAD_EAST: [
-    "analogs\\[0\\].analog_pad",
-    "analogs\\[1\\].analog_pad",
-    "analogs\\[2\\].analog_pad",
-    "analogs\\[3\\].analog_pad",
-    "analogs\\[4\\].analog_pad",
-    "analogs\\[5\\].analog_pad",
-    "analogs\\[6\\].analog_pad",
-    "analogs\\[7\\].analog_pad",
-    
-    "vdd_pads\\[0\\].vdd_pad",
-    "vss_pads\\[0\\].vss_pad"
-]
-
-PAD_NORTH: [
-    "outputs\\[7\\].output_pad",
-    "outputs\\[6\\].output_pad",
-    "outputs\\[5\\].output_pad",
-    "outputs\\[4\\].output_pad",
-    "outputs\\[3\\].output_pad",
-    "outputs\\[2\\].output_pad",
-    "outputs\\[1\\].output_pad",
-    "outputs\\[0\\].output_pad",
-    
-    "iovdd_pads\\[0\\].iovdd_pad",
-    "iovss_pads\\[0\\].iovss_pad"
-]
-
-PAD_WEST: [
-    "inputs\\[9\\].input_pad",
-    "inputs\\[8\\].input_pad",
-    "inputs\\[7\\].input_pad",
-    "inputs\\[6\\].input_pad",
-    "inputs\\[5\\].input_pad",
-    "inputs\\[4\\].input_pad",
-    "inputs\\[3\\].input_pad",
-    "inputs\\[2\\].input_pad",
-    "inputs\\[1\\].input_pad",
-    "inputs\\[0\\].input_pad"
-]
 
 # SDC files
 PNR_SDC_FILE: dir::asic_top.sdc
@@ -190,7 +136,7 @@ MACROS:
     instances:
       # Make sure to specify the SRAMs in pdn_cfg.tcl
       wb/wb_data_mem/wb_slave_sram:
-        location: [880, 620]
+        location: [880, 620.07]
         # location: [390, 390]
         orientation: E
       # i_chip_core.sram_1:
@@ -217,47 +163,65 @@ MAGIC_GDS_FLATGLOB:
  - "RSC_*"
  - "*_CELL_SUB"
 
-
-# VERILOG_DEFINES:
-#   - ASIC
-#   - WISHBONE_ENABLE
-#   - IMEM_LOAD_HEX
-#   # - IMEM_HEX_PATH "/home/blockzilla/ic-design/projects/caid__soc/tests/gcc/build/wb_fpga_test.mem"
-
-# PL_TARGET_DENSITY_PCT: 0.5
-
-# VDD_NETS: ["vccd1"]
-# GND_NETS: ["vssd1"]
-
 FP_MACRO_HORIZONTAL_HALO: 5
 FP_MACRO_VERTICAL_HALO: 5
 
-# # ERROR_ON_PDN_VIOLATIONS: false
-# PDN_VOFFSET: 99.6
-# PDN_VSPACING: 1.36
-# PDN_CFG: "dir::tcl/pdn.tcl"
+KLAYOUT_DRC_THREADS: 12
+KLAYOUT_DENSITY_THREADS: 12
+KLAYOUT_XOR_THREADS: 12
 
-# # PDN_CORE_HORIZONTAL_LAYER: "met3"
-# # PDN_CORE_VERTICAL_LAYER: "met4"
-# # PDN_CORE_RING: true
+# Specify the pad instances for the padring
+PAD_SOUTH: [
+    clk_pad,
+    rst_n_pad,
 
-# PDN_CONNECT_MACROS_TO_GRID: true
-# PDN_MACRO_CONNECTIONS:
-#   - "wb/wb_data_mem/wb_slave_sram vccd1 vssd1 vdd vss"
+    "bidirs\\[0\\].bidir_pad",
+    "bidirs\\[1\\].bidir_pad",
+    "bidirs\\[2\\].bidir_pad",
+    "bidirs\\[3\\].bidir_pad",
+    "bidirs\\[4\\].bidir_pad",
+    "bidirs\\[5\\].bidir_pad",
+    "bidirs\\[6\\].bidir_pad",
+    "bidirs\\[7\\].bidir_pad"
+]
 
+PAD_EAST: [
+    "analogs\\[0\\].analog_pad",
+    "analogs\\[1\\].analog_pad",
+    "analogs\\[2\\].analog_pad",
+    "analogs\\[3\\].analog_pad",
+    "analogs\\[4\\].analog_pad",
+    "analogs\\[5\\].analog_pad",
+    "analogs\\[6\\].analog_pad",
+    "analogs\\[7\\].analog_pad",
+    
+    "vdd_pads\\[0\\].vdd_pad",
+    "vss_pads\\[0\\].vss_pad"
+]
 
-# MACROS:
-#   sram22_1024x32m8w8:
-#     instances:
-#       wb/wb_data_mem/wb_slave_sram:
-#         location: [258,  18.64]
-#         orientation: "E"
-#     gds: ["dir::macros/gds/sram22_1024x32m8w8.gds"]
-#     lef: ["dir::macros/lef/sram22_1024x32m8w8.lef"]
-#     # nl:  ["dir::macros/verilog/sram22_1024x32m8w8.v"]
-#     vh:  ["dir::macros/verilog/sram22_1024x32m8w8_bb.vh"]
-#     lib: 
-#       "*":
-#         - "dir::macros/lib/sram22_1024x32m8w8_ff_n40C_1v95.lib"
-#         - "dir::macros/lib/sram22_1024x32m8w8_ss_100C_1v60.lib"
-#         - "dir::macros/lib/sram22_1024x32m8w8_tt_025C_1v80.lib"
+PAD_NORTH: [
+    "outputs\\[7\\].output_pad",
+    "outputs\\[6\\].output_pad",
+    "outputs\\[5\\].output_pad",
+    "outputs\\[4\\].output_pad",
+    "outputs\\[3\\].output_pad",
+    "outputs\\[2\\].output_pad",
+    "outputs\\[1\\].output_pad",
+    "outputs\\[0\\].output_pad",
+    
+    "iovdd_pads\\[0\\].iovdd_pad",
+    "iovss_pads\\[0\\].iovss_pad"
+]
+
+PAD_WEST: [
+    "inputs\\[9\\].input_pad",
+    "inputs\\[8\\].input_pad",
+    "inputs\\[7\\].input_pad",
+    "inputs\\[6\\].input_pad",
+    "inputs\\[5\\].input_pad",
+    "inputs\\[4\\].input_pad",
+    "inputs\\[3\\].input_pad",
+    "inputs\\[2\\].input_pad",
+    "inputs\\[1\\].input_pad",
+    "inputs\\[0\\].input_pad"
+]

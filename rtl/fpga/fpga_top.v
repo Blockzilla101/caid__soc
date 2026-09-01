@@ -1,5 +1,4 @@
 `define IMEM_LOAD_HEX
-`define IMEM_HEX_PATH "/home/blockzilla/ic-design/projects/caid__soc/tests/gcc/build/wb_fpga_test.mem"
 `define WISHBONE_ENABLE
 
 module fpga_top (
