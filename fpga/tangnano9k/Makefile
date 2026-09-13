@@ -15,7 +15,7 @@ $(info PROJ = $(PROJ))           # Print variables for debugging
 
 all: $(PROJ).fs                  # final bitstream file
 
-$(PROJ)-yosys.json: $(SOURCE)    # synthesizes Verilog-source to JSON using Yosys
+$(PROJ)-yosys.json: rom.mem
 	yosys yosys.ys
 $(info Building $(PROJ)-yosys.json)
 $(PROJ)-nextpnr.json: $(PIN_DEF) $(PROJ)-yosys.json
@@ -23,6 +23,9 @@ $(PROJ)-nextpnr.json: $(PIN_DEF) $(PROJ)-yosys.json
 
 $(PROJ).fs: $(PROJ)-nextpnr.json
 	gowin_pack -d $(DEVICE_FAMILY) -o $@ $(PROJ)-nextpnr.json
+
+rom.mem:
+	cp ../../tests/gcc/build/wb_fpga_test.mem rom.mem
 
 prog: $(PROJ).fs                 # load bitstream fs-file to SRAM or FLASH
 
@@ -33,7 +36,7 @@ else
 endif
 
 clean:                           # clean the files that are needed no more
-	rm -f *.json *.fs
+	rm -f *.json *.fs *.mem
 
 .PHONY: all prog clean
 # EOF
