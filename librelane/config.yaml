@@ -23,10 +23,10 @@ meta:
     # Checker.KLayoutDensity: null
     
     # Save time
-    OpenROAD.IRDropReport: null
-    KLayout.XOR: null
-    Netgen.LVS: null
-    Checker.LVS: null
+    # OpenROAD.IRDropReport: null
+    # KLayout.XOR: null
+    # Netgen.LVS: null
+    # Checker.LVS: null
 
     # Use Magic.Filler instead of KLayout.Filler
     # This can help in some cases where the target

@@ -6,7 +6,8 @@ RUN_TAG = $(shell ls librelane/runs/ | tail -n 1)
 TOP = asic_top
 
 PDK ?= ihp-sg13g2
-PDK_COMMIT ?= 22f2a25f1734796de3debbbf29cf697cbbc54081
+# PDK_COMMIT ?= 22f2a25f1734796de3debbbf29cf697cbbc54081
+PDK_COMMIT ?= 3b5a704ba6738aa686b08706187830e6284d2a10
 PDK_ROOT ?= ~/.ciel
 
 .DEFAULT_GOAL := help
